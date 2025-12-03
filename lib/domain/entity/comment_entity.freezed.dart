@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CommentEntity {
 
- String? get cId; String get cContent; String get cWriter; DateTime get cCreatedAt;
+ String? get cId; String get cContent; String get cWriter; DateTime get cCreatedAt; String get pId;
 /// Create a copy of CommentEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $CommentEntityCopyWith<CommentEntity> get copyWith => _$CommentEntityCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CommentEntity&&(identical(other.cId, cId) || other.cId == cId)&&(identical(other.cContent, cContent) || other.cContent == cContent)&&(identical(other.cWriter, cWriter) || other.cWriter == cWriter)&&(identical(other.cCreatedAt, cCreatedAt) || other.cCreatedAt == cCreatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CommentEntity&&(identical(other.cId, cId) || other.cId == cId)&&(identical(other.cContent, cContent) || other.cContent == cContent)&&(identical(other.cWriter, cWriter) || other.cWriter == cWriter)&&(identical(other.cCreatedAt, cCreatedAt) || other.cCreatedAt == cCreatedAt)&&(identical(other.pId, pId) || other.pId == pId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,cId,cContent,cWriter,cCreatedAt);
+int get hashCode => Object.hash(runtimeType,cId,cContent,cWriter,cCreatedAt,pId);
 
 @override
 String toString() {
-  return 'CommentEntity(cId: $cId, cContent: $cContent, cWriter: $cWriter, cCreatedAt: $cCreatedAt)';
+  return 'CommentEntity(cId: $cId, cContent: $cContent, cWriter: $cWriter, cCreatedAt: $cCreatedAt, pId: $pId)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $CommentEntityCopyWith<$Res>  {
   factory $CommentEntityCopyWith(CommentEntity value, $Res Function(CommentEntity) _then) = _$CommentEntityCopyWithImpl;
 @useResult
 $Res call({
- String? cId, String cContent, String cWriter, DateTime cCreatedAt
+ String? cId, String cContent, String cWriter, DateTime cCreatedAt, String pId
 });
 
 
@@ -62,13 +62,14 @@ class _$CommentEntityCopyWithImpl<$Res>
 
 /// Create a copy of CommentEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? cId = freezed,Object? cContent = null,Object? cWriter = null,Object? cCreatedAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? cId = freezed,Object? cContent = null,Object? cWriter = null,Object? cCreatedAt = null,Object? pId = null,}) {
   return _then(_self.copyWith(
 cId: freezed == cId ? _self.cId : cId // ignore: cast_nullable_to_non_nullable
 as String?,cContent: null == cContent ? _self.cContent : cContent // ignore: cast_nullable_to_non_nullable
 as String,cWriter: null == cWriter ? _self.cWriter : cWriter // ignore: cast_nullable_to_non_nullable
 as String,cCreatedAt: null == cCreatedAt ? _self.cCreatedAt : cCreatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as DateTime,pId: null == pId ? _self.pId : pId // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -153,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? cId,  String cContent,  String cWriter,  DateTime cCreatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? cId,  String cContent,  String cWriter,  DateTime cCreatedAt,  String pId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CommentEntity() when $default != null:
-return $default(_that.cId,_that.cContent,_that.cWriter,_that.cCreatedAt);case _:
+return $default(_that.cId,_that.cContent,_that.cWriter,_that.cCreatedAt,_that.pId);case _:
   return orElse();
 
 }
@@ -174,10 +175,10 @@ return $default(_that.cId,_that.cContent,_that.cWriter,_that.cCreatedAt);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? cId,  String cContent,  String cWriter,  DateTime cCreatedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? cId,  String cContent,  String cWriter,  DateTime cCreatedAt,  String pId)  $default,) {final _that = this;
 switch (_that) {
 case _CommentEntity():
-return $default(_that.cId,_that.cContent,_that.cWriter,_that.cCreatedAt);case _:
+return $default(_that.cId,_that.cContent,_that.cWriter,_that.cCreatedAt,_that.pId);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +195,10 @@ return $default(_that.cId,_that.cContent,_that.cWriter,_that.cCreatedAt);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? cId,  String cContent,  String cWriter,  DateTime cCreatedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? cId,  String cContent,  String cWriter,  DateTime cCreatedAt,  String pId)?  $default,) {final _that = this;
 switch (_that) {
 case _CommentEntity() when $default != null:
-return $default(_that.cId,_that.cContent,_that.cWriter,_that.cCreatedAt);case _:
+return $default(_that.cId,_that.cContent,_that.cWriter,_that.cCreatedAt,_that.pId);case _:
   return null;
 
 }
@@ -209,13 +210,14 @@ return $default(_that.cId,_that.cContent,_that.cWriter,_that.cCreatedAt);case _:
 
 
 class _CommentEntity implements CommentEntity {
-  const _CommentEntity({this.cId, required this.cContent, required this.cWriter, required this.cCreatedAt});
+  const _CommentEntity({this.cId, required this.cContent, required this.cWriter, required this.cCreatedAt, required this.pId});
   
 
 @override final  String? cId;
 @override final  String cContent;
 @override final  String cWriter;
 @override final  DateTime cCreatedAt;
+@override final  String pId;
 
 /// Create a copy of CommentEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -227,16 +229,16 @@ _$CommentEntityCopyWith<_CommentEntity> get copyWith => __$CommentEntityCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CommentEntity&&(identical(other.cId, cId) || other.cId == cId)&&(identical(other.cContent, cContent) || other.cContent == cContent)&&(identical(other.cWriter, cWriter) || other.cWriter == cWriter)&&(identical(other.cCreatedAt, cCreatedAt) || other.cCreatedAt == cCreatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CommentEntity&&(identical(other.cId, cId) || other.cId == cId)&&(identical(other.cContent, cContent) || other.cContent == cContent)&&(identical(other.cWriter, cWriter) || other.cWriter == cWriter)&&(identical(other.cCreatedAt, cCreatedAt) || other.cCreatedAt == cCreatedAt)&&(identical(other.pId, pId) || other.pId == pId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,cId,cContent,cWriter,cCreatedAt);
+int get hashCode => Object.hash(runtimeType,cId,cContent,cWriter,cCreatedAt,pId);
 
 @override
 String toString() {
-  return 'CommentEntity(cId: $cId, cContent: $cContent, cWriter: $cWriter, cCreatedAt: $cCreatedAt)';
+  return 'CommentEntity(cId: $cId, cContent: $cContent, cWriter: $cWriter, cCreatedAt: $cCreatedAt, pId: $pId)';
 }
 
 
@@ -247,7 +249,7 @@ abstract mixin class _$CommentEntityCopyWith<$Res> implements $CommentEntityCopy
   factory _$CommentEntityCopyWith(_CommentEntity value, $Res Function(_CommentEntity) _then) = __$CommentEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String? cId, String cContent, String cWriter, DateTime cCreatedAt
+ String? cId, String cContent, String cWriter, DateTime cCreatedAt, String pId
 });
 
 
@@ -264,13 +266,14 @@ class __$CommentEntityCopyWithImpl<$Res>
 
 /// Create a copy of CommentEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? cId = freezed,Object? cContent = null,Object? cWriter = null,Object? cCreatedAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? cId = freezed,Object? cContent = null,Object? cWriter = null,Object? cCreatedAt = null,Object? pId = null,}) {
   return _then(_CommentEntity(
 cId: freezed == cId ? _self.cId : cId // ignore: cast_nullable_to_non_nullable
 as String?,cContent: null == cContent ? _self.cContent : cContent // ignore: cast_nullable_to_non_nullable
 as String,cWriter: null == cWriter ? _self.cWriter : cWriter // ignore: cast_nullable_to_non_nullable
 as String,cCreatedAt: null == cCreatedAt ? _self.cCreatedAt : cCreatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as DateTime,pId: null == pId ? _self.pId : pId // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
