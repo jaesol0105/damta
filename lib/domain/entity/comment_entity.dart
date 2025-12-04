@@ -6,9 +6,10 @@ part 'comment_entity.freezed.dart';
 abstract class CommentEntity with _$CommentEntity {
   const factory CommentEntity({
     String? cId,
+    required String uId,
     required String cContent,
     required String cWriter,
     required DateTime cCreatedAt,
-    required String pId
+    required String pId,
   }) = _CommentEntity;
 }
