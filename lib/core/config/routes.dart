@@ -2,10 +2,34 @@ import 'package:damta/presentation/view/pages/home/home_page.dart';
 import 'package:damta/presentation/view/pages/post/post_page.dart';
 import 'package:damta/presentation/view/pages/post_detail/post_detail_page.dart';
 import 'package:go_router/go_router.dart';
+import 'package:damta/presentation/view/pages/login/login_page.dart';
+import 'package:damta/presentation/view/pages/school/school_input_page.dart';
+import 'package:damta/presentation/view/pages/splash/splash_page.dart';
 
 final GoRouter router = GoRouter(
+  initialLocation: "/splash",
+
   routes: [
-    GoRoute(path: "/", builder: (context, state) => HomePage()),
+    GoRoute(path: "/", builder: (context, state) => const LoginPage()),
+
+    GoRoute(path: "/splash", builder: (context, state) => const SplashPage()),
+
+    GoRoute(
+      path: "/school",
+      builder: (context, state) {
+        final String? kakaoId = state.extra as String?;
+
+        if (kakaoId == null) {
+          // 비정상 접근 방지 (로그인 페이지로 이동)
+          return const LoginPage();
+        }
+
+        return SchoolInputPage(kakaoId: kakaoId);
+      },
+    ),
+
+    GoRoute(path: "/home", builder: (context, state) => const HomePage()),
+
     GoRoute(
       path: "/post",
       builder: (context, state) => PostPage(),
@@ -19,8 +43,6 @@ final GoRouter router = GoRouter(
         ),
       ],
     ),
-    GoRoute(path: "/splash", builder: (context, state) => HomePage()),
-    GoRoute(path: "/school", builder: (context, state) => HomePage()),
     GoRoute(path: "/notification", builder: (context, state) => HomePage()),
     GoRoute(path: "/write", builder: (context, state) => HomePage()),
     GoRoute(path: "/table", builder: (context, state) => HomePage()),
