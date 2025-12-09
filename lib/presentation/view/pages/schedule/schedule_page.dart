@@ -1,3 +1,4 @@
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/view/pages/schedule/widgets/month_selector.dart';
 import 'package:damta/presentation/view/pages/schedule/widgets/schedule_card.dart';
 import 'package:damta/presentation/view/pages/schedule/widgets/schedule_shimmer.dart';
@@ -19,13 +20,10 @@ class SchedulePage extends ConsumerWidget {
     );
 
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
-        // 백 버튼
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back), // 백 버튼
           onPressed: () => context.pop(),
         ),
       ),
@@ -70,13 +68,13 @@ class SchedulePage extends ConsumerWidget {
                 child: Center(
                   child: Text(
                     '해당 월에 학사일정이 없습니다',
-                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                    style: TextStyle(fontSize: 16, color: vrc(context).detailText),
                   ),
                 ),
               )
             : Expanded(
                 child: ListView.separated(
-                  padding: const EdgeInsets.only(left: 16, right: 16, bottom: 60, top: 20),
+                  padding: const EdgeInsets.only(left: 16, right: 16, bottom: 60, top: 10),
                   itemCount: groupedSchedules.length,
                   separatorBuilder: (context, index) => const SizedBox(height: 20),
                   itemBuilder: (context, index) {
@@ -95,9 +93,9 @@ class SchedulePage extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.error_outline, size: 48, color: Colors.grey),
+          Icon(Icons.error_outline, size: 48, color: vrc(context).errorText),
           const SizedBox(height: 16),
-          const Text('학사일정을 불러오는데 실패했습니다', style: TextStyle(fontSize: 16, color: Colors.grey)),
+          Text('학사일정을 불러오는데 실패했습니다', style: TextStyle(fontSize: 16, color: vrc(context).errorText)),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
@@ -111,7 +109,7 @@ class SchedulePage extends ConsumerWidget {
                   .reload();
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFA7D7FE),
+              backgroundColor: fxc(context).brandColor,
               foregroundColor: Colors.white,
             ),
             child: const Text('다시 시도'),

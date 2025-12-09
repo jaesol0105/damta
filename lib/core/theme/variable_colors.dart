@@ -32,7 +32,7 @@ class VariableColors extends ThemeExtension<VariableColors> {
     detailText: Color(0xFF757575), // [디테일] 내용 텍스트, 설명/세부사항 등에 사용 (grey600)
     contentText: Color(0xFF616161), // [내용] 텍스트, 누를 수 있는 위젯의 텍스트 등에 사용 (grey700)
     labelText: Color(0xDD000000), // [라벨] 등에 사용, 플러터 앱 기본 텍스트 색깔임 (black87)
-    errorText: Color(0xB3FFFFFF), // [에러 텍스트] (grey500)
+    errorText: Colors.grey, // [에러 텍스트] (grey500)
   );
 
   /// 다크모드

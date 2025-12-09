@@ -19,7 +19,7 @@ class AppTheme {
 
   static ThemeData dark = ThemeData(
     colorScheme: ColorScheme.fromSeed(brightness: Brightness.dark, seedColor: blue),
-    appBarTheme: AppBarTheme(backgroundColor: Colors.white, scrolledUnderElevation: 0),
+    appBarTheme: AppBarTheme(backgroundColor: Color(0xFF121212), scrolledUnderElevation: 0),
     scaffoldBackgroundColor: Color(0xFF121212),
     extensions: const [VariableColors.dark, FixedColors.constant],
     // textTheme: GoogleFonts.notoSansKrTextTheme(ThemeData.dark().textTheme),

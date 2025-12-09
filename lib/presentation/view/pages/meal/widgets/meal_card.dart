@@ -1,3 +1,4 @@
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class MealCard extends StatelessWidget {
@@ -20,9 +21,9 @@ class MealCard extends StatelessWidget {
       padding: const EdgeInsets.all(20),
 
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: vrc(context).surface,
         border: Border.all(
-          color: Colors.grey[300]!, // 나중에 Theme에 위임
+          color: vrc(context).border!, // 나중에 Theme에 위임
         ),
         borderRadius: BorderRadius.circular(16),
       ),
@@ -42,7 +43,7 @@ class MealCard extends StatelessWidget {
 
           Text(
             dishes.join(', '),
-            style: TextStyle(fontSize: 14, color: Colors.grey[600], height: 1.5),
+            style: TextStyle(fontSize: 14, color: vrc(context).detailText, height: 1.5),
           ),
 
           if (kcal != null && kcal!.isNotEmpty) ...[

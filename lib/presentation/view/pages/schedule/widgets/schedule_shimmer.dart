@@ -1,3 +1,4 @@
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -20,8 +21,8 @@ class ScheduleShimmer extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.only(right: 8),
                 child: Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey[100]!,
+                  baseColor: vrc(context).border!,
+                  highlightColor: vrc(context).border!,
                   child: Container(
                     width: 56,
                     decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
@@ -42,8 +43,8 @@ class ScheduleShimmer extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 16),
                 child: Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey[100]!,
+                  baseColor: vrc(context).border!,
+                  highlightColor: vrc(context).border!,
                   child: Container(
                     height: 120,
                     decoration: BoxDecoration(

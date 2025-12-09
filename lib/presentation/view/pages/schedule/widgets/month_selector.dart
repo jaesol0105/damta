@@ -1,3 +1,4 @@
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -23,20 +24,18 @@ class MonthSelector extends HookWidget {
 
     final scrollController = useScrollController();
 
-    // 빌드 후 한 번, 현재 선택된 달 위치로 스크롤
+    // 빌드 후 현재 선택된 달 위치로 스크롤
     useEffect(() {
       // 선택된 달의 index 찾기
       final index = availableMonths.indexWhere(
         (m) => m.year == selectedYear && m.month == selectedMonth,
       );
-
       if (index == -1) return null;
 
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         const itemWidth = 56.0; // 아이템 width
         const separatorWidth = 8.0; // margin 간격
         final targetOffset = index * (itemWidth + separatorWidth);
-
         // 자연스럽게 이동하고 싶으면 animateTo, 바로 가려면 jumpTo
         // scrollController.jumpTo(targetOffset);
         scrollController.animateTo(
@@ -45,7 +44,6 @@ class MonthSelector extends HookWidget {
           curve: Curves.easeOut,
         );
       });
-
       return null;
     }, [availableMonths, selectedYear, selectedMonth]);
 
@@ -58,13 +56,13 @@ class MonthSelector extends HookWidget {
         itemCount: availableMonths.length,
         itemBuilder: (context, index) {
           final month = availableMonths[index];
-          return _monthItem(month);
+          return _monthItem(context, month);
         },
       ),
     );
   }
 
-  Widget _monthItem(DateTime month) {
+  Widget _monthItem(BuildContext context, DateTime month) {
     final isSelected = month.year == selectedYear && month.month == selectedMonth;
 
     return GestureDetector(
@@ -73,10 +71,10 @@ class MonthSelector extends HookWidget {
         width: 56,
         margin: const EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFFA7D7FE) : Colors.white,
+          color: isSelected ? fxc(context).brandColor : vrc(context).surface,
           shape: BoxShape.circle,
           border: Border.all(
-            color: isSelected ? const Color(0xFFA7D7FE) : Colors.grey[300]!,
+            color: isSelected ? fxc(context).brandColor! : vrc(context).border!,
             width: 1,
           ),
         ),
@@ -89,7 +87,7 @@ class MonthSelector extends HookWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
-                color: isSelected ? Colors.white : Colors.grey[700],
+                color: isSelected ? Colors.white : vrc(context).contentText,
               ),
             ),
             SizedBox(height: 1),
