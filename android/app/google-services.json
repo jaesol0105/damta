@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "436072449092",
+    "project_id": "damta-323b4",
+    "storage_bucket": "damta-323b4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:436072449092:android:93be68b09136d91454a811",
+        "android_client_info": {
+          "package_name": "com.damta.damta"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOVfwt6RKLThGhz-0IPBhFQ9PTpnlLKd8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
