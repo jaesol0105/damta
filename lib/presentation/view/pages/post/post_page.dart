@@ -1,27 +1,23 @@
 import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/presentation/core/util/date_formatter.dart';
+import 'package:damta/presentation/view_model/post_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class PostPage extends StatelessWidget {
+class PostPage extends HookConsumerWidget {
   const PostPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    List<PostEntity> list = [];
-    for (var i = 1; i <= 30; i++) {
-      list.add(
-        PostEntity(
-          pTitle: "제목$i",
-          pContent: "내용$i",
-          pWriter: "작성자$i",
-          pCreatedAt: DateTime.now(),
-          view: i,
-          uId: '',
-        ),
-      );
-    }
-    print(list.length);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final List<PostEntity> list = ref.watch(postViewModelProvider);
+
+    useEffect(() {
+      ref.read(postViewModelProvider.notifier).loadPosts();
+      return null;
+    }, []);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -51,41 +47,51 @@ class PostPage extends StatelessWidget {
           return InkWell(
             splashColor: Color(0xFFD5ECFF),
             onTap: () {
-              context.push(":id");
+              context.push("/post/${list[index].pId}");
             },
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 5,
                 children: [
                   Text(
-                    list[index].pTitle,
+                    list[index].pTitle, // 제목
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text(list[index].pContent),
+                  SizedBox(height: 5),
+                  Text(
+                    list[index].pContent, // 내용
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   SizedBox(height: 10),
                   IntrinsicHeight(
                     child: Row(
                       children: [
                         Icon(Icons.chat_bubble_outline),
-                        const Text("300"),
+                        Text((list[index].cIds?.length ?? 0).toString()), // 댓글수
                         SizedBox(width: 10),
                         Icon(Icons.favorite_border),
-                        const Text("13"),
+                        Text(
+                          (list[index].emojis?.length ?? 0).toString(), // 이모지수
+                        ),
                         // 세로 구분선
                         VerticalDivider(
                           width: 10,
                           thickness: 0,
                           color: Colors.grey,
                         ),
-                        Text(DateFormatter.format(DateTime.now())),
+                        // Text(DateFormatter.format(DateTime.now())),
+                        Text(
+                          DateFormatter.format(list[index].pCreatedAt),
+                        ), // 등록일
                         VerticalDivider(
                           width: 10,
                           thickness: 0,
                           color: Colors.grey,
                         ),
-                        Text("조회 ${list[index].view.toString()}"),
+                        Text("조회 ${list[index].view.toString()}"), // 조회수
                       ],
                     ),
                   ),

@@ -1,4 +1,5 @@
 import 'package:damta/presentation/view/pages/home/home_page.dart';
+import 'package:damta/presentation/view/pages/meal/meal_page.dart';
 import 'package:damta/presentation/view/pages/post/post_page.dart';
 import 'package:damta/presentation/view/pages/post_detail/post_detail_page.dart';
 import 'package:go_router/go_router.dart';
@@ -37,8 +38,12 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: ":id",
           builder: (context, state) {
-            final String id = state.pathParameters['id']!;
-            return PostDetailPage(id: id);
+            final String? pId = state.pathParameters['id'];
+            if (pId == null) {
+              // 예외처리: id 파라미터가 없을 경우
+              return HomePage();
+            }
+            return PostDetailPage(pId: pId);
           },
         ),
       ],
