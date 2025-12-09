@@ -50,6 +50,7 @@ dependencies:
   flutter_chat_reactions: ^0.2.7
   kakao_flutter_sdk_user: ^1.10.0
   firebase_auth: ^6.1.2
+  http: ^1.6.0
 
 dev_dependencies:
   flutter_test:

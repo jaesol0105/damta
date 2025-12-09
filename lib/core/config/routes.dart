@@ -24,7 +24,7 @@ final GoRouter router = GoRouter(
           return const LoginPage();
         }
 
-        return SchoolInputPage(kakaoId: kakaoId);
+        return SchoolInputPage(kakaoId: kakaoId!);
       },
     ),
 
