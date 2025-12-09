@@ -1,9 +1,6 @@
 import 'package:damta/domain/entity/comment_entity.dart';
-import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/presentation/core/util/time_ago.dart';
-import 'package:damta/presentation/view_model/post_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class PostDetailPage extends StatefulWidget {
