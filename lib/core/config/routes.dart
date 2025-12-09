@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(
   routes: [
-    GoRoute(path: "/", builder: (context, state) => MealPage()),
+    GoRoute(path: "/", builder: (context, state) => HomePage()),
     GoRoute(
       path: "/post",
       builder: (context, state) => PostPage(),
