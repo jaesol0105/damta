@@ -1,4 +1,4 @@
-import 'package:damta/core/app_theme.dart';
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -39,10 +39,7 @@ class NotificationView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               // spacing: 15,
               children: [
-                Text(
-                  title,
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                ),
+                Text(title, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                 // isRead
                 //     ? SizedBox.shrink()
                 //     : Icon(Icons.circle, color: Colors.red, size: 8),

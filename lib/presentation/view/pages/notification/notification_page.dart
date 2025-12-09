@@ -1,4 +1,4 @@
-import 'package:damta/core/app_theme.dart';
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/view/pages/notification/widgets/notification_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -25,8 +25,7 @@ class NotificationEntity {
   final String? comment; // 댓글 내용
   final String? emoji; // 반응 내용
   final bool isNew; // 새로운 알림인지 여부 (댓글 표시 형식 다르게 하기 위한 변수)
-  final bool
-  isRead; // 알림 읽었는지 여부 (알림 목록에 표시되는 알림이 사라지지 않고, 읽음/안읽음 상태만 바꾸기 위한 변수)
+  final bool isRead; // 알림 읽었는지 여부 (알림 목록에 표시되는 알림이 사라지지 않고, 읽음/안읽음 상태만 바꾸기 위한 변수)
 }
 
 /*
@@ -89,9 +88,7 @@ class NotificationPage extends StatelessWidget {
       ];
 
   // 알림을 postId 기준으로 그룹화
-  Map<String, List<NotificationEntity>> groupByPost(
-    List<NotificationEntity> list,
-  ) {
+  Map<String, List<NotificationEntity>> groupByPost(List<NotificationEntity> list) {
     final map = <String, List<NotificationEntity>>{};
 
     for (var n in list) {
@@ -170,10 +167,7 @@ class NotificationPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '알림',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              ),
+              Text('알림', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
               Text('도장중학교', style: TextStyle(fontSize: 14, color: darkgrey)),
             ],
           ),
@@ -183,8 +177,7 @@ class NotificationPage extends StatelessWidget {
       body: NotificationListener(
         onNotification: (notification) {
           if (notification is ScrollUpdateNotification) {
-            if (notification.metrics.pixels >=
-                notification.metrics.maxScrollExtent) {
+            if (notification.metrics.pixels >= notification.metrics.maxScrollExtent) {
               // ref.read(notificationViewModelProvider.notifier).getMoreNotis();
             }
             return true;

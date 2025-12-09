@@ -1,4 +1,4 @@
-import 'package:damta/core/app_theme.dart';
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 // Entity 로 빼기
@@ -35,20 +35,11 @@ class WeatherBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            "${time.month}/${time.day}(${time.weekday})",
-            style: TextStyle(fontSize: 14),
-          ),
+          Text("${time.month}/${time.day}(${time.weekday})", style: TextStyle(fontSize: 14)),
           isUmbrella
-              ? Text(
-                  "우산 챙겨!",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                )
+              ? Text("우산 챙겨!", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold))
               : SizedBox.shrink(),
-          Text(
-            "$temperature° ☔️ $rainPrecipitation%",
-            style: TextStyle(fontSize: 14),
-          ),
+          Text("$temperature° ☔️ $rainPrecipitation%", style: TextStyle(fontSize: 14)),
         ],
       ),
     );

@@ -1,4 +1,4 @@
-import 'package:damta/core/app_theme.dart';
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/core/config/routes.dart';
 import 'package:damta/data/database/database_helper.dart';
 import 'package:flutter/foundation.dart';
@@ -22,8 +22,8 @@ class MyApp extends StatelessWidget {
       routerConfig: router,
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
-      theme: lightTheme,
-      darkTheme: darkTheme,
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
     );
   }
 }
