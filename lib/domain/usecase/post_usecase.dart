@@ -5,9 +5,8 @@ class PostUsecase {
   const PostUsecase(this.postRepository); // 의존성 주입
   final PostRepository postRepository;
 
-   // todo 리스트 처음 불러오기
+  // todo 리스트 처음 불러오기
   Future<List<PostEntity>> getAllPosts() async {
     return postRepository.getAllPosts();
   }
-
 }

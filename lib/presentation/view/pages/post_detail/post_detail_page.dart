@@ -1,42 +1,32 @@
 import 'package:damta/domain/entity/comment_entity.dart';
+import 'package:damta/presentation/core/util/date_formatter.dart';
 import 'package:damta/presentation/core/util/time_ago.dart';
+import 'package:damta/presentation/view_model/post_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class PostDetailPage extends StatefulWidget {
-  const PostDetailPage({super.key, required this.id});
-  final String id;
+class PostDetailPage extends ConsumerStatefulWidget {
+  const PostDetailPage({super.key, required this.pId});
+  final String pId;
 
   @override
-  State<PostDetailPage> createState() => _PostDetailPageState();
+  ConsumerState<PostDetailPage> createState() => _PostDetailPageState();
 }
 
-class _PostDetailPageState extends State<PostDetailPage> {
-  OverlayEntry? _overlayEntry;
+class _PostDetailPageState extends ConsumerState<PostDetailPage> {
+  OverlayEntry? overlayEntry;
 
-  final LayerLink _layerLink = LayerLink();
-
-  bool showEmojiPopup = false;
-
-  final List<String> emojis = ["🤣", "👍", "❤️", "🔥", "✨", "😒", "🥹"];
-
-  final List<String> addEmojis = [];
-
+  final LayerLink layerLink = LayerLink();
   @override
   Widget build(BuildContext context) {
-    // final List<PostEntity> list = ref.read(postViewModelProvider);
     List<CommentEntity> list = [];
-    for (var i = 1; i <= 30; i++) {
-      list.add(
-        CommentEntity(
-          cContent: "내용$i",
-          cWriter: "작성자$i",
-          cCreatedAt: DateTime.now(),
-          pId: "포스트id",
-          uId: '유저id',
-        ),
-      );
-    }
+    final post = ref
+        .watch(postViewModelProvider)
+        .firstWhere(
+          (p) => p.pId == widget.pId,
+          orElse: () => throw Exception("Post not found"),
+        );
 
     return Scaffold(
       appBar: AppBar(
@@ -71,37 +61,36 @@ class _PostDetailPageState extends State<PostDetailPage> {
               IntrinsicHeight(
                 child: Row(
                   children: [
-                    Text("작성자"),
+                    Text(post.pWriter), // 작성자
                     VerticalDivider(
                       width: 10,
                       thickness: 0,
                       color: Colors.grey,
                     ),
-                    Text("작성시간"),
+                    Text(DateFormatter.format(post.pCreatedAt)), // 작성시간
                     VerticalDivider(
                       width: 10,
                       thickness: 0,
                       color: Colors.grey,
                     ),
-                    Text("조회수"),
+                    Text(post.view.toString()), // 조회수
                   ],
                 ),
               ),
-              Text("제목", style: TextStyle(fontWeight: FontWeight.bold)),
-              Text("내용"),
+              Text(
+                post.pTitle,
+                style: TextStyle(fontWeight: FontWeight.bold), // 제목
+              ),
+              Text(post.pContent), // 내용
               Row(
                 spacing: 5,
                 children: [
                   // 반응추가
                   CompositedTransformTarget(
-                    link: _layerLink,
+                    link: layerLink,
                     child: InkWell(
                       onTap: () {
-                        if (_overlayEntry == null) {
-                          showPopup();
-                        } else {
-                          removePopup();
-                        }
+                        showPopup();
                       },
                       child: SizedBox(
                         width: 50,
@@ -116,9 +105,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         spacing: 5,
-                        children: addEmojis
-                            .map((e) => Text(e, style: TextStyle(fontSize: 24)))
-                            .toList(),
+                        children:
+                            post.emojis
+                                ?.map(
+                                  (e) =>
+                                      Text(e, style: TextStyle(fontSize: 24)),
+                                )
+                                .toList() ??
+                            [],
                       ),
                     ),
                   ),
@@ -129,7 +123,10 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 children: [
                   Row(
                     // spacing: 5,
-                    children: [Icon(Icons.chat_bubble_outline), Text("댓글수")],
+                    children: [
+                      Icon(Icons.chat_bubble_outline),
+                      Text((post.cIds?.length).toString()), // 댓글수
+                    ],
                   ),
                   TextButton(
                     onPressed: () {
@@ -200,7 +197,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
               // 버튼 위에 붙는 팝업
               CompositedTransformFollower(
-                link: _layerLink,
+                link: layerLink,
                 offset: const Offset(0, -60), // 버튼 위로 60px 이동
                 showWhenUnlinked: false,
                 child: Material(
@@ -219,9 +216,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
                             (e) => GestureDetector(
                               onTap: () {
                                 // 1. 리스트에 추가
-                                setState(() {
-                                  addEmojis.add(e);
-                                });
 
                                 // 2. 팝업 닫기
                                 removePopup();
@@ -245,12 +239,12 @@ class _PostDetailPageState extends State<PostDetailPage> {
   }
 
   void showPopup() {
-    _overlayEntry = _buildOverlay();
-    Overlay.of(context).insert(_overlayEntry!); // 화면 위에 띄움
+    overlayEntry = _buildOverlay();
+    Overlay.of(context).insert(overlayEntry!); // 화면 위에 띄움
   }
 
   void removePopup() {
-    _overlayEntry?.remove();
-    _overlayEntry = null;
+    overlayEntry?.remove();
+    overlayEntry = null;
   }
 }

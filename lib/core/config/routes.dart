@@ -14,8 +14,12 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: ":id",
           builder: (context, state) {
-            final String id = state.pathParameters['id']!;
-            return PostDetailPage(id: id);
+            final String? pId = state.pathParameters['id'];
+            if (pId == null) {
+              // 예외처리: id 파라미터가 없을 경우
+              return HomePage();
+            }
+            return PostDetailPage(pId: pId);
           },
         ),
       ],

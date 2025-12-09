@@ -34,12 +34,6 @@ class PostDataSourceImpl implements PostDataSource {
   }
 
   @override
-  Future<PostDto> getPost() {
-    // TODO: implement getPost
-    throw UnimplementedError();
-  }
-
-  @override
   Future<void> updatePost(PostDto postDto) {
     // TODO: implement updatePost
     throw UnimplementedError();
