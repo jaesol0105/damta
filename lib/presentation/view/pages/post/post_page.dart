@@ -47,23 +47,23 @@ class PostPage extends HookConsumerWidget {
           return InkWell(
             splashColor: Color(0xFFD5ECFF),
             onTap: () {
-              context.push("/post/:id");
+              context.push("/post/${list[index].pId}");
             },
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 5,
                 children: [
                   Text(
+                    list[index].pTitle, // 제목
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    list[index].pTitle, // 제목
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
+                  SizedBox(height: 5),
                   Text(
-                    overflow: TextOverflow.ellipsis,
                     list[index].pContent, // 내용
+                    overflow: TextOverflow.ellipsis,
                   ),
                   SizedBox(height: 10),
                   IntrinsicHeight(

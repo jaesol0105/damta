@@ -27,12 +27,6 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<PostEntity> getPost() {
-    // TODO: implement getPost
-    throw UnimplementedError();
-  }
-
-  @override
   Future<void> updatePost(PostEntity postEntity) {
     // TODO: implement updatePost
     throw UnimplementedError();
