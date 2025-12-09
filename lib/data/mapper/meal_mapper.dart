@@ -3,6 +3,10 @@ import 'package:damta/data/dto/neis_meal_dto.dart';
 import 'package:damta/domain/entity/meal_entity.dart';
 
 class MealMapper {
+  static List<MealEntity> toDomainList(List<NeisMealDTO> dtoList) {
+    return dtoList.map((dto) => toDomain(dto)).toList();
+  }
+
   static MealEntity toDomain(NeisMealDTO dto) {
     // 날짜 파싱 (yyyyMMdd -> DateTime)
     final date = DateTime.parse(

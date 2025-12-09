@@ -29,6 +29,7 @@ Future<void> _getHashKey() async {
 void main() async {
   // 위젯 바인딩 초기화
   WidgetsFlutterBinding.ensureInitialized();
+
   await FirebaseService.instance.initializeFirebase();
   // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   

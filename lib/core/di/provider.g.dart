@@ -49,47 +49,6 @@ final class DioProvider extends $FunctionalProvider<Dio, Dio, Dio>
 
 String _$dioHash() => r'a03da399b44b3740dc4fcfc6716203041d66ff01';
 
-@ProviderFor(databaseHelper)
-const databaseHelperProvider = DatabaseHelperProvider._();
-
-final class DatabaseHelperProvider
-    extends $FunctionalProvider<DatabaseHelper, DatabaseHelper, DatabaseHelper>
-    with $Provider<DatabaseHelper> {
-  const DatabaseHelperProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'databaseHelperProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$databaseHelperHash();
-
-  @$internal
-  @override
-  $ProviderElement<DatabaseHelper> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
-
-  @override
-  DatabaseHelper create(Ref ref) {
-    return databaseHelper(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(DatabaseHelper value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<DatabaseHelper>(value),
-    );
-  }
-}
-
-String _$databaseHelperHash() => r'd9a91b257d3ed9a4f2d87bd829e17dc900678685';
-
 @ProviderFor(database)
 const databaseProvider = DatabaseProvider._();
 
@@ -122,7 +81,7 @@ final class DatabaseProvider
   }
 }
 
-String _$databaseHash() => r'55aaf60db7cf2e848565a1272f2e5308ac4e82a6';
+String _$databaseHash() => r'8ffd0b9ad24694816b2791de7c00c9fd50ffcc38';
 
 @ProviderFor(mealRemoteDataSource)
 const mealRemoteDataSourceProvider = MealRemoteDataSourceProvider._();
@@ -172,6 +131,54 @@ final class MealRemoteDataSourceProvider
 String _$mealRemoteDataSourceHash() =>
     r'85a08b7586318a6f70f3afac1860e6c590d6cbd1';
 
+@ProviderFor(scheduleRemoteDataSource)
+const scheduleRemoteDataSourceProvider = ScheduleRemoteDataSourceProvider._();
+
+final class ScheduleRemoteDataSourceProvider
+    extends
+        $FunctionalProvider<
+          ScheduleRemoteDataSource,
+          ScheduleRemoteDataSource,
+          ScheduleRemoteDataSource
+        >
+    with $Provider<ScheduleRemoteDataSource> {
+  const ScheduleRemoteDataSourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'scheduleRemoteDataSourceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$scheduleRemoteDataSourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<ScheduleRemoteDataSource> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  ScheduleRemoteDataSource create(Ref ref) {
+    return scheduleRemoteDataSource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ScheduleRemoteDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ScheduleRemoteDataSource>(value),
+    );
+  }
+}
+
+String _$scheduleRemoteDataSourceHash() =>
+    r'92ee8902818ef0ccee9246021577d5c184934e5c';
+
 @ProviderFor(mealLocalDataSource)
 const mealLocalDataSourceProvider = MealLocalDataSourceProvider._();
 
@@ -191,7 +198,7 @@ final class MealLocalDataSourceProvider
         argument: null,
         retry: null,
         name: r'mealLocalDataSourceProvider',
-        isAutoDispose: false,
+        isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -212,7 +219,49 @@ final class MealLocalDataSourceProvider
 }
 
 String _$mealLocalDataSourceHash() =>
-    r'903fc926046ed5429fad6f77caeb87445071f207';
+    r'debba47bf97a253b493bb41285b9100f09cb4dd5';
+
+@ProviderFor(scheduleLocalDataSource)
+const scheduleLocalDataSourceProvider = ScheduleLocalDataSourceProvider._();
+
+final class ScheduleLocalDataSourceProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<ScheduleLocalDataSource>,
+          ScheduleLocalDataSource,
+          FutureOr<ScheduleLocalDataSource>
+        >
+    with
+        $FutureModifier<ScheduleLocalDataSource>,
+        $FutureProvider<ScheduleLocalDataSource> {
+  const ScheduleLocalDataSourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'scheduleLocalDataSourceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$scheduleLocalDataSourceHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<ScheduleLocalDataSource> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<ScheduleLocalDataSource> create(Ref ref) {
+    return scheduleLocalDataSource(ref);
+  }
+}
+
+String _$scheduleLocalDataSourceHash() =>
+    r'039ddf9b059ed131a9e3595beca08e6a74968a07';
 
 @ProviderFor(mealRepository)
 const mealRepositoryProvider = MealRepositoryProvider._();
@@ -231,7 +280,7 @@ final class MealRepositoryProvider
         argument: null,
         retry: null,
         name: r'mealRepositoryProvider',
-        isAutoDispose: false,
+        isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -251,4 +300,46 @@ final class MealRepositoryProvider
   }
 }
 
-String _$mealRepositoryHash() => r'1695904ab5ac07e2793b111dbecdfff92288cb8e';
+String _$mealRepositoryHash() => r'4c2c949d8846bb82c23aea83ba9423183cccb90d';
+
+@ProviderFor(scheduleRepository)
+const scheduleRepositoryProvider = ScheduleRepositoryProvider._();
+
+final class ScheduleRepositoryProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<ScheduleRepository>,
+          ScheduleRepository,
+          FutureOr<ScheduleRepository>
+        >
+    with
+        $FutureModifier<ScheduleRepository>,
+        $FutureProvider<ScheduleRepository> {
+  const ScheduleRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'scheduleRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$scheduleRepositoryHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<ScheduleRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<ScheduleRepository> create(Ref ref) {
+    return scheduleRepository(ref);
+  }
+}
+
+String _$scheduleRepositoryHash() =>
+    r'd49fc4dc2576ff7137c1661fd9358682a64af8e5';

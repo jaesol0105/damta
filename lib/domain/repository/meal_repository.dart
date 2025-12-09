@@ -5,7 +5,7 @@ abstract class MealRepository {
   Future<List<MealEntity>> getMeals({
     required String officeCode,
     required String schoolCode,
-    required DateTime from,
-    required DateTime to,
+    required DateTime fromDate,
+    required DateTime toDate,
   });
 }

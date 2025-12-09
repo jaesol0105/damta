@@ -11,26 +11,7 @@ class DateSelector extends HookWidget {
 
   final DateTime selectedDate;
   final Function(DateTime) onDateSelected;
-  final Set<DateTime> mealDates;
-
-  /// 오늘 기준 한달 치 날짜 생성 (급식이 있는 날만)
-  List<DateTime> _generateDates() {
-    final today = DateTime.now();
-    final dates = <DateTime>[];
-    for (int i = 0; i < 30; i++) {
-      final d = DateTime(today.year, today.month, today.day + i);
-
-      if (_hasMeal(d)) {
-        dates.add(d);
-      }
-    }
-    return dates;
-  }
-
-  /// 해당 날짜에 급식이 있는지 여부
-  bool _hasMeal(DateTime date) {
-    return mealDates.any((m) => m.year == date.year && m.month == date.month && m.day == date.day);
-  }
+  final List<DateTime> mealDates;
 
   /// 요일 매퍼
   String _getWeekdayName(DateTime date) {
@@ -41,7 +22,7 @@ class DateSelector extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final scrollController = useScrollController();
-    final dates = useMemoized(() => _generateDates());
+    final dates = mealDates;
 
     return SizedBox(
       height: 80,

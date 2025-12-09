@@ -21,10 +21,10 @@ class MealCard extends StatelessWidget {
 
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: Colors.grey[300]!, // 나중에 Theme에 위임
         ),
+        borderRadius: BorderRadius.circular(16),
       ),
 
       child: Column(
