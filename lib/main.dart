@@ -1,12 +1,14 @@
 import 'package:damta/core/app_theme.dart';
 import 'package:damta/core/config/routes.dart';
-import 'package:damta/data/database/database_helper.dart';
-import 'package:flutter/foundation.dart';
+import 'package:damta/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(ProviderScope(child: const MyApp()));
 }
 
