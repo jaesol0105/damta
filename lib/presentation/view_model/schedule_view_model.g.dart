@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'meal_view_model.dart';
+part of 'schedule_view_model.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,39 +9,39 @@ part of 'meal_view_model.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(MealViewModel)
-const mealViewModelProvider = MealViewModelFamily._();
+@ProviderFor(ScheduleViewModel)
+const scheduleViewModelProvider = ScheduleViewModelFamily._();
 
-final class MealViewModelProvider
-    extends $AsyncNotifierProvider<MealViewModel, MealState> {
-  const MealViewModelProvider._({
-    required MealViewModelFamily super.from,
+final class ScheduleViewModelProvider
+    extends $AsyncNotifierProvider<ScheduleViewModel, ScheduleState> {
+  const ScheduleViewModelProvider._({
+    required ScheduleViewModelFamily super.from,
     required ({String officeCode, String schoolCode}) super.argument,
   }) : super(
          retry: null,
-         name: r'mealViewModelProvider',
+         name: r'scheduleViewModelProvider',
          isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
 
   @override
-  String debugGetCreateSourceHash() => _$mealViewModelHash();
+  String debugGetCreateSourceHash() => _$scheduleViewModelHash();
 
   @override
   String toString() {
-    return r'mealViewModelProvider'
+    return r'scheduleViewModelProvider'
         ''
         '$argument';
   }
 
   @$internal
   @override
-  MealViewModel create() => MealViewModel();
+  ScheduleViewModel create() => ScheduleViewModel();
 
   @override
   bool operator ==(Object other) {
-    return other is MealViewModelProvider && other.argument == argument;
+    return other is ScheduleViewModelProvider && other.argument == argument;
   }
 
   @override
@@ -50,44 +50,44 @@ final class MealViewModelProvider
   }
 }
 
-String _$mealViewModelHash() => r'f989e0890c7edc1e73eb8b9a2772bdc6d346dc28';
+String _$scheduleViewModelHash() => r'e1a7e0f2acefbd1f135e72c2103ceae9d44f3452';
 
-final class MealViewModelFamily extends $Family
+final class ScheduleViewModelFamily extends $Family
     with
         $ClassFamilyOverride<
-          MealViewModel,
-          AsyncValue<MealState>,
-          MealState,
-          FutureOr<MealState>,
+          ScheduleViewModel,
+          AsyncValue<ScheduleState>,
+          ScheduleState,
+          FutureOr<ScheduleState>,
           ({String officeCode, String schoolCode})
         > {
-  const MealViewModelFamily._()
+  const ScheduleViewModelFamily._()
     : super(
         retry: null,
-        name: r'mealViewModelProvider',
+        name: r'scheduleViewModelProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
         isAutoDispose: true,
       );
 
-  MealViewModelProvider call({
+  ScheduleViewModelProvider call({
     required String officeCode,
     required String schoolCode,
-  }) => MealViewModelProvider._(
+  }) => ScheduleViewModelProvider._(
     argument: (officeCode: officeCode, schoolCode: schoolCode),
     from: this,
   );
 
   @override
-  String toString() => r'mealViewModelProvider';
+  String toString() => r'scheduleViewModelProvider';
 }
 
-abstract class _$MealViewModel extends $AsyncNotifier<MealState> {
+abstract class _$ScheduleViewModel extends $AsyncNotifier<ScheduleState> {
   late final _$args = ref.$arg as ({String officeCode, String schoolCode});
   String get officeCode => _$args.officeCode;
   String get schoolCode => _$args.schoolCode;
 
-  FutureOr<MealState> build({
+  FutureOr<ScheduleState> build({
     required String officeCode,
     required String schoolCode,
   });
@@ -98,12 +98,12 @@ abstract class _$MealViewModel extends $AsyncNotifier<MealState> {
       officeCode: _$args.officeCode,
       schoolCode: _$args.schoolCode,
     );
-    final ref = this.ref as $Ref<AsyncValue<MealState>, MealState>;
+    final ref = this.ref as $Ref<AsyncValue<ScheduleState>, ScheduleState>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<MealState>, MealState>,
-              AsyncValue<MealState>,
+              AnyNotifier<AsyncValue<ScheduleState>, ScheduleState>,
+              AsyncValue<ScheduleState>,
               Object?,
               Object?
             >;

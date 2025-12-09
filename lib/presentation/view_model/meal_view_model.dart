@@ -14,7 +14,7 @@ abstract class MealState with _$MealState {
   const factory MealState({required DateTime selectedDate, required List<MealEntity> allMeals}) =
       _MealState;
 
-  /// 선택된 날짜의 급식 목록 반환
+  /// 선택된 날짜의 급식 목록만 필터링
   List<MealEntity> get mealsForSelectedDate {
     return allMeals.where((meal) {
       final d = selectedDate;
@@ -22,7 +22,7 @@ abstract class MealState with _$MealState {
     }).toList();
   }
 
-  /// 선택된 날짜의 시간대별 (아침/점심/저녁) 급식 가져오기
+  /// 선택된 날짜의 시간대별 (아침/점심/저녁) 급식메뉴 가져오기
   MealEntity? getMealByType(MealType type) {
     try {
       return mealsForSelectedDate.firstWhere((meal) => meal.type == type);
@@ -33,6 +33,13 @@ abstract class MealState with _$MealState {
 
   /// 해당 날짜에 급식이 있는지 여부
   bool get hasAnyMeal => mealsForSelectedDate.isNotEmpty;
+
+  /// 급식이 있는 날짜들의 '년/월/일' 집합
+  List<DateTime> get mealDates {
+    return allMeals
+        .map((meal) => DateTime(meal.date.year, meal.date.month, meal.date.day))
+        .toList();
+  }
 }
 
 @riverpod
@@ -47,13 +54,13 @@ class MealViewModel extends _$MealViewModel {
     final repo = await ref.read(mealRepositoryProvider.future);
 
     final today = DateTime.now();
-    final endDate = today.add(const Duration(days: 30));
+    final endDate = today.add(const Duration(days: 31));
 
     final meals = await repo.getMeals(
       officeCode: officeCode,
       schoolCode: schoolCode,
-      from: today,
-      to: endDate,
+      fromDate: today,
+      toDate: endDate,
     );
 
     DateTime selected = DateTime(today.year, today.month, today.day);

@@ -16,27 +16,28 @@ class MealRepositoryImpl implements MealRepository {
   Future<List<MealEntity>> getMeals({
     required String officeCode,
     required String schoolCode,
-    required DateTime from,
-    required DateTime to,
+    required DateTime fromDate,
+    required DateTime toDate,
   }) async {
     try {
       // 로컬 캐시에서 먼저 조회
       final cachedMeals = await localDataSource.getMeals(
         schoolCode: schoolCode,
-        from: from,
-        to: to,
+        fromDate: fromDate,
+        toDate: toDate,
       );
       if (cachedMeals.isNotEmpty) {
         return cachedMeals;
       }
+
       // 캐시가 없으면 API 호출
-      final meals = await remoteDataSource.getMeals(
+      final dtoList = await remoteDataSource.getMeals(
         officeCode: officeCode,
         schoolCode: schoolCode,
-        from: from,
-        to: to,
+        fromDate: fromDate,
+        toDate: toDate,
       );
-      final entities = meals.map((dto) => MealMapper.toDomain(dto)).toList();
+      final entities = MealMapper.toDomainList(dtoList);
 
       // API 응답을 로컬 캐시에 저장
       if (entities.isNotEmpty) {

@@ -2,6 +2,7 @@ import 'package:damta/presentation/view/pages/home/home_page.dart';
 import 'package:damta/presentation/view/pages/meal/meal_page.dart';
 import 'package:damta/presentation/view/pages/post/post_page.dart';
 import 'package:damta/presentation/view/pages/post_detail/post_detail_page.dart';
+import 'package:damta/presentation/view/pages/schedule/schedule_page.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(
