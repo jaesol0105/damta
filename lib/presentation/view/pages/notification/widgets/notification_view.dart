@@ -1,29 +1,32 @@
 import 'package:damta/core/app_theme.dart';
+import 'package:damta/core/di/notification_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class NotificationView extends StatelessWidget {
+class NotificationView extends ConsumerWidget {
   const NotificationView({
     super.key,
-    required this.id,
+    required this.uId,
+    required this.pId,
     required this.isRead,
     required this.title,
-    this.content,
+    required this.content,
     required this.time,
   });
-
-  final String id;
+  final String uId;
+  final String pId;
   final bool isRead;
   final String title;
-  final String? content;
+  final String content;
   final String time;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
       onTap: () async {
-        context.go('/post/:$id');
-        // TODO : isRead = true 변경하기
+        context.push('/post/$pId');
+        ref.read(notificationViewModelProvider(uId).notifier).markAsRead(pId);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -37,18 +40,23 @@ class NotificationView extends StatelessWidget {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              // spacing: 15,
               children: [
                 Text(
                   title,
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
-                // isRead
-                //     ? SizedBox.shrink()
-                //     : Icon(Icons.circle, color: Colors.red, size: 8),
+                // TODO : 알림 테스트용 삭제 버튼 > 지우기
+                InkWell(
+                  onTap: () {
+                    ref
+                        .read(notificationViewModelProvider(uId).notifier)
+                        .deleteNotis(pId);
+                  },
+                  child: Icon(Icons.clear),
+                ),
               ],
             ),
-            content == null ? SizedBox.shrink() : Text(content!),
+            Text(content),
             Text(time),
           ],
         ),
