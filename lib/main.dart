@@ -1,3 +1,4 @@
+import 'package:damta/core/app_theme.dart';
 import 'package:damta/core/config/routes.dart';
 import 'package:damta/core/firebase_options.dart';
 import 'package:damta/core/notification_service.dart';
@@ -34,6 +35,9 @@ class MyApp extends StatelessWidget {
         NotificationService.setContext(context);
         return child!;
       },
+      themeMode: ThemeMode.system,
+      theme: lightTheme,
+      darkTheme: darkTheme,
     );
   }
 }
