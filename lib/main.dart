@@ -1,7 +1,7 @@
 import 'package:damta/core/app_theme.dart';
 import 'package:damta/core/config/routes.dart';
-import 'package:damta/core/firebase_options.dart';
 import 'package:damta/core/notification_service.dart';
+import 'package:damta/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
