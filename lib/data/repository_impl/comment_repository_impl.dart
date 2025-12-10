@@ -1,5 +1,5 @@
 // Dto - Entity
-import 'package:damta/data/data_source/comment_data_source.dart';
+import 'package:damta/data/data_source/remote/comment_data_source.dart';
 import 'package:damta/data/mapper/comment_mapper.dart';
 import 'package:damta/domain/entity/comment_entity.dart';
 import 'package:damta/domain/repository/comment_repository.dart';

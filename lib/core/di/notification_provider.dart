@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:damta/data/data_source/notification_data_source.dart';
+import 'package:damta/data/data_source/remote/notification_data_source.dart';
 import 'package:damta/data/data_source_impl/remote/notification_data_source_impl.dart';
 import 'package:damta/data/repository_impl/notification_repository_impl.dart';
 import 'package:damta/domain/entity/notification_entity.dart';

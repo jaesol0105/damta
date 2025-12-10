@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class WritePostPage extends StatelessWidget {
-  const WritePostPage({super.key});
+class PostEditorPage extends StatelessWidget {
+  const PostEditorPage({super.key});
 
   @override
   Widget build(BuildContext context) {

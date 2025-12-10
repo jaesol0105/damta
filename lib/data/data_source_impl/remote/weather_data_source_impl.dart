@@ -1,4 +1,4 @@
-import 'package:damta/data/data_source/weather_data_source.dart';
+import 'package:damta/data/data_source/remote/weather_data_source.dart';
 import 'package:dio/dio.dart';
 
 class WeatherDataSourceImpl implements WeatherDataSource {
@@ -8,10 +8,7 @@ class WeatherDataSourceImpl implements WeatherDataSource {
 
   // Open-Meteo API 로 날씨 정보 가져오기
   @override
-  Future<Map<String, dynamic>> getWeather({
-    required double lat,
-    required double lon,
-  }) async {
+  Future<Map<String, dynamic>> getWeather({required double lat, required double lon}) async {
     final response = await dio.get(
       'https://api.open-meteo.com/v1/forecast',
       queryParameters: {
