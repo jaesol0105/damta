@@ -1,3 +1,4 @@
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/domain/entity/schedule_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -19,8 +20,8 @@ class ScheduleCard extends StatelessWidget {
       padding: const EdgeInsets.all(20),
 
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey[300]!),
+        color: vrc(context).surface,
+        border: Border.all(color: vrc(context).border!),
         borderRadius: BorderRadius.circular(16),
       ),
 
@@ -34,13 +35,13 @@ class ScheduleCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey[800],
+                  color: vrc(context).labelText,
                 ),
               ),
               const SizedBox(width: 4),
               Text(
                 '(${_getWeekdayName(date)})',
-                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                style: TextStyle(fontSize: 16, color: vrc(context).detailText),
               ),
             ],
           ),
@@ -51,17 +52,21 @@ class ScheduleCard extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('• ', style: TextStyle(fontSize: 16, color: Colors.grey[700])),
+                  Text('• ', style: TextStyle(fontSize: 16, color: vrc(context).contentText)),
                   Expanded(
                     child: RichText(
                       text: TextSpan(
-                        style: TextStyle(fontSize: 16, color: Colors.grey[700], height: 1.4),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: vrc(context).contentText,
+                          height: 1.4,
+                        ),
                         children: [
                           TextSpan(text: schedule.eventName),
                           if (schedule.gradeText != null)
                             TextSpan(
                               text: ' ${schedule.gradeText}',
-                              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                              style: TextStyle(fontSize: 14, color: vrc(context).detailText),
                             ),
                         ],
                       ),

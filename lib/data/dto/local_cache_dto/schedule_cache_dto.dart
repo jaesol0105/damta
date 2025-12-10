@@ -3,9 +3,7 @@ import 'dart:convert';
 import 'package:damta/core/extension/date_time_extension.dart';
 import 'package:damta/domain/entity/schedule_entity.dart';
 
-import 'package:intl/intl.dart';
-
-class ScheduleCacheModel {
+class ScheduleCacheDTO {
   final int? id;
   final String schoolCode;
   final String date; // yyyy-MM-dd 형식
@@ -13,7 +11,7 @@ class ScheduleCacheModel {
   final String gradesJson; // 학년 - JSON 문자열로 저장
   final int cachedAt; // Unix timestamp (밀리초)
   /// SQLite에 저장되는 학사일정 캐시 모델
-  ScheduleCacheModel({
+  ScheduleCacheDTO({
     this.id,
     required this.schoolCode,
     required this.date,
@@ -22,7 +20,7 @@ class ScheduleCacheModel {
     required this.cachedAt,
   });
 
-  // ScheduleCacheModel을 DB Map으로 변롼
+  // ScheduleCacheDTO를 DB Map으로 변롼
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -34,9 +32,9 @@ class ScheduleCacheModel {
     };
   }
 
-  // DB Map을 ScheduleCacheModel로 변환
-  factory ScheduleCacheModel.fromMap(Map<String, dynamic> map) {
-    return ScheduleCacheModel(
+  // DB Map을 ScheduleCacheDTO로 변환
+  factory ScheduleCacheDTO.fromMap(Map<String, dynamic> map) {
+    return ScheduleCacheDTO(
       id: map['id'] as int?,
       schoolCode: map['school_code'] as String,
       date: map['date'] as String,
@@ -46,18 +44,18 @@ class ScheduleCacheModel {
     );
   }
 
-  // ScheduleCacheModel을 ScheduleEntity로 변환
+  // ScheduleCacheDTO을 ScheduleEntity로 변환
   ScheduleEntity toDomain() {
     final grades = (jsonDecode(gradesJson) as List).cast<int>();
     return ScheduleEntity(date: DateTime.parse(date), eventName: eventName, grades: grades);
   }
 
-  // ScheduleEntity를 ScheduleCacheModel로 변환
-  factory ScheduleCacheModel.fromDomain({
+  // ScheduleEntity를 ScheduleCacheDTO로 변환
+  factory ScheduleCacheDTO.fromDomain({
     required ScheduleEntity entity,
     required String schoolCode,
   }) {
-    return ScheduleCacheModel(
+    return ScheduleCacheDTO(
       schoolCode: schoolCode,
       date: entity.date.dbDate(),
       eventName: entity.eventName,

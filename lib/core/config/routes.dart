@@ -31,7 +31,6 @@ final GoRouter router = GoRouter(
     ),
 
     GoRoute(path: "/home", builder: (context, state) => const HomePage()),
-
     GoRoute(
       path: "/post",
       builder: (context, state) => PostPage(),

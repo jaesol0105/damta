@@ -1,4 +1,4 @@
-import 'package:damta/core/app_theme.dart';
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/view/pages/time_table/widgets/choose_class.dart';
 import 'package:damta/presentation/view/pages/time_table/widgets/choose_week.dart';
 import 'package:damta/presentation/view/pages/time_table/widgets/time_table.dart';
