@@ -1,5 +1,5 @@
-import 'package:damta/core/extension/date_time_extension.dart';
 import 'package:damta/domain/entity/time_table_entity.dart';
+import 'package:damta/data/util/extension/date_time_extension.dart';
 
 /// SQLite 에 저장되는 시간표 캐시 모델
 class TimeTableCacheModel {

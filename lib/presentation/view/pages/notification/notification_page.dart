@@ -1,4 +1,4 @@
-import 'package:damta/core/app_theme.dart';
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/core/di/notification_provider.dart';
 import 'package:damta/domain/entity/notification_entity.dart';
 import 'package:damta/presentation/core/util/time_ago.dart';

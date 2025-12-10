@@ -1,4 +1,4 @@
-import 'package:damta/domain/enums/meal_type_enum.dart';
+import 'package:damta/domain/enum/meal_type_enum.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'meal_entity.freezed.dart';

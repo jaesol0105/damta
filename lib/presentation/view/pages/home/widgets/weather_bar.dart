@@ -1,4 +1,4 @@
-import 'package:damta/core/app_theme.dart';
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/view_model/weather_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

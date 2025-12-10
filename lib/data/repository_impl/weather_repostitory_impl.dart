@@ -1,16 +1,15 @@
 import 'package:damta/data/data_source/weather_data_source.dart';
 import 'package:damta/data/dto/weather_dto.dart';
 import 'package:damta/domain/entity/weather_entity.dart';
+import 'package:damta/domain/repository/weather_repository.dart';
 
-class WeatherRepositoryImpl {
+class WeatherRepositoryImpl implements WeatherRepository {
   const WeatherRepositoryImpl(this.dataSource);
 
   final WeatherDataSource dataSource;
 
-  Future<WeatherEntity> getWeather({
-    required double lat,
-    required double lon,
-  }) async {
+  @override
+  Future<WeatherEntity> getWeather({required double lat, required double lon}) async {
     final data = await dataSource.getWeather(lat: lat, lon: lon);
 
     // API 응답에서 current 추출

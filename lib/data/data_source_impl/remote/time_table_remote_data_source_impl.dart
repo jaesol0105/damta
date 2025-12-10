@@ -1,5 +1,5 @@
 import 'dart:developer';
-import 'package:damta/core/extension/date_time_extension.dart';
+import 'package:damta/data/util/extension/date_time_extension.dart';
 import 'package:damta/data/data_source/remote/time_table_remote_data_source.dart';
 import 'package:damta/data/dto/neis_time_table_dto.dart';
 import 'package:dio/dio.dart';
@@ -41,9 +41,7 @@ class TimeTableRemoteDataSourceImpl implements TimeTableRemoteDataSource {
           .timeout(const Duration(seconds: 8));
 
       final end = DateTime.now();
-      print(
-        '[REMOTE] 응답 수신: $end (소요: ${end.difference(start).inMilliseconds} ms)',
-      );
+      print('[REMOTE] 응답 수신: $end (소요: ${end.difference(start).inMilliseconds} ms)');
 
       if (response.statusCode == 200) {
         final data = response.data;
@@ -77,11 +75,7 @@ class TimeTableRemoteDataSourceImpl implements TimeTableRemoteDataSource {
         throw Exception('서버 응답 오류 : ${response.statusCode}');
       }
     } on DioException catch (e, s) {
-      log(
-        'Network 오류로 인한 getTimeTables 실패 : ${e.message}',
-        error: e,
-        stackTrace: s,
-      );
+      log('Network 오류로 인한 getTimeTables 실패 : ${e.message}', error: e, stackTrace: s);
       rethrow;
     } catch (e, s) {
       log('알 수 없는 오류로 인한 getTimeTables 실패 : $e', error: e, stackTrace: s);
@@ -100,11 +94,7 @@ class TimeTableRemoteDataSourceImpl implements TimeTableRemoteDataSource {
 
       if (rowField != null) {
         final rows = (rowField as Map<String, dynamic>)['row'] as List;
-        return rows
-            .map(
-              (json) => NeisTimeTableDto.fromJson(json as Map<String, dynamic>),
-            )
-            .toList();
+        return rows.map((json) => NeisTimeTableDto.fromJson(json as Map<String, dynamic>)).toList();
       }
     }
 
@@ -118,11 +108,7 @@ class TimeTableRemoteDataSourceImpl implements TimeTableRemoteDataSource {
 
       if (rowField != null) {
         final rows = (rowField as Map<String, dynamic>)['row'] as List;
-        return rows
-            .map(
-              (json) => NeisTimeTableDto.fromJson(json as Map<String, dynamic>),
-            )
-            .toList();
+        return rows.map((json) => NeisTimeTableDto.fromJson(json as Map<String, dynamic>)).toList();
       }
     }
 

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:damta/core/extension/date_time_extension.dart';
+import 'package:damta/data/util/extension/date_time_extension.dart';
 import 'package:damta/domain/entity/schedule_entity.dart';
 
 class ScheduleCacheDTO {

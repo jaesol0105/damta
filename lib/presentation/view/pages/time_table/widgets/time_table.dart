@@ -1,25 +1,18 @@
 import 'package:damta/presentation/view_model/time_table_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:damta/core/app_theme.dart';
+import 'package:damta/core/theme/app_theme.dart';
 
 class TimeTable extends ConsumerWidget {
   final String officeCode;
   final String schoolCode;
 
-  const TimeTable({
-    super.key,
-    required this.officeCode,
-    required this.schoolCode,
-  });
+  const TimeTable({super.key, required this.officeCode, required this.schoolCode});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncState = ref.watch(
-      timeTableViewModelProvider(
-        officeCode: officeCode,
-        schoolCode: schoolCode,
-      ),
+      timeTableViewModelProvider(officeCode: officeCode, schoolCode: schoolCode),
     );
 
     return asyncState.when(
@@ -44,10 +37,7 @@ class TimeTable extends ConsumerWidget {
                         width: dayWidth,
                         height: 40,
                         child: Center(
-                          child: Text(
-                            labels[i],
-                            style: TextStyle(color: darkgrey),
-                          ),
+                          child: Text(labels[i], style: TextStyle(color: darkgrey)),
                         ),
                       ),
                   ],
@@ -88,9 +78,7 @@ class TimeTable extends ConsumerWidget {
                             return Container(
                               width: dayWidth,
                               height: 70,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: grey),
-                              ),
+                              decoration: BoxDecoration(border: Border.all(color: grey)),
                             );
                           }
 
@@ -107,10 +95,7 @@ class TimeTable extends ConsumerWidget {
                             ),
                             child: Text(
                               subject,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
-                              ),
+                              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
                               textAlign: TextAlign.center,
                             ),
                           );

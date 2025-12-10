@@ -1,5 +1,5 @@
 import 'package:damta/core/config/routes.dart';
-import 'package:damta/core/notification_service.dart';
+import 'package:damta/core/services/notification_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';

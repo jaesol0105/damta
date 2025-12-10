@@ -1,4 +1,4 @@
-import 'package:damta/core/app_theme.dart';
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 

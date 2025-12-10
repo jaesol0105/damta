@@ -43,7 +43,7 @@ class PostDataSourceImpl implements PostDataSource {
   @override
   Future<void> deletePost(String pId) async {
     try {
-      await firestore.collection('post').doc(id).delete();
+      await firestore.collection('post').doc(pId).delete();
       // 예외 전파
     } on FirebaseException catch (e, s) {
       log('Firebase deletePost 실패: ${e.message}', error: e, stackTrace: s);

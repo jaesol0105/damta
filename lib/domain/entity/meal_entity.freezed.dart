@@ -28,12 +28,12 @@ $MealEntityCopyWith<MealEntity> get copyWith => _$MealEntityCopyWithImpl<MealEnt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MealEntity&&(identical(other.date, date) || other.date == date)&&(identical(other.type, type) || other.type == type)&&const DeepCollectionEquality().equals(other.dishes, dishes)&&(identical(other.kcal, kcal) || other.kcal == kcal));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MealEntity&&(identical(other.date, date) || other.date == date)&&const DeepCollectionEquality().equals(other.type, type)&&const DeepCollectionEquality().equals(other.dishes, dishes)&&(identical(other.kcal, kcal) || other.kcal == kcal));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,date,type,const DeepCollectionEquality().hash(dishes),kcal);
+int get hashCode => Object.hash(runtimeType,date,const DeepCollectionEquality().hash(type),const DeepCollectionEquality().hash(dishes),kcal);
 
 @override
 String toString() {
@@ -65,10 +65,10 @@ class _$MealEntityCopyWithImpl<$Res>
 
 /// Create a copy of MealEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? date = null,Object? type = null,Object? dishes = null,Object? kcal = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? date = null,Object? type = freezed,Object? dishes = null,Object? kcal = freezed,}) {
   return _then(_self.copyWith(
 date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
-as DateTime,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as DateTime,type: freezed == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as MealType,dishes: null == dishes ? _self.dishes : dishes // ignore: cast_nullable_to_non_nullable
 as List<String>,kcal: freezed == kcal ? _self.kcal : kcal // ignore: cast_nullable_to_non_nullable
 as String?,
@@ -240,12 +240,12 @@ _$MealEntityCopyWith<_MealEntity> get copyWith => __$MealEntityCopyWithImpl<_Mea
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MealEntity&&(identical(other.date, date) || other.date == date)&&(identical(other.type, type) || other.type == type)&&const DeepCollectionEquality().equals(other._dishes, _dishes)&&(identical(other.kcal, kcal) || other.kcal == kcal));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MealEntity&&(identical(other.date, date) || other.date == date)&&const DeepCollectionEquality().equals(other.type, type)&&const DeepCollectionEquality().equals(other._dishes, _dishes)&&(identical(other.kcal, kcal) || other.kcal == kcal));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,date,type,const DeepCollectionEquality().hash(_dishes),kcal);
+int get hashCode => Object.hash(runtimeType,date,const DeepCollectionEquality().hash(type),const DeepCollectionEquality().hash(_dishes),kcal);
 
 @override
 String toString() {
@@ -277,10 +277,10 @@ class __$MealEntityCopyWithImpl<$Res>
 
 /// Create a copy of MealEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? date = null,Object? type = null,Object? dishes = null,Object? kcal = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? date = null,Object? type = freezed,Object? dishes = null,Object? kcal = freezed,}) {
   return _then(_MealEntity(
 date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
-as DateTime,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as DateTime,type: freezed == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as MealType,dishes: null == dishes ? _self._dishes : dishes // ignore: cast_nullable_to_non_nullable
 as List<String>,kcal: freezed == kcal ? _self.kcal : kcal // ignore: cast_nullable_to_non_nullable
 as String?,

@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:damta/core/extension/date_time_extension.dart';
+import 'package:damta/data/util/extension/date_time_extension.dart';
 import 'package:damta/data/data_source/remote/schedule_remote_data_source.dart';
 import 'package:damta/data/dto/neis_schedule_dto.dart';
 import 'package:dio/dio.dart';

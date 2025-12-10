@@ -1,5 +1,5 @@
 import 'package:damta/core/di/provider.dart';
-import 'package:damta/domain/enums/meal_type_enum.dart';
+import 'package:damta/domain/enum/meal_type_enum.dart';
 import 'package:damta/domain/entity/meal_entity.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

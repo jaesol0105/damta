@@ -1,4 +1,4 @@
-import 'package:damta/core/di/comment_provider.dart';
+import 'package:damta/core/di/provider.dart';
 import 'package:damta/domain/entity/comment_entity.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

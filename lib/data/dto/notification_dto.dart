@@ -18,10 +18,10 @@ abstract class NotificationDto with _$NotificationDto {
     required bool isRead,
   }) = _NotificationDto;
 
-  factory NotificationDto.fromJson(Map<String, Object?> json) =>
-      _$NotificationDtoFromJson(json);
+  factory NotificationDto.fromJson(Map<String, Object?> json) => _$NotificationDtoFromJson(json);
 }
 
+// 나중에 data/util에있는 컨버터랑 통일 하기.
 // DateTime 변환 함수
 DateTime _convertToDateTime(String timeString) => DateTime.parse(timeString);
 String _convertFromDateTime(DateTime time) => time.toIso8601String();

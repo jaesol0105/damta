@@ -1,9 +1,9 @@
 import 'dart:developer';
 
-import 'package:damta/core/extension/date_time_extension.dart';
+import 'package:damta/data/util/extension/date_time_extension.dart';
 import 'package:damta/data/data_source/local/meal_local_data_source.dart';
 import 'package:damta/data/database/database_helper.dart';
-import 'package:damta/data/model/meal_cache_dto.dart';
+import 'package:damta/data/dto/local_cache_dto/meal_cache_dto.dart';
 import 'package:damta/domain/entity/meal_entity.dart';
 import 'package:sqflite/sqflite.dart';
 

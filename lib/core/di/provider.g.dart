@@ -47,7 +47,54 @@ final class DioProvider extends $FunctionalProvider<Dio, Dio, Dio>
   }
 }
 
-String _$dioHash() => r'a03da399b44b3740dc4fcfc6716203041d66ff01';
+String _$dioHash() => r'088d5c03610503c2407a8d7429b0e9f3ee76406f';
+
+@ProviderFor(firestore)
+const firestoreProvider = FirestoreProvider._();
+
+final class FirestoreProvider
+    extends
+        $FunctionalProvider<
+          FirebaseFirestore,
+          FirebaseFirestore,
+          FirebaseFirestore
+        >
+    with $Provider<FirebaseFirestore> {
+  const FirestoreProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'firestoreProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$firestoreHash();
+
+  @$internal
+  @override
+  $ProviderElement<FirebaseFirestore> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  FirebaseFirestore create(Ref ref) {
+    return firestore(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(FirebaseFirestore value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<FirebaseFirestore>(value),
+    );
+  }
+}
+
+String _$firestoreHash() => r'597b1a9eb96f2fae51f5b578f4b5debe4f6d30c6';
 
 @ProviderFor(database)
 const databaseProvider = DatabaseProvider._();
@@ -226,6 +273,141 @@ final class TimeTableRemoteDataSourceProvider
 
 String _$timeTableRemoteDataSourceHash() =>
     r'f170c05b60355d70a7a171cb1c24a25fea6ec85b';
+
+@ProviderFor(weatherDataSource)
+const weatherDataSourceProvider = WeatherDataSourceProvider._();
+
+final class WeatherDataSourceProvider
+    extends
+        $FunctionalProvider<
+          WeatherDataSource,
+          WeatherDataSource,
+          WeatherDataSource
+        >
+    with $Provider<WeatherDataSource> {
+  const WeatherDataSourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'weatherDataSourceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$weatherDataSourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<WeatherDataSource> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  WeatherDataSource create(Ref ref) {
+    return weatherDataSource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(WeatherDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<WeatherDataSource>(value),
+    );
+  }
+}
+
+String _$weatherDataSourceHash() => r'1faeab990a34f07af8dad18b7ff75706253a2523';
+
+@ProviderFor(postDataSource)
+const postDataSourceProvider = PostDataSourceProvider._();
+
+final class PostDataSourceProvider
+    extends $FunctionalProvider<PostDataSource, PostDataSource, PostDataSource>
+    with $Provider<PostDataSource> {
+  const PostDataSourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'postDataSourceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$postDataSourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<PostDataSource> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  PostDataSource create(Ref ref) {
+    return postDataSource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(PostDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<PostDataSource>(value),
+    );
+  }
+}
+
+String _$postDataSourceHash() => r'460504de673267020f8b1b70fb31a2789a8a72cc';
+
+@ProviderFor(commentDataSource)
+const commentDataSourceProvider = CommentDataSourceProvider._();
+
+final class CommentDataSourceProvider
+    extends
+        $FunctionalProvider<
+          CommentDataSource,
+          CommentDataSource,
+          CommentDataSource
+        >
+    with $Provider<CommentDataSource> {
+  const CommentDataSourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'commentDataSourceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$commentDataSourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<CommentDataSource> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  CommentDataSource create(Ref ref) {
+    return commentDataSource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(CommentDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<CommentDataSource>(value),
+    );
+  }
+}
+
+String _$commentDataSourceHash() => r'bc4aa84bd4220f1a2af80a37314147b030ce1767';
 
 @ProviderFor(mealLocalDataSource)
 const mealLocalDataSourceProvider = MealLocalDataSourceProvider._();
@@ -475,3 +657,220 @@ final class TimeTableRepositoryProvider
 
 String _$timeTableRepositoryHash() =>
     r'77fb830e1617b93aa5310126256990d4416d1e7f';
+
+@ProviderFor(weatherRepository)
+const weatherRepositoryProvider = WeatherRepositoryProvider._();
+
+final class WeatherRepositoryProvider
+    extends
+        $FunctionalProvider<
+          WeatherRepository,
+          WeatherRepository,
+          WeatherRepository
+        >
+    with $Provider<WeatherRepository> {
+  const WeatherRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'weatherRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$weatherRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<WeatherRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  WeatherRepository create(Ref ref) {
+    return weatherRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(WeatherRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<WeatherRepository>(value),
+    );
+  }
+}
+
+String _$weatherRepositoryHash() => r'bc1fa2b02200ca7bbbc117c1a6450e60c260f8b4';
+
+@ProviderFor(postRepository)
+const postRepositoryProvider = PostRepositoryProvider._();
+
+final class PostRepositoryProvider
+    extends $FunctionalProvider<PostRepository, PostRepository, PostRepository>
+    with $Provider<PostRepository> {
+  const PostRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'postRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$postRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<PostRepository> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  PostRepository create(Ref ref) {
+    return postRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(PostRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<PostRepository>(value),
+    );
+  }
+}
+
+String _$postRepositoryHash() => r'64209d8be544d729b661befbb49ad76b2e432958';
+
+@ProviderFor(commentRepository)
+const commentRepositoryProvider = CommentRepositoryProvider._();
+
+final class CommentRepositoryProvider
+    extends
+        $FunctionalProvider<
+          CommentRepository,
+          CommentRepository,
+          CommentRepository
+        >
+    with $Provider<CommentRepository> {
+  const CommentRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'commentRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$commentRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<CommentRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  CommentRepository create(Ref ref) {
+    return commentRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(CommentRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<CommentRepository>(value),
+    );
+  }
+}
+
+String _$commentRepositoryHash() => r'efb95a41385877555ad31b5f12622dfa6ff4cf20';
+
+@ProviderFor(postUsecase)
+const postUsecaseProvider = PostUsecaseProvider._();
+
+final class PostUsecaseProvider
+    extends $FunctionalProvider<PostUsecase, PostUsecase, PostUsecase>
+    with $Provider<PostUsecase> {
+  const PostUsecaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'postUsecaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$postUsecaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<PostUsecase> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  PostUsecase create(Ref ref) {
+    return postUsecase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(PostUsecase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<PostUsecase>(value),
+    );
+  }
+}
+
+String _$postUsecaseHash() => r'9b0fb7a8083f9d733cfb310cc2b1f2cd438884b3';
+
+@ProviderFor(commentUsecase)
+const commentUsecaseProvider = CommentUsecaseProvider._();
+
+final class CommentUsecaseProvider
+    extends $FunctionalProvider<CommentUsecase, CommentUsecase, CommentUsecase>
+    with $Provider<CommentUsecase> {
+  const CommentUsecaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'commentUsecaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$commentUsecaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<CommentUsecase> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  CommentUsecase create(Ref ref) {
+    return commentUsecase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(CommentUsecase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<CommentUsecase>(value),
+    );
+  }
+}
+
+String _$commentUsecaseHash() => r'aca2489def285413f16928b373f956efd0e9598e';

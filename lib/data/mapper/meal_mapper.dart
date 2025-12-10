@@ -1,4 +1,4 @@
-import 'package:damta/domain/enums/meal_type_enum.dart';
+import 'package:damta/domain/enum/meal_type_enum.dart';
 import 'package:damta/data/dto/neis_meal_dto.dart';
 import 'package:damta/domain/entity/meal_entity.dart';
 

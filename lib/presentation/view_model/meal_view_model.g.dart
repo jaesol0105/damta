@@ -50,7 +50,7 @@ final class MealViewModelProvider
   }
 }
 
-String _$mealViewModelHash() => r'f989e0890c7edc1e73eb8b9a2772bdc6d346dc28';
+String _$mealViewModelHash() => r'708b8035337f6cf020c9ea247493dc4f439416d7';
 
 final class MealViewModelFamily extends $Family
     with

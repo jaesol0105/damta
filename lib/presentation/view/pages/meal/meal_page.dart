@@ -1,5 +1,5 @@
 import 'package:damta/core/theme/app_theme.dart';
-import 'package:damta/domain/enums/meal_type_enum.dart';
+import 'package:damta/domain/enum/meal_type_enum.dart';
 import 'package:damta/presentation/view/pages/meal/widgets/date_selector.dart';
 import 'package:damta/presentation/view/pages/meal/widgets/meal_card.dart';
 import 'package:damta/presentation/view/pages/meal/widgets/meal_shimmer.dart';
