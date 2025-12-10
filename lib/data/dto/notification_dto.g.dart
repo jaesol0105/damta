@@ -14,7 +14,7 @@ _NotificationDto _$NotificationDtoFromJson(Map<String, dynamic> json) =>
       pTitle: json['pTitle'] as String,
       createdAt: _convertToDateTime(json['createdAt'] as String),
       isComment: json['isComment'] as bool,
-      content: json['content'] as String? ?? '',
+      content: json['content'] as String,
       isNew: json['isNew'] as bool,
       isRead: json['isRead'] as bool,
     );

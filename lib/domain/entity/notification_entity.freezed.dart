@@ -14,7 +14,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$NotificationEntity {
 
- String get nId; String get uId; String get pId;// 해당 게시글 ID
+ String get nId; String get uId;// 사용자 ID (내가 쓴 게시글 알림만 받아오기 위한 변수)
+ String get pId;// 해당 게시글 ID
  String get pTitle;// 해당 게시글 제목
  DateTime get createdAt;// 시간
  bool get isComment;// 댓글인지 여부 (true = 댓글, false = 반응)
@@ -225,6 +226,7 @@ class _NotificationEntity implements NotificationEntity {
 
 @override final  String nId;
 @override final  String uId;
+// 사용자 ID (내가 쓴 게시글 알림만 받아오기 위한 변수)
 @override final  String pId;
 // 해당 게시글 ID
 @override final  String pTitle;

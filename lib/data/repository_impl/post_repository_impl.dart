@@ -9,15 +9,14 @@ class PostRepositoryImpl implements PostRepository {
   final PostDataSource postDataSource;
 
   @override
-  Future<void> addPost(PostEntity postEntity) {
-    // TODO: implement addPost
-    throw UnimplementedError();
+  Future<void> addPost(PostEntity postEntity) async {
+    final postDto = postEntityToPostDto(postEntity);
+    await postDataSource.addPost(postDto);
   }
 
   @override
-  Future<void> deletePost(String pId) {
-    // TODO: implement deletePost
-    throw UnimplementedError();
+  Future<void> deletePost(String pId) async {
+    await postDataSource.deletePost(pId);
   }
 
   @override
@@ -28,7 +27,7 @@ class PostRepositoryImpl implements PostRepository {
 
   @override
   Future<void> updatePost(PostEntity postEntity) {
-    // TODO: implement updatePost
-    throw UnimplementedError();
+    final postDto = postEntityToPostDto(postEntity);
+    return postDataSource.updatePost(postDto);
   }
 }

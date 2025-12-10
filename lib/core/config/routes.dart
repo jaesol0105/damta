@@ -1,14 +1,13 @@
 import 'package:damta/presentation/view/pages/home/home_page.dart';
-import 'package:damta/presentation/view/pages/meal/meal_page.dart';
+import 'package:damta/presentation/view/pages/login/login_page.dart';
 import 'package:damta/presentation/view/pages/post/post_page.dart';
 import 'package:damta/presentation/view/pages/post_detail/post_detail_page.dart';
-import 'package:go_router/go_router.dart';
-import 'package:damta/presentation/view/pages/login/login_page.dart';
 import 'package:damta/presentation/view/pages/school/school_input_page.dart';
 import 'package:damta/presentation/view/pages/splash/splash_page.dart';
+import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(
-  initialLocation: "/splash",
+  initialLocation: "/post",
 
   routes: [
     GoRoute(path: "/", builder: (context, state) => const LoginPage()),

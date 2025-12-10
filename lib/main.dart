@@ -31,12 +31,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FirebaseService.instance.initializeFirebase();
   // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  
+
   // 카카오 SDK 초기화
   KakaoSdk.init(nativeAppKey: '905586a95c550bb2604245bee31dd16c');
   // 앱 실행 전 해시 키 함수 호출
   _getHashKey();
-  
+
   // 로컬 알림 + FCM 초기화, Background 핸들러 등록
   await NotificationService.initialize();
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);

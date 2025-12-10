@@ -14,6 +14,5 @@ abstract class PostEntity with _$PostEntity {
     String? pImageUrl,
     List<String>? emojis,
     int? view,
-    List<String>? cIds,
   }) = _PostEntity;
 }
