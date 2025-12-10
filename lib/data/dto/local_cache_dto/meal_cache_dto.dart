@@ -1,17 +1,18 @@
 import 'dart:convert';
+import 'package:damta/core/extension/date_time_extension.dart';
 import 'package:damta/domain/entity/meal_entity.dart';
 import 'package:damta/domain/enums/meal_type_enum.dart';
 
-class MealCacheModel {
+class MealCacheDTO {
   final int? id;
   final String schoolCode;
   final String date; // yyyy-MM-dd 형식
   final String mealType; // breakfast, lunch, dinner
   final String dishesJson; // List<String>을 JSON으로 저장
-  final String? kcal;
+  final String? kcal; // 칼로리
   final int cachedAt; // Unix timestamp (밀리초)
   /// SQLite에 저장되는 급식 캐시 모델
-  MealCacheModel({
+  MealCacheDTO({
     this.id,
     required this.schoolCode,
     required this.date,
@@ -21,7 +22,7 @@ class MealCacheModel {
     required this.cachedAt,
   });
 
-  /// MealCacheModel을 Map으로 변환
+  /// MealCacheDTO를 DB Map으로 변환
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -34,9 +35,9 @@ class MealCacheModel {
     };
   }
 
-  /// Map을 MealCacheModel으로 변환
-  factory MealCacheModel.fromMap(Map<String, dynamic> map) {
-    return MealCacheModel(
+  /// DB Map을 MealCacheDTO로 변환
+  factory MealCacheDTO.fromMap(Map<String, dynamic> map) {
+    return MealCacheDTO(
       id: map['id'] as int?,
       schoolCode: map['school_code'] as String,
       date: map['date'] as String,
@@ -47,19 +48,7 @@ class MealCacheModel {
     );
   }
 
-  /// MealEntity를 MealCacheModel로 변환
-  factory MealCacheModel.fromDomain({required MealEntity entity, required String schoolCode}) {
-    return MealCacheModel(
-      schoolCode: schoolCode,
-      date: _formatDate(entity.date),
-      mealType: entity.type.name,
-      dishesJson: jsonEncode(entity.dishes),
-      kcal: entity.kcal,
-      cachedAt: DateTime.now().millisecondsSinceEpoch,
-    );
-  }
-
-  /// MealCacheModel을 MealEntity로 변환
+  /// MealCacheDTO를 MealEntity로 변환
   MealEntity toDomain() {
     return MealEntity(
       date: DateTime.parse(date),
@@ -69,7 +58,15 @@ class MealCacheModel {
     );
   }
 
-  static String _formatDate(DateTime date) {
-    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+  /// MealEntity를 MealCacheDTO로 변환
+  factory MealCacheDTO.fromDomain({required MealEntity entity, required String schoolCode}) {
+    return MealCacheDTO(
+      schoolCode: schoolCode,
+      date: entity.date.dbDate(),
+      mealType: entity.type.name,
+      dishesJson: jsonEncode(entity.dishes),
+      kcal: entity.kcal,
+      cachedAt: DateTime.now().millisecondsSinceEpoch,
+    );
   }
 }

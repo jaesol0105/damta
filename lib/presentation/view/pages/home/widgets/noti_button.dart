@@ -1,4 +1,4 @@
-import 'package:damta/core/app_theme.dart';
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -18,9 +18,7 @@ class NotiButton extends StatelessWidget {
         height: 60,
         child: Stack(
           children: [
-            Center(
-              child: Icon(Icons.notifications_none, size: 30, color: darkgrey),
-            ),
+            Center(child: Icon(Icons.notifications_none, size: 30, color: darkgrey)),
             newNoti
                 ? Align(
                     alignment: Alignment(0.3, -0.3),

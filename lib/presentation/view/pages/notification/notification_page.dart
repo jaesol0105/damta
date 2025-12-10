@@ -31,10 +31,7 @@ class NotificationPage extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '알림',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              ),
+              Text('알림', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
               Text('도장중학교', style: TextStyle(fontSize: 14, color: darkgrey)),
             ],
           ),
@@ -44,11 +41,8 @@ class NotificationPage extends ConsumerWidget {
       body: NotificationListener(
         onNotification: (notification) {
           if (notification is ScrollUpdateNotification) {
-            if (notification.metrics.pixels >=
-                notification.metrics.maxScrollExtent) {
-              ref
-                  .read(notificationViewModelProvider(uId).notifier)
-                  .getMoreNotis();
+            if (notification.metrics.pixels >= notification.metrics.maxScrollExtent) {
+              ref.read(notificationViewModelProvider(uId).notifier).getMoreNotis();
             }
             return true;
           }
@@ -58,9 +52,7 @@ class NotificationPage extends ConsumerWidget {
         child: RefreshIndicator(
           color: blue,
           onRefresh: () async {
-            ref
-                .read(notificationViewModelProvider(uId).notifier)
-                .markAsReadAll();
+            ref.read(notificationViewModelProvider(uId).notifier).markAsReadAll();
           },
           child: notis.isEmpty
               ? Center(child: Text("알림이 없습니다"))

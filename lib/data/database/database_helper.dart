@@ -7,6 +7,7 @@ class DatabaseHelper {
   static const String _databaseName = 'damta.db';
   static const int _databaseVersion = 1;
   static const String mealCacheTable = 'meal_cache'; // 테이블명 상수
+  static const String scheduleCacheTable = 'schedule_cache'; // 테이블명 상수
   Database? _database;
 
   /// 데이터베이스 인스턴스 가져오기
@@ -38,10 +39,28 @@ class DatabaseHelper {
       )
     ''');
 
+    await db.execute('''
+      CREATE TABLE $scheduleCacheTable (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        school_code TEXT NOT NULL,
+        date TEXT NOT NULL,
+        event_name TEXT NOT NULL,
+        grades_json TEXT NOT NULL,
+        cached_at INTEGER NOT NULL,
+        UNIQUE(school_code, date, event_name)
+      )
+    ''');
+
     // 빠른 조회를 위한 인덱스
     await db.execute('''
       CREATE INDEX idx_meal_cache_school_date
       ON $mealCacheTable(school_code, date)
+    ''');
+
+    // 빠른 조회를 위한 인덱스
+    await db.execute('''
+      CREATE INDEX idx_schedule_cache_school_date
+      ON $scheduleCacheTable(school_code, date)
     ''');
 
     log('모든 테이블 생성 완료');

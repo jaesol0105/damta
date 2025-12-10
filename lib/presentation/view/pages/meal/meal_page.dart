@@ -1,3 +1,4 @@
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/domain/enums/meal_type_enum.dart';
 import 'package:damta/presentation/view/pages/meal/widgets/date_selector.dart';
 import 'package:damta/presentation/view/pages/meal/widgets/meal_card.dart';
@@ -18,14 +19,12 @@ class MealPage extends ConsumerWidget {
     final mealState = ref.watch(
       mealViewModelProvider(officeCode: officeCode, schoolCode: schoolCode),
     );
+
     return Scaffold(
-      backgroundColor: Colors.white, // 나중에 Theme으로 위임
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
-        // 백 버튼
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back), // 백 버튼
           onPressed: () => context.pop(),
         ),
       ),
@@ -45,25 +44,22 @@ class MealPage extends ConsumerWidget {
       children: [
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Text('오늘의 급식', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
+          child: Text('오늘의 급식', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600)),
         ),
         const SizedBox(height: 18),
         if (!state.hasAnyMeal)
           Expanded(
-            child: const Center(
+            child: Center(
               child: Text(
                 '이번 달은 등록된 급식 정보가 없어요',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
+                style: TextStyle(fontSize: 16, color: vrc(context).detailText),
               ),
             ),
           )
         else ...[
           DateSelector(
-            selectedDate: state.selectedDate,
-            // 날짜만 뽑아서 DateSelector에 넘기기 (급식 유무 확인용)
-            mealDates: state.allMeals
-                .map((m) => DateTime(m.date.year, m.date.month, m.date.day))
-                .toSet(),
+            selectedDate: state.selectedDate, // 선택된 날짜
+            mealDates: state.mealDates, // 셀렉터에 표시할 날짜
             onDateSelected: (date) {
               ref
                   .read(
@@ -72,7 +68,7 @@ class MealPage extends ConsumerWidget {
                   .selectDate(date);
             },
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 30),
           Expanded(child: _mealList(state)),
         ],
       ],
@@ -82,9 +78,8 @@ class MealPage extends ConsumerWidget {
   /// 일일 급식 메뉴 리스트 (+ 이모지 설정)
   Widget _mealList(MealState state) {
     return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       children: [
-        const SizedBox(height: 8),
         _mealCard(state, MealType.breakfast, '조식', '🍙'),
         _mealCard(state, MealType.lunch, '중식', '🍱'),
         _mealCard(state, MealType.dinner, '석식', '🌙'),
@@ -111,24 +106,12 @@ class MealPage extends ConsumerWidget {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-
         children: [
-          const Icon(Icons.error_outline, size: 64, color: Colors.red),
+          Icon(Icons.error_outline, size: 48, color: vrc(context).errorText),
           const SizedBox(height: 16),
-          Text('네트워크 오류가 발생했습니다', style: TextStyle(fontSize: 16, color: Colors.grey[700])),
-
-          const SizedBox(height: 8),
-
-          Text(
-            error.toString(),
-            style: TextStyle(fontSize: 12, color: Colors.grey[500]),
-            textAlign: TextAlign.center,
-          ),
-
-          const SizedBox(height: 24),
-
-          // 재시도 버튼
-          IconButton(
+          Text('급식정보를 불러오는데 실패했습니다', style: TextStyle(fontSize: 16, color: vrc(context).errorText)),
+          const SizedBox(height: 16),
+          ElevatedButton(
             onPressed: () {
               ref
                   .read(
@@ -136,7 +119,12 @@ class MealPage extends ConsumerWidget {
                   )
                   .reload();
             },
-            icon: const Icon(Icons.refresh),
+            style: ElevatedButton.styleFrom(
+              elevation: 0,
+              backgroundColor: fxc(context).brandColor,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('다시 시도'),
           ),
         ],
       ),

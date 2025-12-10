@@ -41,16 +41,11 @@ class NotificationView extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  title,
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                ),
+                Text(title, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                 // TODO : 알림 테스트용 삭제 버튼 > 지우기
                 InkWell(
                   onTap: () {
-                    ref
-                        .read(notificationViewModelProvider(uId).notifier)
-                        .deleteNotis(pId);
+                    ref.read(notificationViewModelProvider(uId).notifier).deleteNotis(pId);
                   },
                   child: Icon(Icons.clear),
                 ),

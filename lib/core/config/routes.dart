@@ -2,6 +2,8 @@ import 'package:damta/presentation/view/pages/home/home_page.dart';
 import 'package:damta/presentation/view/pages/login/login_page.dart';
 import 'package:damta/presentation/view/pages/post/post_page.dart';
 import 'package:damta/presentation/view/pages/post_detail/post_detail_page.dart';
+import 'package:go_router/go_router.dart';
+import 'package:damta/presentation/view/pages/login/login_page.dart';
 import 'package:damta/presentation/view/pages/school/school_input_page.dart';
 import 'package:damta/presentation/view/pages/splash/splash_page.dart';
 import 'package:go_router/go_router.dart';
@@ -29,7 +31,6 @@ final GoRouter router = GoRouter(
     ),
 
     GoRoute(path: "/home", builder: (context, state) => const HomePage()),
-
     GoRoute(
       path: "/post",
       builder: (context, state) => PostPage(),
