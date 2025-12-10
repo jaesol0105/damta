@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:damta/core/services/firebase_service.dart';
+import 'package:lottie/lottie.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -11,14 +14,51 @@ class SplashPage extends StatefulWidget {
   State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> {
+class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  bool _initialized = false; // onLoaded 중복 호출 방지
+
   @override
   void initState() {
     super.initState();
+    _controller = AnimationController(vsync: this);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkAuthenticationStatus();
     });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  /// 앱 시작전 스플래시 화면에서 수행할 초기화 작업
+  Future<void> _loadHomeData() async {
+    await Future.delayed(const Duration(seconds: 2)); // 데모용 딜레이
+
+    // await ref.read(initAppUseCaseProvider).execute();
+  }
+
+  /// 초기화 작업 끝날때까지 애니메이션 반복
+  Future<void> _startInit() async {
+    _controller.repeat(); // 반복
+
+    try {
+      await _loadHomeData(); // 데이터 로딩이 끝날 때까지 대기
+    } catch (e) {
+      log('SplashPage _startInit 실패: $e');
+    }
+
+    // final dataFuture = _loadHomeData(); // 데이터 로드
+    // final minDisplayFuture = Future.delayed(const Duration(seconds: 2)); // 최소 딜레이 시간 설정
+    // await Future.wait([dataFuture, minDisplayFuture]); // 데이터 로딩 + 최소 노출 시간 둘 다 끝나면
+
+    _controller.stop();
+
+    if (!mounted) return;
+    context.go('/'); // 페이지 라우팅
   }
 
   Future<void> _checkAuthenticationStatus() async {
@@ -50,8 +90,7 @@ class _SplashPageState extends State<SplashPage> {
 
       // schoolName 필드가 없거나 비어 있으면 학교 정보 미입력으로 간주!
       final hasSchoolInfo =
-          data?.containsKey('schoolName') == true &&
-          (data?['schoolName'] as String).isNotEmpty;
+          data?.containsKey('schoolName') == true && (data?['schoolName'] as String).isNotEmpty;
 
       if (hasSchoolInfo) {
         // 학교 정보 입력 완료: 홈 페이지로 이동 (자동 로그인)
@@ -73,15 +112,17 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     // 추후 추가 예정 (애니메이션)
-    return const Scaffold(
+    return Scaffold(
+      backgroundColor: Colors.white, // 네이티브 스플래쉬 컬러와 동일하게 맞추면 자연스럽게 넘어가는거처럼 보임
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(), // 로딩 표시
-            SizedBox(height: 20),
-            Text("인증 상태 확인 중...", style: TextStyle(fontSize: 16)),
-          ],
+        child: Lottie.asset(
+          'assets/lottie/splash.json',
+          controller: _controller,
+          onLoaded: (composition) {
+            if (_initialized) return;
+            _initialized = true;
+            _startInit();
+          },
         ),
       ),
     );
