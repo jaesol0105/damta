@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:damta/core/extension/date_time_extension.dart';
 import 'package:damta/data/data_source/local/meal_local_data_source.dart';
 import 'package:damta/data/database/database_helper.dart';
-import 'package:damta/data/model/meal_cache_model.dart';
+import 'package:damta/data/model/meal_cache_dto.dart';
 import 'package:damta/domain/entity/meal_entity.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -34,18 +34,18 @@ class MealLocalDataSourceImpl implements MealLocalDataSource {
         return [];
       }
 
-      final cacheModels = maps.map((map) => MealCacheModel.fromMap(map)).toList();
+      final cacheList = maps.map((map) => MealCacheDTO.fromMap(map)).toList();
 
       // 만료된 캐시 필터링 (자정 기준, 하루 1회는 새로 API 호출)
       final today = DateTime.now().dateOnly();
-      final cachedDate = DateTime.fromMillisecondsSinceEpoch(cacheModels.first.cachedAt).dateOnly();
+      final cachedDate = DateTime.fromMillisecondsSinceEpoch(cacheList.first.cachedAt).dateOnly();
       if (!cachedDate.isAtSameMomentAs(today)) {
         await clearExpiredCache(); // 만료된 캐시 DB에서 삭제
         return [];
       }
 
-      print('🥕로컬 캐시에서 ${cacheModels.length}개 급식 정보 로드');
-      return cacheModels.map((cache) => cache.toDomain()).toList();
+      print('🥕로컬 캐시에서 ${cacheList.length}개 급식 정보 로드');
+      return cacheList.map((cache) => cache.toDomain()).toList();
     } catch (e, s) {
       log('로컬 캐시 조회 실패 : $e', error: e, stackTrace: s);
       return []; // Repository에서 네트워크 요청
@@ -58,7 +58,7 @@ class MealLocalDataSourceImpl implements MealLocalDataSource {
     try {
       await database.transaction((txn) async {
         for (final meal in meals) {
-          final cacheModel = MealCacheModel.fromDomain(entity: meal, schoolCode: schoolCode);
+          final cacheModel = MealCacheDTO.fromDomain(entity: meal, schoolCode: schoolCode);
           await txn.insert(
             _tableName,
             cacheModel.toMap(),

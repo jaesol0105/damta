@@ -34,8 +34,9 @@ class ScheduleLocalDataSourceImpl implements ScheduleLocalDataSource {
         return [];
       }
 
-      final cacheModels = maps.map((map) => ScheduleCacheModel.fromMap(map)).toList();
-      return cacheModels.map((cache) => cache.toDomain()).toList();
+      final cacheList = maps.map((map) => ScheduleCacheDTO.fromMap(map)).toList();
+
+      return cacheList.map((cache) => cache.toDomain()).toList();
     } catch (e, s) {
       log('로컬 캐시 조회 실패 : $e', error: e, stackTrace: s);
       return []; // Repository에서 네트워크 요청
@@ -53,10 +54,7 @@ class ScheduleLocalDataSourceImpl implements ScheduleLocalDataSource {
     try {
       await database.transaction((txn) async {
         for (final schedule in schedules) {
-          final cacheModel = ScheduleCacheModel.fromDomain(
-            entity: schedule,
-            schoolCode: schoolCode,
-          );
+          final cacheModel = ScheduleCacheDTO.fromDomain(entity: schedule, schoolCode: schoolCode);
           await txn.insert(
             _tableName,
             cacheModel.toMap(),
