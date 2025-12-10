@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:damta/data/data_source/post_data_source.dart';
 import 'package:damta/data/dto/post_dto.dart';
@@ -7,29 +9,49 @@ class PostDataSourceImpl implements PostDataSource {
   final FirebaseFirestore firestore;
 
   @override
-  Future<void> addPost(PostDto postDto) async {
-    final json = postDto.toJson();
-    // p_id는 Firestore 문서 ID로 사용되므로 JSON에서 제거
-    final pId = json.remove('p_id') as String?;
-
-    // DateTime을 ISO8601 문자열로 변환
-    if (json['p_created_at'] is DateTime) {
-      json['p_created_at'] = (json['p_created_at'] as DateTime)
-          .toIso8601String();
+  Future<PostDto> addPost(PostDto post) async {
+    try {
+      final ref = await firestore.collection('post').add({
+        ...post.toJson(),
+        'created_at': FieldValue.serverTimestamp(), // 파이어베이스 서버 시간 사용
+      });
+      return post.copyWith(pId: ref.id); // 문서 id, 낙관적 업데이트를 위해 포스트 객체 반환
+      // 예외 전파
+    } on FirebaseException catch (e, s) {
+      log('Firebase addPost 실패: ${e.message}', error: e, stackTrace: s);
+      rethrow;
+    } catch (e, s) {
+      log('알 수 없는 addPost 실패: $e', error: e, stackTrace: s);
+      rethrow;
     }
+  }
 
-    if (pId != null && pId.isNotEmpty) {
-      // pId가 있으면 해당 ID로 문서 생성
-      await firestore.collection("post").doc(pId).set(json);
-    } else {
-      // pId가 없으면 Firestore가 자동으로 ID 생성
-      await firestore.collection("post").add(json);
+  @override
+  Future<void> updatePost(PostDto post) async {
+    try {
+      await firestore.collection('post').doc(post.pId).update(post.toJson());
+      // 예외 전파
+    } on FirebaseException catch (e, s) {
+      log('Firebase updatePost 실패: ${e.message}', error: e, stackTrace: s);
+      rethrow;
+    } catch (e, s) {
+      log('알 수 없는 updatePost 실패: $e', error: e, stackTrace: s);
+      rethrow;
     }
   }
 
   @override
   Future<void> deletePost(String pId) async {
-    await firestore.collection("post").doc(pId).delete();
+    try {
+      await firestore.collection('post').doc(id).delete();
+      // 예외 전파
+    } on FirebaseException catch (e, s) {
+      log('Firebase deletePost 실패: ${e.message}', error: e, stackTrace: s);
+      rethrow;
+    } catch (e, s) {
+      log('알 수 없는 deletePost 실패: $e', error: e, stackTrace: s);
+      rethrow;
+    }
   }
 
   @override
@@ -41,26 +63,9 @@ class PostDataSourceImpl implements PostDataSource {
       data['p_id'] = doc.id;
       // Firestore Timestamp를 DateTime으로 변환
       if (data['p_created_at'] is Timestamp) {
-        data['p_created_at'] = (data['p_created_at'] as Timestamp)
-            .toDate()
-            .toIso8601String();
+        data['p_created_at'] = (data['p_created_at'] as Timestamp).toDate().toIso8601String();
       }
       return PostDto.fromJson(data);
     }).toList();
-  }
-
-  @override
-  Future<void> updatePost(PostDto postDto) {
-    if (postDto.pId == null) {
-      throw ArgumentError('pId cannot be null for update');
-    }
-
-    final json = postDto.toJson();
-    // 불변 필드 제거 (문서 ID, 생성 시간, 사용자 ID는 업데이트하지 않음)
-    json.remove('p_id');
-    json.remove('p_created_at');
-    json.remove('u_id');
-
-    return firestore.collection("post").doc(postDto.pId).update(json);
   }
 }

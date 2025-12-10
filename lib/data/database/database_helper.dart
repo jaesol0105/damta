@@ -8,6 +8,7 @@ class DatabaseHelper {
   static const int _databaseVersion = 1;
   static const String mealCacheTable = 'meal_cache'; // 테이블명 상수
   static const String scheduleCacheTable = 'schedule_cache'; // 테이블명 상수
+  static const String timeTableCacheTable = 'time_table_cache'; // 테이블명 상수
   Database? _database;
 
   /// 데이터베이스 인스턴스 가져오기
@@ -21,7 +22,11 @@ class DatabaseHelper {
   Future<Database> _initDatabase() async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, _databaseName);
-    return await openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
+    return await openDatabase(
+      path,
+      version: _databaseVersion,
+      onCreate: _onCreate,
+    );
   }
 
   /// 데이터베이스 생성 시 호출
@@ -51,6 +56,20 @@ class DatabaseHelper {
       )
     ''');
 
+    await db.execute('''
+      CREATE TABLE $timeTableCacheTable (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        school_code TEXT NOT NULL,
+        date TEXT NOT NULL,
+        grade TEXT NOT NULL,
+        classes TEXT NOT NULL,
+        period TEXT NOT NULL,
+        subject TEXT NOT NULL,
+        cached_at INTEGER NOT NULL,
+        UNIQUE(date, grade, classes, period)
+      )
+    ''');
+
     // 빠른 조회를 위한 인덱스
     await db.execute('''
       CREATE INDEX idx_meal_cache_school_date
@@ -61,6 +80,12 @@ class DatabaseHelper {
     await db.execute('''
       CREATE INDEX idx_schedule_cache_school_date
       ON $scheduleCacheTable(school_code, date)
+    ''');
+
+    // 빠른 조회를 위한 인덱스
+    await db.execute('''
+      CREATE INDEX idx_time_table_cache_school_date
+      ON $timeTableCacheTable(school_code, date)
     ''');
 
     log('모든 테이블 생성 완료');
