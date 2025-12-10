@@ -179,6 +179,54 @@ final class ScheduleRemoteDataSourceProvider
 String _$scheduleRemoteDataSourceHash() =>
     r'92ee8902818ef0ccee9246021577d5c184934e5c';
 
+@ProviderFor(timeTableRemoteDataSource)
+const timeTableRemoteDataSourceProvider = TimeTableRemoteDataSourceProvider._();
+
+final class TimeTableRemoteDataSourceProvider
+    extends
+        $FunctionalProvider<
+          TimeTableRemoteDataSource,
+          TimeTableRemoteDataSource,
+          TimeTableRemoteDataSource
+        >
+    with $Provider<TimeTableRemoteDataSource> {
+  const TimeTableRemoteDataSourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'timeTableRemoteDataSourceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$timeTableRemoteDataSourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<TimeTableRemoteDataSource> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  TimeTableRemoteDataSource create(Ref ref) {
+    return timeTableRemoteDataSource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(TimeTableRemoteDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<TimeTableRemoteDataSource>(value),
+    );
+  }
+}
+
+String _$timeTableRemoteDataSourceHash() =>
+    r'f170c05b60355d70a7a171cb1c24a25fea6ec85b';
+
 @ProviderFor(mealLocalDataSource)
 const mealLocalDataSourceProvider = MealLocalDataSourceProvider._();
 
@@ -263,6 +311,48 @@ final class ScheduleLocalDataSourceProvider
 String _$scheduleLocalDataSourceHash() =>
     r'039ddf9b059ed131a9e3595beca08e6a74968a07';
 
+@ProviderFor(timeTableLocalDataSource)
+const timeTableLocalDataSourceProvider = TimeTableLocalDataSourceProvider._();
+
+final class TimeTableLocalDataSourceProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<TimeTableLocalDataSource>,
+          TimeTableLocalDataSource,
+          FutureOr<TimeTableLocalDataSource>
+        >
+    with
+        $FutureModifier<TimeTableLocalDataSource>,
+        $FutureProvider<TimeTableLocalDataSource> {
+  const TimeTableLocalDataSourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'timeTableLocalDataSourceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$timeTableLocalDataSourceHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<TimeTableLocalDataSource> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<TimeTableLocalDataSource> create(Ref ref) {
+    return timeTableLocalDataSource(ref);
+  }
+}
+
+String _$timeTableLocalDataSourceHash() =>
+    r'295645c167b7ded8e4e90d838534c7020f526613';
+
 @ProviderFor(mealRepository)
 const mealRepositoryProvider = MealRepositoryProvider._();
 
@@ -343,3 +433,45 @@ final class ScheduleRepositoryProvider
 
 String _$scheduleRepositoryHash() =>
     r'd49fc4dc2576ff7137c1661fd9358682a64af8e5';
+
+@ProviderFor(timeTableRepository)
+const timeTableRepositoryProvider = TimeTableRepositoryProvider._();
+
+final class TimeTableRepositoryProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<TimeTableRepository>,
+          TimeTableRepository,
+          FutureOr<TimeTableRepository>
+        >
+    with
+        $FutureModifier<TimeTableRepository>,
+        $FutureProvider<TimeTableRepository> {
+  const TimeTableRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'timeTableRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$timeTableRepositoryHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<TimeTableRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<TimeTableRepository> create(Ref ref) {
+    return timeTableRepository(ref);
+  }
+}
+
+String _$timeTableRepositoryHash() =>
+    r'77fb830e1617b93aa5310126256990d4416d1e7f';

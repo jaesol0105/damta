@@ -1,84 +1,142 @@
 import 'package:damta/core/app_theme.dart';
 import 'package:damta/presentation/view/pages/time_table/widgets/choose_class.dart';
-import 'package:damta/presentation/view/pages/time_table/widgets/choose_semester.dart';
-
+import 'package:damta/presentation/view/pages/time_table/widgets/choose_week.dart';
 import 'package:damta/presentation/view/pages/time_table/widgets/time_table.dart';
+import 'package:damta/presentation/view/pages/time_table/widgets/time_table_shimmer.dart';
+import 'package:damta/presentation/view_model/time_table_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-// Entity 로 빼기
-class TableEntity {
-  const TableEntity({
-    required this.year,
-    required this.semester,
-    required this.grade,
-    required this.classes,
-    required this.weekday,
-    required this.period,
-    required this.subject,
-  });
-
-  final int year; // 학년도
-  final int semester; // 학기
-  final int grade; // 학년
-  final int classes; // 반
-  final int weekday; // 요일 (1=월, 2=화, 3=수, 4=목, 5=금)
-  final int period; // 교시
-  final String subject; // 과목
-}
-
-class TimeTablePage extends StatelessWidget {
+class TimeTablePage extends ConsumerWidget {
   const TimeTablePage({super.key});
 
+  // TODO : 더미데이터 지우기
+  final officeCode = 'B10';
+  // final schoolCode = '7041186'; // 중학교 코드 테스트용
+  final schoolCode = '7010096'; // 고등학교 코드 테스트용
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(
+      timeTableViewModelProvider(
+        officeCode: officeCode,
+        schoolCode: schoolCode,
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.arrow_back, color: darkgrey),
-        title: SizedBox(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: darkgrey),
+          onPressed: () => context.pop(),
+        ),
+        title: const SizedBox(
           width: double.infinity,
           child: Text('도장중학교', style: TextStyle(fontSize: 18)),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: darkgrey),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            width: double.infinity,
-            child: Column(
-              children: [
-                Container(
-                  constraints: BoxConstraints(minHeight: 110),
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            "시간표",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
+      body: state.when(
+        data: (timeTableState) =>
+            _timeTableContent(context, ref, timeTableState),
+        loading: () => const TimeTableShimmer(),
+        error: (error, stackTrace) => _timeTableError(context, ref, error),
+      ),
+    );
+  }
+
+  Widget _timeTableContent(
+    BuildContext context,
+    WidgetRef ref,
+    TimeTableState state,
+  ) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: darkgrey),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          width: double.infinity,
+          child: Column(
+            children: [
+              Container(
+                constraints: const BoxConstraints(minHeight: 110),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      children: [
+                        const Text(
+                          "시간표",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
                           ),
-                          Spacer(),
-                          ChooseSemester(),
-                        ],
-                      ),
-                      Row(children: [Spacer(), ChooseClass()]),
-                    ],
-                  ),
+                        ),
+                        const Spacer(),
+                        ChooseWeek(
+                          officeCode: officeCode,
+                          schoolCode: schoolCode,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Spacer(),
+                        ChooseClass(
+                          officeCode: officeCode,
+                          schoolCode: schoolCode,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                Divider(color: darkgrey),
-                TimeTable(),
-              ],
-            ),
+              ),
+              Divider(color: darkgrey),
+              TimeTable(officeCode: officeCode, schoolCode: schoolCode),
+            ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _timeTableError(BuildContext context, WidgetRef ref, Object error) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.error_outline, size: 48, color: Colors.grey),
+          const SizedBox(height: 16),
+          const Text(
+            '시간표를 불러오는데 실패했습니다',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {
+              ref
+                  .read(
+                    timeTableViewModelProvider(
+                      officeCode: officeCode,
+                      schoolCode: schoolCode,
+                    ).notifier,
+                  )
+                  .loadTimeTables(
+                    officeCode: officeCode,
+                    schoolCode: schoolCode,
+                  );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFA7D7FE),
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('다시 시도'),
+          ),
+        ],
       ),
     );
   }
