@@ -9,4 +9,16 @@ class PostUsecase {
   Future<List<PostEntity>> getAllPosts() async {
     return postRepository.getAllPosts();
   }
+
+  Future<void> addPost(PostEntity postEntity) async {
+    await postRepository.addPost(postEntity);
+  }
+
+  Future<void> updatePost(PostEntity postEntity) async {
+    await postRepository.updatePost(postEntity);
+  }
+
+  Future<void> deletePost(String pId) async {
+    await postRepository.deletePost(pId);
+  }
 }

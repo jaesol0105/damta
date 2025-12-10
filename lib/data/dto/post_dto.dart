@@ -21,7 +21,6 @@ abstract class PostDto with _$PostDto {
     @JsonKey(name: "p_image_url") String? pImageUrl,
     required List<String>? emojis,
     int? view,
-    @JsonKey(name: "c_ids") List<String>? cIds,
   }) = _PostDto;
 
   factory PostDto.fromJson(Map<String, dynamic> json) => _$PostDtoFromJson(json);

@@ -41,7 +41,7 @@ class PostDataSourceImpl implements PostDataSource {
   }
 
   @override
-  Future<void> deletePost(String id) async {
+  Future<void> deletePost(String pId) async {
     try {
       await firestore.collection('post').doc(id).delete();
       // 예외 전파
@@ -56,9 +56,11 @@ class PostDataSourceImpl implements PostDataSource {
 
   @override
   Future<List<PostDto>> getAllPosts() async {
-    final snapshot = await firestore.collection('post').get();
+    final snapshot = await firestore.collection("post").get();
     return snapshot.docs.map((doc) {
       final data = doc.data();
+      // Firestore 문서 ID를 p_id로 설정
+      data['p_id'] = doc.id;
       // Firestore Timestamp를 DateTime으로 변환
       if (data['p_created_at'] is Timestamp) {
         data['p_created_at'] = (data['p_created_at'] as Timestamp).toDate().toIso8601String();

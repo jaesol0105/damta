@@ -16,7 +16,6 @@ _PostDto _$PostDtoFromJson(Map<String, dynamic> json) => _PostDto(
   pImageUrl: json['p_image_url'] as String?,
   emojis: (json['emojis'] as List<dynamic>?)?.map((e) => e as String).toList(),
   view: (json['view'] as num?)?.toInt(),
-  cIds: (json['c_ids'] as List<dynamic>?)?.map((e) => e as String).toList(),
 );
 
 Map<String, dynamic> _$PostDtoToJson(_PostDto instance) => <String, dynamic>{
@@ -29,5 +28,4 @@ Map<String, dynamic> _$PostDtoToJson(_PostDto instance) => <String, dynamic>{
   'p_image_url': instance.pImageUrl,
   'emojis': instance.emojis,
   'view': instance.view,
-  'c_ids': instance.cIds,
 };
