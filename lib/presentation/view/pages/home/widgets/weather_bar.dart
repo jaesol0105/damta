@@ -36,10 +36,7 @@ class WeatherBar extends ConsumerWidget {
                 style: const TextStyle(fontSize: 16),
               ),
               if (w.precipitation >= 50)
-                const Text(
-                  "우산 챙겨!",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
+                const Text("우산 챙겨!", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               Text(
                 "${w.temperature.round()}° ☔️ ${w.precipitation}%",
                 style: const TextStyle(fontSize: 16),

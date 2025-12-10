@@ -1,4 +1,4 @@
-import 'package:damta/core/app_theme.dart';
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/view/pages/time_table/widgets/choose_class.dart';
 import 'package:damta/presentation/view/pages/time_table/widgets/choose_semester.dart';
 
@@ -58,13 +58,7 @@ class TimeTablePage extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Text(
-                            "시간표",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
-                          ),
+                          Text("시간표", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                           Spacer(),
                           ChooseSemester(),
                         ],

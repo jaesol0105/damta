@@ -1,4 +1,4 @@
-import 'package:damta/core/app_theme.dart';
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:damta/presentation/view/pages/time_table/time_table_page.dart';
 
@@ -42,9 +42,7 @@ class TimeTable extends StatelessWidget {
     final periods = List.generate(7, (i) => i + 1); // 7교시까지
 
     // 요일 기반 매핑
-    Map<int, List<TableEntity>> timetable = {
-      for (int i = 1; i <= 5; i++) i: [],
-    };
+    Map<int, List<TableEntity>> timetable = {for (int i = 1; i <= 5; i++) i: []};
 
     for (final e in dummy) {
       timetable[e.weekday]!.add(e);
@@ -95,9 +93,7 @@ class TimeTable extends StatelessWidget {
                         Container(
                           width: dayWidth,
                           height: periodHeight,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: grey),
-                          ),
+                          decoration: BoxDecoration(border: Border.all(color: grey)),
                           child: (() {
                             final events = timetable[weekday]!
                                 .where((e) => e.period == period)
@@ -114,10 +110,7 @@ class TimeTable extends StatelessWidget {
                               ),
                               child: Text(
                                 events.first.subject,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                ),
+                                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
                               ),
                             );
                           })(),
