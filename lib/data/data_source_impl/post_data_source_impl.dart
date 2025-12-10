@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:damta/data/data_source/post_data_source.dart';
 import 'package:damta/data/dto/post_dto.dart';
@@ -7,15 +9,49 @@ class PostDataSourceImpl implements PostDataSource {
   final FirebaseFirestore firestore;
 
   @override
-  Future<void> addPost(PostDto postDto) {
-    // TODO: implement addPost
-    throw UnimplementedError();
+  Future<PostDto> addPost(PostDto post) async {
+    try {
+      final ref = await firestore.collection('post').add({
+        ...post.toJson(),
+        'created_at': FieldValue.serverTimestamp(), // 파이어베이스 서버 시간 사용
+      });
+      return post.copyWith(pId: ref.id); // 문서 id, 낙관적 업데이트를 위해 포스트 객체 반환
+      // 예외 전파
+    } on FirebaseException catch (e, s) {
+      log('Firebase addPost 실패: ${e.message}', error: e, stackTrace: s);
+      rethrow;
+    } catch (e, s) {
+      log('알 수 없는 addPost 실패: $e', error: e, stackTrace: s);
+      rethrow;
+    }
   }
 
   @override
-  Future<void> deletePost(String pId) {
-    // TODO: implement deletePost
-    throw UnimplementedError();
+  Future<void> updatePost(PostDto post) async {
+    try {
+      await firestore.collection('post').doc(post.pId).update(post.toJson());
+      // 예외 전파
+    } on FirebaseException catch (e, s) {
+      log('Firebase updatePost 실패: ${e.message}', error: e, stackTrace: s);
+      rethrow;
+    } catch (e, s) {
+      log('알 수 없는 updatePost 실패: $e', error: e, stackTrace: s);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> deletePost(String id) async {
+    try {
+      await firestore.collection('post').doc(id).delete();
+      // 예외 전파
+    } on FirebaseException catch (e, s) {
+      log('Firebase deletePost 실패: ${e.message}', error: e, stackTrace: s);
+      rethrow;
+    } catch (e, s) {
+      log('알 수 없는 deletePost 실패: $e', error: e, stackTrace: s);
+      rethrow;
+    }
   }
 
   @override
@@ -25,17 +61,9 @@ class PostDataSourceImpl implements PostDataSource {
       final data = doc.data();
       // Firestore Timestamp를 DateTime으로 변환
       if (data['p_created_at'] is Timestamp) {
-        data['p_created_at'] = (data['p_created_at'] as Timestamp)
-            .toDate()
-            .toIso8601String();
+        data['p_created_at'] = (data['p_created_at'] as Timestamp).toDate().toIso8601String();
       }
       return PostDto.fromJson(data);
     }).toList();
-  }
-
-  @override
-  Future<void> updatePost(PostDto postDto) {
-    // TODO: implement updatePost
-    throw UnimplementedError();
   }
 }
