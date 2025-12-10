@@ -1,149 +1,233 @@
-import 'package:damta/domain/entity/comment_entity.dart';
+import 'package:damta/presentation/core/util/date_formatter.dart';
+import 'package:damta/presentation/core/util/time_ago.dart';
+import 'package:damta/presentation/view/pages/post_detail/widgets/comment_input_bottom_sheet.dart';
+import 'package:damta/presentation/view/pages/post_detail/widgets/comment_item_widget.dart';
+import 'package:damta/presentation/view/pages/post_detail/widgets/emoji_picker_widget.dart';
+import 'package:damta/presentation/view_model/comment_view_model.dart';
+import 'package:damta/presentation/view_model/post_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class PostDetailPage extends StatelessWidget {
-  const PostDetailPage({super.key, required this.id});
-  final String id;
+class PostDetailPage extends HookConsumerWidget {
+  const PostDetailPage({super.key, required this.pId});
+  final String pId;
 
   @override
-  Widget build(BuildContext context) {
-    List<CommentEntity> list = [];
-    for (var i = 1; i <= 30; i++) {
-      list.add(
-        CommentEntity(
-          cContent: "내용$i",
-          cWriter: "작성자$i",
-          cCreatedAt: DateTime.now(),
-          pId: "포스트id",
-          uId: '',
-        ),
-      );
-    }
-    print(list.length);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final showEmojiPicker = useState(false);
+    final overlayEntryRef = useRef<OverlayEntry?>(null);
 
-    String timeAgo(DateTime date) {
-      final Duration diff = DateTime.now().difference(date);
-      if (diff.inSeconds < 60) {
-        return '방금 전';
-      } else if (diff.inMinutes < 60) {
-        return '${diff.inMinutes}분 전';
-      } else if (diff.inHours < 24) {
-        return '${diff.inHours}시간 전';
-      } else if (diff.inDays < 7) {
-        return '${diff.inDays}일 전';
-      } else {
-        return '${(diff.inDays / 7).floor()}주 전';
-      }
+    final post = ref
+        .watch(postViewModelProvider)
+        .firstWhere(
+          (p) => p.pId == pId,
+          orElse: () => throw Exception("Post not found"),
+        );
+    final comments = ref.watch(commentViewModelProvider);
+    final commentList = comments.where((c) => c.pId == pId).toList()
+      ..sort((a, b) => a.cCreatedAt.compareTo(b.cCreatedAt));
+
+    useEffect(() {
+      ref.read(commentViewModelProvider.notifier).getComments();
+      return null;
+    }, []);
+
+    void removePopup() {
+      overlayEntryRef.value?.remove();
+      overlayEntryRef.value = null;
+      showEmojiPicker.value = false;
     }
+
+    void showPopup() {
+      if (overlayEntryRef.value != null) return;
+
+      overlayEntryRef.value = EmojiPickerWidget.createEmojiPickerOverlay(
+        context: context,
+        post: post,
+        ref: ref,
+        onClose: removePopup,
+      );
+
+      Overlay.of(context).insert(overlayEntryRef.value!);
+      showEmojiPicker.value = true;
+    }
+
+    useEffect(() {
+      return () {
+        overlayEntryRef.value?.remove();
+      };
+    }, []);
 
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             context.pop();
           },
         ),
-        title: Column(
+        title: const Column(
           children: [
-            const Text("익명게시판"),
-            const Text("도장중학교", style: TextStyle(color: Colors.grey)),
+            Text("익명게시판"),
+            Text("도장중학교", style: TextStyle(color: Colors.grey)),
           ],
         ),
-        actions: [Icon(Icons.notifications_outlined)],
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1), // 선 높이
-          child: Container(
-            color: Colors.grey, // 선 색상
-            height: 1, // 두께
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 20),
+            child: PopupMenuButton<String>(
+              icon: const Icon(Icons.more_vert),
+
+              onSelected: (value) {
+                if (value == 'edit') {
+                  print('수정 선택');
+                } else if (value == 'delete') {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              context.pop();
+                            },
+                            child: Text("취소"),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              await ref
+                                  .read(postViewModelProvider.notifier)
+                                  .deletePost(pId);
+                              if (context.mounted) {
+                                context.pop(); // 다이얼로그 닫기
+                                context.pop(); // 상세 페이지 닫기
+                              }
+                            },
+                            child: const Text("삭제"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+              },
+
+              itemBuilder: (context) => [
+                const PopupMenuItem(value: 'edit', child: Text('수정')),
+                const PopupMenuItem(value: 'delete', child: Text('삭제')),
+              ],
+            ),
           ),
-        ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20),
-          child: InkWell(
-            onTap: () {},
-            child: Column(
-              spacing: 10,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                IntrinsicHeight(
-                  child: Row(
-                    children: [
-                      Text("작성자"),
-                      VerticalDivider(
-                        width: 10,
-                        thickness: 0,
-                        color: Colors.grey,
-                      ),
-                      Text("작성시간"),
-                      VerticalDivider(
-                        width: 10,
-                        thickness: 0,
-                        color: Colors.grey,
-                      ),
-                      Text("조회수"),
-                    ],
-                  ),
-                ),
-                Text("제목", style: TextStyle(fontWeight: FontWeight.bold)),
-                Text("내용"),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
+            spacing: 10,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              IntrinsicHeight(
+                child: Row(
                   children: [
-                    Icon(Icons.chat_bubble_outline),
-                    TextButton(
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return Container();
-                          },
-                        );
-                      },
-                      child: Text("댓글달기"),
-                    ),
-                  ],
-                ),
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: list.length,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        IntrinsicHeight(
-                          child: Row(
-                            children: [
-                              Text(list[index].cWriter), // 작성자
-                              VerticalDivider(
-                                width: 10,
-                                thickness: 0,
-                                color: Colors.grey,
-                              ),
-                              Text(timeAgo(DateTime.now())), // 날짜
-                            ],
-                          ),
-                        ),
-                        Text(list[index].cContent), // 댓글 내용
-                      ],
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const Divider(
-                      height: 1,
+                    Text(post.pWriter),
+                    const VerticalDivider(
+                      width: 10,
                       thickness: 0,
                       color: Colors.grey,
-                      // indent: 20,
-                      // endIndent: 20,
-                    );
-                  },
+                    ),
+                    Text(timeAgo(post.pCreatedAt)),
+                    const VerticalDivider(
+                      width: 10,
+                      thickness: 0,
+                      color: Colors.grey,
+                    ),
+                    Text(post.view.toString()),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              Text(
+                post.pTitle,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text(post.pContent),
+              Row(
+                spacing: 5,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      if (showEmojiPicker.value) {
+                        removePopup();
+                      } else {
+                        showPopup();
+                      }
+                    },
+                    child: const SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: Icon(Icons.add_circle_outline),
+                    ),
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        spacing: 5,
+                        children:
+                            post.emojis
+                                ?.map(
+                                  (e) => Text(
+                                    e,
+                                    style: const TextStyle(fontSize: 24),
+                                  ),
+                                )
+                                .toList() ??
+                            [],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.chat_bubble_outline),
+                      Text(commentList.length.toString()),
+                    ],
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (context) =>
+                            CommentInputBottomSheet(post: post, pId: pId),
+                      );
+                    },
+                    child: const Text("댓글달기"),
+                  ),
+                ],
+              ),
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: commentList.length,
+                itemBuilder: (context, index) {
+                  return CommentItemWidget(comment: commentList[index]);
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return const Divider(
+                    height: 1,
+                    thickness: 0,
+                    color: Colors.grey,
+                  );
+                },
+              ),
+            ],
           ),
         ),
       ),

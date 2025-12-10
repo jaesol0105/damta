@@ -1,9 +1,21 @@
 import 'package:damta/core/config/routes.dart';
+import 'package:damta/core/services/notification_service.dart';
+import 'package:damta/core/theme/app_theme.dart';
+import 'package:damta/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:damta/core/services/firebase_service.dart';
+
+// Background > 로컬 알림 표시 (코드 반드시 main 최상단!)
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await NotificationService.showLocalNotification(message);
+}
 
 Future<void> _getHashKey() async {
   try {
@@ -18,13 +30,22 @@ void main() async {
   // 위젯 바인딩 초기화
   WidgetsFlutterBinding.ensureInitialized();
 
+  // if (kDebugMode) {
+  //   final helper = DatabaseHelper();
+  //   await helper.deleteDatabase();
+  // }
+
   await FirebaseService.instance.initializeFirebase();
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // 카카오 SDK 초기화
   KakaoSdk.init(nativeAppKey: '905586a95c550bb2604245bee31dd16c');
-
   // 앱 실행 전 해시 키 함수 호출
   _getHashKey();
+
+  // 로컬 알림 + FCM 초기화, Background 핸들러 등록
+  await NotificationService.initialize();
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   runApp(ProviderScope(child: const MyApp()));
 }
@@ -35,8 +56,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      routerConfig: router,
       debugShowCheckedModeBanner: false,
+      routerConfig: router,
+      builder: (context, child) {
+        NotificationService.setContext(context);
+        return child!;
+      },
+      themeMode: ThemeMode.system,
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
     );
   }
 }

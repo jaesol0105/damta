@@ -1,1 +1,43 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"damta-323b4","appId":"1:436072449092:android:93be68b09136d91454a811","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"damta-323b4","configurations":{"android":"1:436072449092:android:93be68b09136d91454a811","ios":"1:436072449092:ios:bc73f472350c672854a811"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "damta-323b4",
+          "appId": "1:436072449092:android:93be68b09136d91454a811",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "damta-323b4",
+          "appId": "1:436072449092:ios:bc73f472350c672854a811",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "damta-323b4",
+          "configurations": {
+            "android": "1:436072449092:android:93be68b09136d91454a811",
+            "ios": "1:436072449092:ios:bc73f472350c672854a811"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ]
+}
