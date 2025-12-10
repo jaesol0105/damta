@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/damta.iml" filepath="$PROJECT_DIR$/damta.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/.idea/damta.iml" filepath="$PROJECT_DIR$/.idea/damta.iml" />
+>>>>>>> dev
       <module fileurl="file://$PROJECT_DIR$/android/damta_android.iml" filepath="$PROJECT_DIR$/android/damta_android.iml" />
     </modules>
   </component>
