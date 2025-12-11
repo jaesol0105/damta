@@ -1,4 +1,5 @@
 import 'package:damta/core/services/firebase_service.dart';
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/domain/entity/comment_entity.dart';
 import 'package:damta/domain/entity/notification_entity.dart';
 import 'package:damta/domain/entity/post_entity.dart';
@@ -23,9 +24,9 @@ class CommentInputBottomSheet extends HookConsumerWidget {
 
     return Padding(
       padding: EdgeInsets.only(
-        left: 10,
-        right: 10,
-        top: 5,
+        left: 16,
+        right: 16,
+        top: 20,
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: Column(
@@ -34,7 +35,10 @@ class CommentInputBottomSheet extends HookConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("댓글 작성"),
+              Padding(
+                padding: const EdgeInsets.only(left: 4),
+                child: const Text("댓글 작성", style: TextStyle(fontWeight: FontWeight.w600)),
+              ),
               TextButton(
                 onPressed: () async {
                   if (commentController.text.trim().isEmpty) {
@@ -103,17 +107,20 @@ class CommentInputBottomSheet extends HookConsumerWidget {
             controller: commentController,
             decoration: InputDecoration(
               hintText: "댓글을 입력해주세요",
+              hintStyle: TextStyle(
+                color: vrc(context).disabledText, // 힌트 색 변경
+              ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(width: 0.5),
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(width: 1, color: vrc(context).border!),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(width: 0.5),
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(width: 2, color: vrc(context).border!),
               ),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(width: 0.5),
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(width: 1, color: vrc(context).border!),
               ),
             ),
           ),
