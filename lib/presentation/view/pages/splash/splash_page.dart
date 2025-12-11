@@ -64,7 +64,7 @@ class _SplashPageState extends State<SplashPage> {
         if (mounted) context.go('/');
       }
     } catch (e) {
-      print("사용자 프로필 상태 확인 오류: $e");
+      print("!!! 사용자 프로필 상태 확인 오류 !!! : $e");
       // 오류 발생 시에도 안전하게 로그인 페이지로 이동!!
       if (mounted) context.go('/');
     }

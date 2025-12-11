@@ -22,7 +22,7 @@ Future<void> _getHashKey() async {
     final hash = await KakaoSdk.origin;
     print('카카오 키 해시: $hash'); // 키 해시 추출
   } on PlatformException catch (e) {
-    print('키 해시 얻기 실패: $e');
+    print('!!! 키 해시 얻기 실패 !!! : $e');
   }
 }
 
