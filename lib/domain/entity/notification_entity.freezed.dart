@@ -14,10 +14,10 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$NotificationEntity {
 
- String get nId; String get uId;// 사용자 ID (내가 쓴 게시글 알림만 받아오기 위한 변수)
+ String? get nId; String get uId;// 사용자 ID (내가 쓴 게시글 알림만 받아오기 위한 변수)
  String get pId;// 해당 게시글 ID
  String get pTitle;// 해당 게시글 제목
- DateTime get createdAt;// 시간
+ DateTime? get nCreatedAt;// 알림 생성 시간
  bool get isComment;// 댓글인지 여부 (true = 댓글, false = 반응)
  String get content;// 댓글,반응 내용
  bool get isNew;// 새로운 알림인지 여부 (댓글 표시 형식 다르게 하기 위한 변수)
@@ -32,16 +32,16 @@ $NotificationEntityCopyWith<NotificationEntity> get copyWith => _$NotificationEn
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NotificationEntity&&(identical(other.nId, nId) || other.nId == nId)&&(identical(other.uId, uId) || other.uId == uId)&&(identical(other.pId, pId) || other.pId == pId)&&(identical(other.pTitle, pTitle) || other.pTitle == pTitle)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isComment, isComment) || other.isComment == isComment)&&(identical(other.content, content) || other.content == content)&&(identical(other.isNew, isNew) || other.isNew == isNew)&&(identical(other.isRead, isRead) || other.isRead == isRead));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is NotificationEntity&&(identical(other.nId, nId) || other.nId == nId)&&(identical(other.uId, uId) || other.uId == uId)&&(identical(other.pId, pId) || other.pId == pId)&&(identical(other.pTitle, pTitle) || other.pTitle == pTitle)&&(identical(other.nCreatedAt, nCreatedAt) || other.nCreatedAt == nCreatedAt)&&(identical(other.isComment, isComment) || other.isComment == isComment)&&(identical(other.content, content) || other.content == content)&&(identical(other.isNew, isNew) || other.isNew == isNew)&&(identical(other.isRead, isRead) || other.isRead == isRead));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,nId,uId,pId,pTitle,createdAt,isComment,content,isNew,isRead);
+int get hashCode => Object.hash(runtimeType,nId,uId,pId,pTitle,nCreatedAt,isComment,content,isNew,isRead);
 
 @override
 String toString() {
-  return 'NotificationEntity(nId: $nId, uId: $uId, pId: $pId, pTitle: $pTitle, createdAt: $createdAt, isComment: $isComment, content: $content, isNew: $isNew, isRead: $isRead)';
+  return 'NotificationEntity(nId: $nId, uId: $uId, pId: $pId, pTitle: $pTitle, nCreatedAt: $nCreatedAt, isComment: $isComment, content: $content, isNew: $isNew, isRead: $isRead)';
 }
 
 
@@ -52,7 +52,7 @@ abstract mixin class $NotificationEntityCopyWith<$Res>  {
   factory $NotificationEntityCopyWith(NotificationEntity value, $Res Function(NotificationEntity) _then) = _$NotificationEntityCopyWithImpl;
 @useResult
 $Res call({
- String nId, String uId, String pId, String pTitle, DateTime createdAt, bool isComment, String content, bool isNew, bool isRead
+ String? nId, String uId, String pId, String pTitle, DateTime? nCreatedAt, bool isComment, String content, bool isNew, bool isRead
 });
 
 
@@ -69,14 +69,14 @@ class _$NotificationEntityCopyWithImpl<$Res>
 
 /// Create a copy of NotificationEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? nId = null,Object? uId = null,Object? pId = null,Object? pTitle = null,Object? createdAt = null,Object? isComment = null,Object? content = null,Object? isNew = null,Object? isRead = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? nId = freezed,Object? uId = null,Object? pId = null,Object? pTitle = null,Object? nCreatedAt = freezed,Object? isComment = null,Object? content = null,Object? isNew = null,Object? isRead = null,}) {
   return _then(_self.copyWith(
-nId: null == nId ? _self.nId : nId // ignore: cast_nullable_to_non_nullable
-as String,uId: null == uId ? _self.uId : uId // ignore: cast_nullable_to_non_nullable
+nId: freezed == nId ? _self.nId : nId // ignore: cast_nullable_to_non_nullable
+as String?,uId: null == uId ? _self.uId : uId // ignore: cast_nullable_to_non_nullable
 as String,pId: null == pId ? _self.pId : pId // ignore: cast_nullable_to_non_nullable
 as String,pTitle: null == pTitle ? _self.pTitle : pTitle // ignore: cast_nullable_to_non_nullable
-as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime,isComment: null == isComment ? _self.isComment : isComment // ignore: cast_nullable_to_non_nullable
+as String,nCreatedAt: freezed == nCreatedAt ? _self.nCreatedAt : nCreatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,isComment: null == isComment ? _self.isComment : isComment // ignore: cast_nullable_to_non_nullable
 as bool,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
 as String,isNew: null == isNew ? _self.isNew : isNew // ignore: cast_nullable_to_non_nullable
 as bool,isRead: null == isRead ? _self.isRead : isRead // ignore: cast_nullable_to_non_nullable
@@ -165,10 +165,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String nId,  String uId,  String pId,  String pTitle,  DateTime createdAt,  bool isComment,  String content,  bool isNew,  bool isRead)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? nId,  String uId,  String pId,  String pTitle,  DateTime? nCreatedAt,  bool isComment,  String content,  bool isNew,  bool isRead)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _NotificationEntity() when $default != null:
-return $default(_that.nId,_that.uId,_that.pId,_that.pTitle,_that.createdAt,_that.isComment,_that.content,_that.isNew,_that.isRead);case _:
+return $default(_that.nId,_that.uId,_that.pId,_that.pTitle,_that.nCreatedAt,_that.isComment,_that.content,_that.isNew,_that.isRead);case _:
   return orElse();
 
 }
@@ -186,10 +186,10 @@ return $default(_that.nId,_that.uId,_that.pId,_that.pTitle,_that.createdAt,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String nId,  String uId,  String pId,  String pTitle,  DateTime createdAt,  bool isComment,  String content,  bool isNew,  bool isRead)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? nId,  String uId,  String pId,  String pTitle,  DateTime? nCreatedAt,  bool isComment,  String content,  bool isNew,  bool isRead)  $default,) {final _that = this;
 switch (_that) {
 case _NotificationEntity():
-return $default(_that.nId,_that.uId,_that.pId,_that.pTitle,_that.createdAt,_that.isComment,_that.content,_that.isNew,_that.isRead);case _:
+return $default(_that.nId,_that.uId,_that.pId,_that.pTitle,_that.nCreatedAt,_that.isComment,_that.content,_that.isNew,_that.isRead);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -206,10 +206,10 @@ return $default(_that.nId,_that.uId,_that.pId,_that.pTitle,_that.createdAt,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String nId,  String uId,  String pId,  String pTitle,  DateTime createdAt,  bool isComment,  String content,  bool isNew,  bool isRead)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? nId,  String uId,  String pId,  String pTitle,  DateTime? nCreatedAt,  bool isComment,  String content,  bool isNew,  bool isRead)?  $default,) {final _that = this;
 switch (_that) {
 case _NotificationEntity() when $default != null:
-return $default(_that.nId,_that.uId,_that.pId,_that.pTitle,_that.createdAt,_that.isComment,_that.content,_that.isNew,_that.isRead);case _:
+return $default(_that.nId,_that.uId,_that.pId,_that.pTitle,_that.nCreatedAt,_that.isComment,_that.content,_that.isNew,_that.isRead);case _:
   return null;
 
 }
@@ -221,18 +221,18 @@ return $default(_that.nId,_that.uId,_that.pId,_that.pTitle,_that.createdAt,_that
 
 
 class _NotificationEntity implements NotificationEntity {
-  const _NotificationEntity({required this.nId, required this.uId, required this.pId, required this.pTitle, required this.createdAt, required this.isComment, required this.content, required this.isNew, required this.isRead});
+  const _NotificationEntity({this.nId, required this.uId, required this.pId, required this.pTitle, this.nCreatedAt, required this.isComment, required this.content, required this.isNew, required this.isRead});
   
 
-@override final  String nId;
+@override final  String? nId;
 @override final  String uId;
 // 사용자 ID (내가 쓴 게시글 알림만 받아오기 위한 변수)
 @override final  String pId;
 // 해당 게시글 ID
 @override final  String pTitle;
 // 해당 게시글 제목
-@override final  DateTime createdAt;
-// 시간
+@override final  DateTime? nCreatedAt;
+// 알림 생성 시간
 @override final  bool isComment;
 // 댓글인지 여부 (true = 댓글, false = 반응)
 @override final  String content;
@@ -251,16 +251,16 @@ _$NotificationEntityCopyWith<_NotificationEntity> get copyWith => __$Notificatio
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NotificationEntity&&(identical(other.nId, nId) || other.nId == nId)&&(identical(other.uId, uId) || other.uId == uId)&&(identical(other.pId, pId) || other.pId == pId)&&(identical(other.pTitle, pTitle) || other.pTitle == pTitle)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isComment, isComment) || other.isComment == isComment)&&(identical(other.content, content) || other.content == content)&&(identical(other.isNew, isNew) || other.isNew == isNew)&&(identical(other.isRead, isRead) || other.isRead == isRead));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NotificationEntity&&(identical(other.nId, nId) || other.nId == nId)&&(identical(other.uId, uId) || other.uId == uId)&&(identical(other.pId, pId) || other.pId == pId)&&(identical(other.pTitle, pTitle) || other.pTitle == pTitle)&&(identical(other.nCreatedAt, nCreatedAt) || other.nCreatedAt == nCreatedAt)&&(identical(other.isComment, isComment) || other.isComment == isComment)&&(identical(other.content, content) || other.content == content)&&(identical(other.isNew, isNew) || other.isNew == isNew)&&(identical(other.isRead, isRead) || other.isRead == isRead));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,nId,uId,pId,pTitle,createdAt,isComment,content,isNew,isRead);
+int get hashCode => Object.hash(runtimeType,nId,uId,pId,pTitle,nCreatedAt,isComment,content,isNew,isRead);
 
 @override
 String toString() {
-  return 'NotificationEntity(nId: $nId, uId: $uId, pId: $pId, pTitle: $pTitle, createdAt: $createdAt, isComment: $isComment, content: $content, isNew: $isNew, isRead: $isRead)';
+  return 'NotificationEntity(nId: $nId, uId: $uId, pId: $pId, pTitle: $pTitle, nCreatedAt: $nCreatedAt, isComment: $isComment, content: $content, isNew: $isNew, isRead: $isRead)';
 }
 
 
@@ -271,7 +271,7 @@ abstract mixin class _$NotificationEntityCopyWith<$Res> implements $Notification
   factory _$NotificationEntityCopyWith(_NotificationEntity value, $Res Function(_NotificationEntity) _then) = __$NotificationEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String nId, String uId, String pId, String pTitle, DateTime createdAt, bool isComment, String content, bool isNew, bool isRead
+ String? nId, String uId, String pId, String pTitle, DateTime? nCreatedAt, bool isComment, String content, bool isNew, bool isRead
 });
 
 
@@ -288,14 +288,14 @@ class __$NotificationEntityCopyWithImpl<$Res>
 
 /// Create a copy of NotificationEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? nId = null,Object? uId = null,Object? pId = null,Object? pTitle = null,Object? createdAt = null,Object? isComment = null,Object? content = null,Object? isNew = null,Object? isRead = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? nId = freezed,Object? uId = null,Object? pId = null,Object? pTitle = null,Object? nCreatedAt = freezed,Object? isComment = null,Object? content = null,Object? isNew = null,Object? isRead = null,}) {
   return _then(_NotificationEntity(
-nId: null == nId ? _self.nId : nId // ignore: cast_nullable_to_non_nullable
-as String,uId: null == uId ? _self.uId : uId // ignore: cast_nullable_to_non_nullable
+nId: freezed == nId ? _self.nId : nId // ignore: cast_nullable_to_non_nullable
+as String?,uId: null == uId ? _self.uId : uId // ignore: cast_nullable_to_non_nullable
 as String,pId: null == pId ? _self.pId : pId // ignore: cast_nullable_to_non_nullable
 as String,pTitle: null == pTitle ? _self.pTitle : pTitle // ignore: cast_nullable_to_non_nullable
-as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime,isComment: null == isComment ? _self.isComment : isComment // ignore: cast_nullable_to_non_nullable
+as String,nCreatedAt: freezed == nCreatedAt ? _self.nCreatedAt : nCreatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,isComment: null == isComment ? _self.isComment : isComment // ignore: cast_nullable_to_non_nullable
 as bool,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
 as String,isNew: null == isNew ? _self.isNew : isNew // ignore: cast_nullable_to_non_nullable
 as bool,isRead: null == isRead ? _self.isRead : isRead // ignore: cast_nullable_to_non_nullable

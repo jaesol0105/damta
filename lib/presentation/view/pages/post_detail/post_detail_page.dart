@@ -1,4 +1,4 @@
-import 'package:damta/presentation/core/util/date_formatter.dart';
+import 'package:damta/core/services/firebase_service.dart';
 import 'package:damta/presentation/core/util/time_ago.dart';
 import 'package:damta/presentation/view/pages/post_detail/widgets/comment_input_bottom_sheet.dart';
 import 'package:damta/presentation/view/pages/post_detail/widgets/comment_item_widget.dart';
@@ -31,9 +31,18 @@ class PostDetailPage extends HookConsumerWidget {
 
     useEffect(() {
       ref.read(commentViewModelProvider.notifier).getComments();
+      ref
+          .read(postViewModelProvider.notifier)
+          .updatePost(
+            post.copyWith(
+              uIdForView: {
+                ...(post.uIdForView ?? {}),
+                FirebaseService.getUId.toString(),
+              },
+            ),
+          );
       return null;
     }, []);
-
     void removePopup() {
       overlayEntryRef.value?.remove();
       overlayEntryRef.value = null;
@@ -88,6 +97,8 @@ class PostDetailPage extends HookConsumerWidget {
                     context: context,
                     builder: (context) {
                       return AlertDialog(
+                        title: Text("삭제"),
+                        content: Text("정말로 삭제하시겠습니까?"),
                         actions: [
                           TextButton(
                             onPressed: () {
@@ -97,13 +108,13 @@ class PostDetailPage extends HookConsumerWidget {
                           ),
                           TextButton(
                             onPressed: () async {
-                              await ref
-                                  .read(postViewModelProvider.notifier)
-                                  .deletePost(pId);
                               if (context.mounted) {
                                 context.pop(); // 다이얼로그 닫기
                                 context.pop(); // 상세 페이지 닫기
                               }
+                              await ref
+                                  .read(postViewModelProvider.notifier)
+                                  .deletePost(pId);
                             },
                             child: const Text("삭제"),
                           ),
@@ -144,7 +155,7 @@ class PostDetailPage extends HookConsumerWidget {
                       thickness: 0,
                       color: Colors.grey,
                     ),
-                    Text(post.view.toString()),
+                    Text((post.uIdForView?.length ?? 0).toString()),
                   ],
                 ),
               ),
@@ -176,8 +187,8 @@ class PostDetailPage extends HookConsumerWidget {
                       child: Row(
                         spacing: 5,
                         children:
-                            post.emojis
-                                ?.map(
+                            post.emojis?.reversed
+                                .map(
                                   (e) => Text(
                                     e,
                                     style: const TextStyle(fontSize: 24),
@@ -196,6 +207,7 @@ class PostDetailPage extends HookConsumerWidget {
                   Row(
                     children: [
                       const Icon(Icons.chat_bubble_outline),
+                      SizedBox(width: 5),
                       Text(commentList.length.toString()),
                     ],
                   ),

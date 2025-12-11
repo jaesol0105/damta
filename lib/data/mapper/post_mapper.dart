@@ -1,7 +1,7 @@
-// DTO > Entity
 import 'package:damta/data/dto/post_dto.dart';
 import 'package:damta/domain/entity/post_entity.dart';
 
+// DTO > Entity
 PostEntity postDtoToPostEntity(PostDto postDto) {
   return PostEntity(
     uId: postDto.uId,
@@ -12,11 +12,11 @@ PostEntity postDtoToPostEntity(PostDto postDto) {
     pCreatedAt: postDto.pCreatedAt,
     pImageUrl: postDto.pImageUrl,
     emojis: postDto.emojis,
-    view: postDto.view,
+    uIdForView: postDto.uIdForView,
   );
 }
 
-// Entity > DTO
+/// Entity > DTO
 PostDto postEntityToPostDto(PostEntity postEntity) {
   return PostDto(
     pId: postEntity.pId,
@@ -27,6 +27,6 @@ PostDto postEntityToPostDto(PostEntity postEntity) {
     pCreatedAt: postEntity.pCreatedAt,
     emojis: postEntity.emojis,
     pImageUrl: postEntity.pImageUrl,
-    view: postEntity.view,
+    uIdForView: postEntity.uIdForView,
   );
 }

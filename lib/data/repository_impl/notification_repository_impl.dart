@@ -1,4 +1,4 @@
-import 'package:damta/data/data_source/notification_data_source.dart';
+import 'package:damta/data/data_source/remote/notification_data_source.dart';
 import 'package:damta/data/mapper/notification_mapper.dart';
 import 'package:damta/domain/entity/notification_entity.dart';
 import 'package:damta/domain/repository/notification_repository.dart';
@@ -14,10 +14,7 @@ class NotificationRepositoryImpl implements NotificationRepository {
   }
 
   @override
-  Future<List<NotificationEntity>> getMoreNotis(
-    String uId,
-    NotificationEntity lastNoti,
-  ) async {
+  Future<List<NotificationEntity>> getMoreNotis(String uId, NotificationEntity lastNoti) async {
     final dtos = await dataSource.getMoreNotis(uId, entityToDto(lastNoti));
     return dtos.map(dtoToEntity).toList();
   }

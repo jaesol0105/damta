@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:damta/data/data_source/post_data_source.dart';
+import 'package:damta/data/data_source/remote/post_data_source.dart';
 import 'package:damta/data/dto/post_dto.dart';
 
 class PostDataSourceImpl implements PostDataSource {
@@ -41,9 +41,9 @@ class PostDataSourceImpl implements PostDataSource {
   }
 
   @override
-  Future<void> deletePost(String pId) async {
+  Future<void> deletePost(String id) async {
     try {
-      await firestore.collection('post').doc(pId).delete();
+      await firestore.collection('post').doc(id).delete();
       // 예외 전파
     } on FirebaseException catch (e, s) {
       log('Firebase deletePost 실패: ${e.message}', error: e, stackTrace: s);
@@ -63,7 +63,9 @@ class PostDataSourceImpl implements PostDataSource {
       data['p_id'] = doc.id;
       // Firestore Timestamp를 DateTime으로 변환
       if (data['p_created_at'] is Timestamp) {
-        data['p_created_at'] = (data['p_created_at'] as Timestamp).toDate().toIso8601String();
+        data['p_created_at'] = (data['p_created_at'] as Timestamp)
+            .toDate()
+            .toIso8601String();
       }
       return PostDto.fromJson(data);
     }).toList();

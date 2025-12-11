@@ -6,14 +6,12 @@ import 'package:go_router/go_router.dart';
 class NotificationService {
   static final FlutterLocalNotificationsPlugin plugin =
       FlutterLocalNotificationsPlugin();
-
   static BuildContext? globalContext; // 라우팅 위해
 
   static void setContext(BuildContext context) {
     globalContext = context;
   }
 
-  // 초기화
   static Future<void> initialize() async {
     // 1. 로컬 알림 초기화
     const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -26,7 +24,7 @@ class NotificationService {
     await plugin.initialize(
       settings,
       onDidReceiveNotificationResponse: (response) {
-        globalContext!.go('/notification');
+        globalContext?.go('/notification');
       },
     );
 
@@ -34,27 +32,29 @@ class NotificationService {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     await messaging.requestPermission(alert: true, badge: true, sound: true);
 
-    // 3. Foreground > 로컬 알림 표시
+    // 3. Foreground 알림 처리 > 로컬 알림 표시
     FirebaseMessaging.onMessage.listen((message) async {
       await showLocalNotification(message);
     });
 
-    // 4. 백그라운드 알림 클릭 후 앱으로 들어온 경우
+    // 4. 백그라운드 알림 클릭 처리
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      globalContext!.go('/notification');
+      globalContext?.go('/notification');
     });
 
-    // 5. 앱 완전 종료 상태에서 알림 클릭 후 시작된 경우
+    // 5. 앱 종료 상태에서 알림 클릭 처리
     final initialMessage = await messaging.getInitialMessage();
     if (initialMessage != null) {
-      globalContext!.go('/notification');
+      globalContext?.go('/notification');
     }
   }
 
   // 로컬 알림 표시
   static Future<void> showLocalNotification(RemoteMessage message) async {
-    final noti = message.notification;
-    if (noti == null) return;
+    final title = message.notification?.title ?? message.data['title'];
+    final body = message.notification?.body ?? message.data['body'];
+
+    if (title == null && body == null) return;
 
     const androidDetails = AndroidNotificationDetails(
       'Damta', // 안드로이드 channelId (고정)
@@ -66,16 +66,16 @@ class NotificationService {
       enableVibration: true, // 진동
       visibility: NotificationVisibility.public, // 잠금화면 표시
     );
-    const iOSDetails = DarwinNotificationDetails(
+    const iosDetails = DarwinNotificationDetails(
       presentAlert: true,
       presentBadge: true,
       presentSound: true,
     );
     const platformDetails = NotificationDetails(
       android: androidDetails,
-      iOS: iOSDetails,
+      iOS: iosDetails,
     );
 
-    await plugin.show(noti.hashCode, noti.title, noti.body, platformDetails);
+    await plugin.show(message.hashCode, title, body, platformDetails);
   }
 }

@@ -1,4 +1,4 @@
-import 'package:damta/data/data_source/weather_data_source.dart';
+import 'package:damta/data/data_source/remote/weather_data_source.dart';
 import 'package:damta/data/dto/weather_dto.dart';
 import 'package:damta/domain/entity/weather_entity.dart';
 import 'package:damta/domain/repository/weather_repository.dart';

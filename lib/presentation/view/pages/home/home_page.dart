@@ -41,7 +41,6 @@ final userProfileProvider = StreamProvider<UserProfile>((ref) {
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userProfileAsyncValue = ref.watch(userProfileProvider);

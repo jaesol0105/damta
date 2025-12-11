@@ -1,3 +1,4 @@
+import 'package:damta/presentation/view/pages/home/widgets/noti_button.dart';
 import 'package:damta/presentation/view/pages/post/widgets/post_input_bottom_sheet.dart';
 import 'package:damta/presentation/view/pages/post/widgets/post_list_item.dart';
 import 'package:damta/presentation/view_model/comment_view_model.dart';
@@ -35,12 +36,8 @@ class PostPage extends HookConsumerWidget {
             Text("도장중학교", style: TextStyle(color: Colors.grey)),
           ],
         ),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 20),
-            child: Icon(Icons.notifications_outlined),
-          ),
-        ],
+        // TODO : 알림 버튼 지우기
+        actions: [NotiButton()],
       ),
       body: ListView.separated(
         itemCount: posts.length,

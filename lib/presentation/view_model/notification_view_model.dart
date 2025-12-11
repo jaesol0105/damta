@@ -1,24 +1,32 @@
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:damta/core/di/provider.dart';
 import 'package:damta/domain/entity/notification_entity.dart';
 import 'package:damta/domain/repository/notification_repository.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class NotificationViewModel extends StateNotifier<List<NotificationEntity>> {
-  NotificationViewModel({required this.repo, required this.uId}) : super([]) {
+part 'notification_view_model.g.dart';
+
+@riverpod
+class NotificationViewModel extends _$NotificationViewModel {
+  late final NotificationRepository repo;
+  late final String uId;
+
+  @override
+  FutureOr<List<NotificationEntity>> build({required String uId}) {
+    repo = ref.watch(notificationRepositoryProvider);
+    this.uId = uId;
+
     initFCM();
-    getNotis();
+    return getNotis();
   }
 
-  final NotificationRepository repo;
-  final String uId;
-
   // FCM 초기화
-  Future<void> initFCM() async {
+  void initFCM() {
     FirebaseMessaging.onMessage.listen((message) async {
       final entity = convertMessageToEntity(message);
       await repo.addNoti(entity);
-      state = await repo.getNotis(uId);
+      state = AsyncValue.data(await repo.getNotis(uId));
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) async {
@@ -34,26 +42,39 @@ class NotificationViewModel extends StateNotifier<List<NotificationEntity>> {
       nId: '',
       uId: uId,
       pId: msg.data['pId'] ?? '',
-      pTitle: msg.data['pTitle'] ?? '',
-      createdAt: DateTime.now(),
+      pTitle: msg.data['pTitle'] ?? msg.notification?.title ?? '',
+      nCreatedAt: DateTime.now(),
       isComment: msg.data['isComment'] == 'true',
-      content: msg.notification?.body ?? '',
+      content: msg.notification?.body ?? msg.data['content'] ?? '',
       isNew: true,
       isRead: false,
     );
   }
 
   // 내 전체 알림 목록 가져오기
-  Future<void> getNotis() async {
-    state = await repo.getNotis(uId);
+  Future<List<NotificationEntity>> getNotis() async {
+    final list = await repo.getNotis(uId);
+    state = AsyncValue.data(list);
+    return list;
   }
 
   // 추가 알림 목록 가져오기
   Future<void> getMoreNotis() async {
-    if (state.isEmpty) return;
-    final lastNoti = state.last;
+    if (state.value == null || state.value!.isEmpty) return;
+
+    final lastNoti = state.value!.last;
     final moreNotis = await repo.getMoreNotis(uId, lastNoti);
-    state = [...state, ...moreNotis];
+
+    if (moreNotis.isEmpty) return;
+
+    final existingNIds = state.value!.map((n) => n.nId).toSet();
+    final filteredMoreNotis = moreNotis
+        .where((n) => !existingNIds.contains(n.nId))
+        .toList();
+
+    if (filteredMoreNotis.isEmpty) return;
+
+    state = AsyncValue.data([...state.value!, ...filteredMoreNotis]);
   }
 
   // 알림 추가 + FCM 발송
@@ -70,38 +91,38 @@ class NotificationViewModel extends StateNotifier<List<NotificationEntity>> {
       "isComment": noti.isComment,
     });
 
-    state = await repo.getNotis(uId);
+    state = AsyncValue.data(await repo.getNotis(uId));
   }
 
   // 알림 삭제
-  Future<void> deleteNotis(String pId) async {
-    final toDelete = state.where((n) => n.pId == pId).toList();
-    state = state.where((n) => n.pId != pId).toList();
+  Future<void> deleteNotis(String nId) async {
+    if (state.value == null) return;
 
-    for (var n in toDelete) {
-      await repo.deleteNoti(n.nId);
-    }
+    state = AsyncValue.data(state.value!.where((n) => n.nId != nId).toList());
+    await repo.deleteNoti(nId);
   }
 
   // 특정 알림 읽음 처리
   Future<void> markAsRead(String pId) async {
-    final updatedList = state.map((n) {
-      if (n.pId == pId) {
-        return n.copyWith(isRead: true, isNew: false);
-      }
+    if (state.value == null) return;
+
+    final updatedList = state.value!.map((n) {
+      if (n.pId == pId) return n.copyWith(isRead: true, isNew: false);
       return n;
     }).toList();
+
     await repo.updateNotis(updatedList);
-    state = updatedList;
+    state = AsyncValue.data(updatedList);
   }
 
-  // 전체 알림 읽음 처리 + 새로고침 시 DB 반영 후 목록 재조회
+  // 전체 알림 읽음 처리
   Future<void> markAsReadAll() async {
-    if (state.isEmpty) return;
-    final updatedList = state
+    if (state.value == null || state.value!.isEmpty) return;
+
+    final updatedList = state.value!
         .map((n) => n.copyWith(isRead: true, isNew: false))
         .toList();
     await repo.updateNotis(updatedList);
-    await getNotis();
+    state = AsyncValue.data(updatedList);
   }
 }

@@ -1,20 +1,19 @@
+import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/presentation/view/pages/home/home_page.dart';
 import 'package:damta/presentation/view/pages/login/login_page.dart';
 import 'package:damta/presentation/view/pages/meal/meal_page.dart';
+import 'package:damta/presentation/view/pages/notification/notification_page.dart';
 import 'package:damta/presentation/view/pages/post/post_page.dart';
 import 'package:damta/presentation/view/pages/post_detail/post_detail_page.dart';
 import 'package:damta/presentation/view/pages/schedule/schedule_page.dart';
 import 'package:damta/presentation/view/pages/school/school_input_page.dart';
 import 'package:damta/presentation/view/pages/splash/splash_page.dart';
 import 'package:damta/presentation/view/pages/time_table/time_table_page.dart';
-import 'package:damta/presentation/view/pages/write_post/write_post_page.dart';
+import 'package:damta/presentation/view/pages/post_editor/post_editor_page.dart';
 import 'package:go_router/go_router.dart';
-import 'package:damta/presentation/view/pages/login/login_page.dart';
-import 'package:damta/presentation/view/pages/school/school_input_page.dart';
-import 'package:damta/presentation/view/pages/splash/splash_page.dart';
 
 final GoRouter router = GoRouter(
-  initialLocation: "/splash",
+  initialLocation: "/posteditor",
 
   routes: [
     GoRoute(path: "/", builder: (context, state) => const LoginPage()),
@@ -53,8 +52,25 @@ final GoRouter router = GoRouter(
         ),
       ],
     ),
-    GoRoute(path: "/notification", builder: (context, state) => HomePage()),
-    GoRoute(path: "/writepost", builder: (context, state) => WritePostPage()),
+    GoRoute(
+      path: "/posteditor",
+      builder: (context, state) => PostEditorPage(
+        post: PostEntity(
+          uId: '',
+          pTitle: '',
+          pContent: '',
+          pWriter: '',
+          pCreatedAt: DateTime.now(),
+        ),
+      ),
+    ),
+    GoRoute(
+      path: "/notification/:uId",
+      builder: (context, state) {
+        final uId = state.pathParameters['uId']!;
+        return NotificationPage(uId: uId);
+      },
+    ),
     GoRoute(path: "/timetable", builder: (context, state) => TimeTablePage()),
     GoRoute(path: "/meal", builder: (context, state) => MealPage()),
     GoRoute(path: "/schedule", builder: (context, state) => SchedulePage()),
