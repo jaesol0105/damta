@@ -195,7 +195,7 @@ class HomePage extends ConsumerWidget {
     final route = data['route']!;
 
     return InkWell(
-      onTap: () => context.go(route),
+      onTap: () => context.push(route),
       child: Material(
         elevation: 4.0,
         color: Colors.white,
