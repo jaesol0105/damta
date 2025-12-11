@@ -223,9 +223,7 @@ class EmojiPickerWidget {
                               ref
                                   .read(postViewModelProvider.notifier)
                                   .updatePost(
-                                    post.copyWith(
-                                      emojis: [...(post.emojis ?? []), emoji],
-                                    ),
+                                    post.copyWith(emojis: [...(post.emojis ?? []), emoji]),
                                   );
                               // 반응 알림 추가
                               ref
@@ -236,7 +234,7 @@ class EmojiPickerWidget {
                                   )
                                   .addNoti(
                                     NotificationEntity(
-                                      uId: 'uId', // TODO : 더미데이터 > post.uId 바꾸기
+                                      uId: post.uId,
                                       pId: post.pId!,
                                       pTitle: post.pTitle,
                                       isComment: false,
@@ -251,10 +249,7 @@ class EmojiPickerWidget {
                               width: 40,
                               height: 40,
                               alignment: Alignment.center,
-                              child: Text(
-                                emoji,
-                                style: const TextStyle(fontSize: 24),
-                              ),
+                              child: Text(emoji, style: const TextStyle(fontSize: 24)),
                             ),
                           ),
                         )

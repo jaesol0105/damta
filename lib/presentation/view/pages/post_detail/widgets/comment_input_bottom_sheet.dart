@@ -60,7 +60,7 @@ class CommentInputBottomSheet extends HookConsumerWidget {
                       .read(notificationViewModelProvider(uId: 'uId').notifier)
                       .addNoti(
                         NotificationEntity(
-                          uId: 'uId', // TODO : 더미데이터 > post.uId 바꾸기
+                          uId: post.uId,
                           pId: pId,
                           pTitle: post.pTitle,
                           isComment: true,

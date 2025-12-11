@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/presentation/view_model/post_editor_view_model.dart';
+import 'package:damta/presentation/view_model/post_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -36,6 +37,7 @@ class PostEditorPage extends HookConsumerWidget {
         return;
       }
       if (context.mounted) {
+        ref.read(postViewModelProvider.notifier).loadPosts();
         context.pop();
       }
     }
@@ -106,7 +108,7 @@ class PostEditorPage extends HookConsumerWidget {
                       ),
                     ),
 
-                    // ▼ 글자수 표시: 텍스트필드의 오른쪽 아래에 고정
+                    // 글자수 표시: 텍스트필드의 오른쪽 아래에 고정
                     Positioned(
                       right: 0,
                       bottom: 0,

@@ -1,3 +1,4 @@
+import 'package:damta/core/config/routes.dart';
 import 'package:damta/core/services/firebase_service.dart';
 import 'package:damta/presentation/core/util/time_ago.dart';
 import 'package:damta/presentation/view/pages/post_detail/widgets/comment_input_bottom_sheet.dart';
@@ -21,24 +22,19 @@ class PostDetailPage extends HookConsumerWidget {
 
     final post = ref
         .watch(postViewModelProvider)
-        .firstWhere(
-          (p) => p.pId == pId,
-          orElse: () => throw Exception("Post not found"),
-        );
+        .firstWhere((p) => p.pId == pId, orElse: () => throw Exception("Post not found"));
     final comments = ref.watch(commentViewModelProvider);
     final commentList = comments.where((c) => c.pId == pId).toList()
       ..sort((a, b) => a.cCreatedAt.compareTo(b.cCreatedAt));
 
     useEffect(() {
+      print('😡$post');
       ref.read(commentViewModelProvider.notifier).getComments();
       ref
           .read(postViewModelProvider.notifier)
           .updatePost(
             post.copyWith(
-              uIdForView: {
-                ...(post.uIdForView ?? {}),
-                FirebaseService.getUId.toString(),
-              },
+              uIdForView: {...(post.uIdForView ?? {}), FirebaseService.getUId.toString()},
             ),
           );
       return null;
@@ -91,7 +87,7 @@ class PostDetailPage extends HookConsumerWidget {
 
               onSelected: (value) {
                 if (value == 'edit') {
-                  print('수정 선택');
+                  context.push(AppRoutePath.postEditor, extra: post);
                 } else if (value == 'delete') {
                   showDialog(
                     context: context,
@@ -112,9 +108,7 @@ class PostDetailPage extends HookConsumerWidget {
                                 context.pop(); // 다이얼로그 닫기
                                 context.pop(); // 상세 페이지 닫기
                               }
-                              await ref
-                                  .read(postViewModelProvider.notifier)
-                                  .deletePost(pId);
+                              await ref.read(postViewModelProvider.notifier).deletePost(pId);
                             },
                             child: const Text("삭제"),
                           ),
@@ -144,25 +138,14 @@ class PostDetailPage extends HookConsumerWidget {
                 child: Row(
                   children: [
                     Text(post.pWriter),
-                    const VerticalDivider(
-                      width: 10,
-                      thickness: 0,
-                      color: Colors.grey,
-                    ),
+                    const VerticalDivider(width: 10, thickness: 0, color: Colors.grey),
                     Text(timeAgo(post.pCreatedAt)),
-                    const VerticalDivider(
-                      width: 10,
-                      thickness: 0,
-                      color: Colors.grey,
-                    ),
+                    const VerticalDivider(width: 10, thickness: 0, color: Colors.grey),
                     Text((post.uIdForView?.length ?? 0).toString()),
                   ],
                 ),
               ),
-              Text(
-                post.pTitle,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
+              Text(post.pTitle, style: const TextStyle(fontWeight: FontWeight.bold)),
               Text(post.pContent),
               Row(
                 spacing: 5,
@@ -188,12 +171,7 @@ class PostDetailPage extends HookConsumerWidget {
                         spacing: 5,
                         children:
                             post.emojis?.reversed
-                                .map(
-                                  (e) => Text(
-                                    e,
-                                    style: const TextStyle(fontSize: 24),
-                                  ),
-                                )
+                                .map((e) => Text(e, style: const TextStyle(fontSize: 24)))
                                 .toList() ??
                             [],
                       ),
@@ -216,8 +194,7 @@ class PostDetailPage extends HookConsumerWidget {
                       showModalBottomSheet(
                         isScrollControlled: true,
                         context: context,
-                        builder: (context) =>
-                            CommentInputBottomSheet(post: post, pId: pId),
+                        builder: (context) => CommentInputBottomSheet(post: post, pId: pId),
                       );
                     },
                     child: const Text("댓글달기"),
@@ -232,11 +209,7 @@ class PostDetailPage extends HookConsumerWidget {
                   return CommentItemWidget(comment: commentList[index]);
                 },
                 separatorBuilder: (BuildContext context, int index) {
-                  return const Divider(
-                    height: 1,
-                    thickness: 0,
-                    color: Colors.grey,
-                  );
+                  return const Divider(height: 1, thickness: 0, color: Colors.grey);
                 },
               ),
             ],

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:damta/core/util/string_extension.dart';
 import 'package:damta/data/data_source/remote/post_data_source.dart';
 import 'package:damta/data/mapper/post_mapper.dart';
 import 'package:damta/domain/entity/post_entity.dart';
@@ -26,7 +27,7 @@ class PostRepositoryImpl implements PostRepository {
   Future<void> updatePost(PostEntity entity) async {
     try {
       final dto = postEntityToPostDto(entity);
-      if (entity.uId.isEmpty) {
+      if (entity.pId.isNullOrEmpty) {
         await postDataSource.addPost(dto);
       } else {
         await postDataSource.updatePost(dto);

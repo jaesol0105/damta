@@ -13,7 +13,7 @@ class PostDataSourceImpl implements PostDataSource {
     try {
       final ref = await firestore.collection('post').add({
         ...post.toJson(),
-        'created_at': FieldValue.serverTimestamp(), // 파이어베이스 서버 시간 사용
+        'p_created_at': FieldValue.serverTimestamp(), // 파이어베이스 서버 시간 사용
       });
       return post.copyWith(pId: ref.id); // 문서 id, 낙관적 업데이트를 위해 포스트 객체 반환
       // 예외 전파
@@ -29,6 +29,7 @@ class PostDataSourceImpl implements PostDataSource {
   @override
   Future<void> updatePost(PostDto post) async {
     try {
+      print('😡호출');
       await firestore.collection('post').doc(post.pId).update(post.toJson());
       // 예외 전파
     } on FirebaseException catch (e, s) {
@@ -63,9 +64,7 @@ class PostDataSourceImpl implements PostDataSource {
       data['p_id'] = doc.id;
       // Firestore Timestamp를 DateTime으로 변환
       if (data['p_created_at'] is Timestamp) {
-        data['p_created_at'] = (data['p_created_at'] as Timestamp)
-            .toDate()
-            .toIso8601String();
+        data['p_created_at'] = (data['p_created_at'] as Timestamp).toDate().toIso8601String();
       }
       return PostDto.fromJson(data);
     }).toList();
