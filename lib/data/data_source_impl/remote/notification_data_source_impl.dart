@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:damta/data/data_source/remote/notification_data_source.dart';
 import 'package:damta/data/dto/notification_dto.dart';
@@ -16,16 +14,11 @@ class NotificationDataSourceImpl implements NotificationDataSource {
         .orderBy('nCreatedAt', descending: true)
         .limit(15)
         .get();
-    return snapshot.docs
-        .map((doc) => NotificationDto.fromJson(doc.data()))
-        .toList();
+    return snapshot.docs.map((doc) => NotificationDto.fromJson(doc.data())).toList();
   }
 
   @override // R+
-  Future<List<NotificationDto>> getMoreNotis(
-    String uId,
-    NotificationDto lastNoti,
-  ) async {
+  Future<List<NotificationDto>> getMoreNotis(String uId, NotificationDto lastNoti) async {
     final snapshot = await firestore
         .collection('notification')
         .where('uId', isEqualTo: uId)
@@ -33,9 +26,7 @@ class NotificationDataSourceImpl implements NotificationDataSource {
         .startAfter([lastNoti.nCreatedAt])
         .limit(15)
         .get();
-    return snapshot.docs
-        .map((doc) => NotificationDto.fromJson(doc.data()))
-        .toList();
+    return snapshot.docs.map((doc) => NotificationDto.fromJson(doc.data())).toList();
   }
 
   @override // C

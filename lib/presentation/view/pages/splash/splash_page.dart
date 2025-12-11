@@ -47,7 +47,6 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
 
       if (user == null) {
         // 로그인 안 된 경우: 초기 데이터 로드(필요 시) + 로그인 화면
-        print('🐿️[Splash] 로그인 안 된 상태 → / 로 이동');
         await _loadHomeData();
         if (!mounted) return;
         context.go('/');

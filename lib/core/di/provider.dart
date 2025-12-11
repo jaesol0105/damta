@@ -3,8 +3,8 @@ import 'package:damta/data/data_source/remote/comment_data_source.dart';
 import 'package:damta/data/data_source/local/meal_local_data_source.dart';
 import 'package:damta/data/data_source/local/schedule_local_data_source.dart';
 import 'package:damta/data/data_source/local/time_table_local_data_source.dart';
+import 'package:damta/data/data_source/remote/notification_data_source.dart';
 import 'package:damta/data/data_source/remote/post_data_source.dart';
-import 'package:damta/data/data_source/notification_data_source.dart';
 import 'package:damta/data/data_source/remote/meal_remote_data_source.dart';
 import 'package:damta/data/data_source/remote/schedule_remote_data_source.dart';
 import 'package:damta/data/data_source/remote/storage_data_source.dart';
@@ -106,14 +106,13 @@ StorageDataSource storageDataSource(Ref ref) {
   return StorageDataSourceImpl(storage: storage);
 }
 
-// Local DataSource
-
+@riverpod
 NotificationDataSource notificationDataSource(Ref ref) {
   final firestore = ref.watch(firestoreProvider);
   return NotificationDataSourceImpl(firestore);
 }
 
-//
+// Local DataSource
 
 @riverpod
 Future<MealLocalDataSource> mealLocalDataSource(Ref ref) async {
@@ -139,27 +138,20 @@ Future<TimeTableLocalDataSource> timeTableLocalDataSource(Ref ref) async {
 Future<MealRepository> mealRepository(Ref ref) async {
   final remoteDataSource = ref.watch(mealRemoteDataSourceProvider);
   final localDataSource = await ref.watch(mealLocalDataSourceProvider.future);
-  return MealRepositoryImpl(
-    remoteDataSource: remoteDataSource,
-    localDataSource: localDataSource,
-  );
+  return MealRepositoryImpl(remoteDataSource: remoteDataSource, localDataSource: localDataSource);
 }
 
 @riverpod
 Future<ScheduleRepository> scheduleRepository(Ref ref) async {
   final remoteDataSource = ref.watch(scheduleRemoteDataSourceProvider);
-  final localDataSource = await ref.watch(
-    scheduleLocalDataSourceProvider.future,
-  );
+  final localDataSource = await ref.watch(scheduleLocalDataSourceProvider.future);
   return ScheduleRepositoryImpl(remoteDataSource, localDataSource);
 }
 
 @riverpod
 Future<TimeTableRepository> timeTableRepository(Ref ref) async {
   final remoteDataSource = ref.watch(timeTableRemoteDataSourceProvider);
-  final localDataSource = await ref.watch(
-    timeTableLocalDataSourceProvider.future,
-  );
+  final localDataSource = await ref.watch(timeTableLocalDataSourceProvider.future);
   return TimeTableRepositoryImpl(remoteDataSource, localDataSource);
 }
 
@@ -183,19 +175,16 @@ CommentRepository commentRepository(Ref ref) {
 
 @riverpod
 StorageRepository storageRepository(Ref ref) {
-  return StorageRepositoryImpl(
-    dataSource: ref.watch(storageDataSourceProvider),
-  );
+  return StorageRepositoryImpl(dataSource: ref.watch(storageDataSourceProvider));
 }
 
-// Usecase
-
+@riverpod
 NotificationRepository notificationRepository(Ref ref) {
   final dataSource = ref.watch(notificationDataSourceProvider);
   return NotificationRepositoryImpl(dataSource);
 }
 
-//
+// Usecase
 
 @riverpod
 PostUsecase postUsecase(Ref ref) {

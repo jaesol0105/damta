@@ -13,7 +13,7 @@ import 'package:damta/presentation/view/pages/post_editor/post_editor_page.dart'
 import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(
-  initialLocation: "/posteditor",
+  initialLocation: "/splash",
 
   routes: [
     GoRoute(path: "/", builder: (context, state) => const LoginPage()),

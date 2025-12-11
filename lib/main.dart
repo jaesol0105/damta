@@ -54,10 +54,10 @@ void main() async {
   await NotificationService.initialize();
 
   // FCM 토큰 저장 (현재 로그인한 유저가 있으면)
-  final user = FirebaseService.instance.auth.currentUser;
-  if (user != null) {
-    await FirebaseService.instance.saveFcmToken(user.uid);
-  }
+  // final user = FirebaseService.instance.auth.currentUser;
+  // if (user != null) {
+  //   await FirebaseService.instance.saveFcmToken(user.uid);
+  // }
 
   runApp(ProviderScope(child: const MyApp()));
 }
