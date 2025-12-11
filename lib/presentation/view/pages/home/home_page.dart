@@ -1,21 +1,62 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:damta/core/config/routes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+class UserProfile {
+  final String schoolName;
+
+  // schoolName이 null이거나 비어있으면 기본값으로 "학교 미지정"
+  UserProfile({required this.schoolName});
+
+  factory UserProfile.fromFirestore(Map<String, dynamic> data) {
+    // 'schoolName' 필드가 없거나 null이면 기본값
+    final schoolName = data['schoolName'] as String? ?? '학교 미지정';
+
+    return UserProfile(schoolName: schoolName);
+  }
+}
+
+final userProfileProvider = StreamProvider<UserProfile>((ref) {
+  final auth = FirebaseAuth.instance;
+  final firestore = FirebaseFirestore.instance;
+
+  final user = auth.currentUser;
+  if (user == null) {
+    return Stream.value(UserProfile(schoolName: '로그인 필요'));
+  }
+
+  final userDocRef = firestore.collection('users').doc(user.uid);
+
+  return userDocRef.snapshots().map((snapshot) {
+    if (!snapshot.exists || snapshot.data() == null) {
+      return UserProfile(schoolName: '학교 미지정');
+    }
+
+    return UserProfile.fromFirestore(snapshot.data()!);
+  });
+});
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final userProfileAsyncValue = ref.watch(userProfileProvider);
-    // final schoolName = userProfileAsyncValue.when(
-    //   data: (profile) => profile.schoolName,
-    //   loading: () => '학교 이름 로딩 중...',
-    //   error: (e, st) => '오류 발생',
-    // );
+    final userProfileAsyncValue = ref.watch(userProfileProvider);
+
+    final schoolName = userProfileAsyncValue.when(
+      data: (profile) => profile.schoolName, // 데이터 로드 성공 시
+      loading: () => '학교 이름 로딩 중...', // 로딩 중일 때
+      error: (e, st) {
+        print('!!! 학교 프로필 로드 오류 !!!: $e');
+        return '오류 발생'; // 오류 발생 시
+      },
+    );
+
     return Scaffold(
-      // appBar: _buildAppBar(context, schoolName),
-      appBar: AppBar(),
+      // schoolName을 AppBar에 전달하여 표시
+      appBar: _buildAppBar(context, schoolName),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -34,27 +75,27 @@ class HomePage extends ConsumerWidget {
 
   AppBar _buildAppBar(BuildContext context, String schoolName) {
     return AppBar(
-      // 학교 이름을 왼쪽에 배치
+      // schoolName 변수를 사용하여 학교 이름을 AppBar의 왼쪽에 배치
       title: Text(
         schoolName,
         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
       ),
-      centerTitle: false,
+      centerTitle: false, // 제목을 왼쪽에 붙이기 위해 false 설정
       actions: [
         // 알림 아이콘
         IconButton(
           icon: const Icon(Icons.notifications_none),
           onPressed: () {
             // 알림 페이지로 이동
-            context.push('/notification');
+            context.go('/notification');
           },
         ),
         // 설정 아이콘
         IconButton(
           icon: const Icon(Icons.settings),
           onPressed: () {
-            // 설정 페이지로 이동 (현재는 /home으로 임시 이동)
-            context.push('/home');
+            // 설정 페이지로 이동
+            context.go('/settings');
           },
         ),
         const SizedBox(width: 8),
@@ -97,7 +138,7 @@ class HomePage extends ConsumerWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             TextButton(
-              onPressed: () => context.push('/post'),
+              onPressed: () => context.go('/post'),
               child: const Text('더보기 >'),
             ),
           ],
@@ -114,40 +155,15 @@ class HomePage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                '** 여기에 Firestore DB에서 실시간 최신글 3개가 스트림으로 표시됩니다. **',
+                '여기에 Firestore DB에서 실시간 최신글 3개가 스트림으로 표시',
                 style: TextStyle(color: Colors.red),
               ),
               const Divider(height: 20, color: Colors.grey),
               _buildPostItem(title: '익명글 제목 1', content: '게시글 내용 미리보기...'),
               _buildPostItem(title: '익명글 제목 2', content: '또 다른 게시글 내용...'),
               _buildPostItem(title: '익명글 제목 3', content: '세 번째 게시글 내용...'),
-              /*
-              StreamBuilder<List<Post>>(
-                stream: ref.watch(postStreamProvider),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  if (snapshot.hasError) {
-                    return const Text('게시글 로딩 오류');
-                  }
-                  final posts = snapshot.data ?? [];
-                  if (posts.isEmpty) {
-                    return const Text('아직 게시글이 없습니다. 첫 글을 작성해보세요!');
-                  }
-                  return Column(
-                    children: posts.take(3).map((post) => _buildPostItem(
-                      title: post.title,
-                      content: post.content,
-                      onTap: () => context.go('/post/${post.id}'),
-                    )).toList(),
-                  );
-                },
-              )
-              */
             ],
           ),
-          // ----------------------------------------------------
         ),
       ],
     );
@@ -196,24 +212,9 @@ class HomePage extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildServiceButton(
-              context,
-              iconPath: "assets/images/meal.png", // 급식표 에셋 이미지
-              label: "급식표",
-              route: "/meal",
-            ),
-            _buildServiceButton(
-              context,
-              iconPath: "assets/images/timetable.png", // 시간표 에셋 이미지
-              label: "시간표",
-              route: "/timetable",
-            ),
-            _buildServiceButton(
-              context,
-              iconPath: "assets/images/schedule.png", // 학사일정 에셋 이미지
-              label: "학사일정",
-              route: "/schedule",
-            ),
+            _buildServiceButton(context, label: "급식표", route: "/meal"),
+            _buildServiceButton(context, label: "시간표", route: "/timetable"),
+            _buildServiceButton(context, label: "학사일정", route: "/schedule"),
           ],
         ),
       ],
@@ -222,14 +223,13 @@ class HomePage extends ConsumerWidget {
 
   Widget _buildServiceButton(
     BuildContext context, {
-    required String iconPath,
     required String label,
     required String route,
   }) {
     return Column(
       children: [
         InkWell(
-          onTap: () => context.push(route),
+          onTap: () => context.go(route),
           child: Container(
             width: 80,
             height: 80,
