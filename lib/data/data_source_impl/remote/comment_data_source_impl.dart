@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:damta/data/data_source/comment_data_source.dart';
+import 'package:damta/data/data_source/remote/comment_data_source.dart';
 import 'package:damta/data/dto/comment_dto.dart';
 
 class CommentDataSourceImpl implements CommentDataSource {
@@ -27,9 +27,7 @@ class CommentDataSourceImpl implements CommentDataSource {
       data['c_id'] = doc.id;
       // Firestore Timestamp를 DateTime으로 변환
       if (data['c_created_at'] is Timestamp) {
-        data['c_created_at'] = (data['c_created_at'] as Timestamp)
-            .toDate()
-            .toIso8601String();
+        data['c_created_at'] = (data['c_created_at'] as Timestamp).toDate().toIso8601String();
       }
       return CommentDto.fromJson(data);
     }).toList();

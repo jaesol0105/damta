@@ -96,6 +96,48 @@ final class FirestoreProvider
 
 String _$firestoreHash() => r'597b1a9eb96f2fae51f5b578f4b5debe4f6d30c6';
 
+@ProviderFor(firebaseStorage)
+const firebaseStorageProvider = FirebaseStorageProvider._();
+
+final class FirebaseStorageProvider
+    extends
+        $FunctionalProvider<FirebaseStorage, FirebaseStorage, FirebaseStorage>
+    with $Provider<FirebaseStorage> {
+  const FirebaseStorageProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'firebaseStorageProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$firebaseStorageHash();
+
+  @$internal
+  @override
+  $ProviderElement<FirebaseStorage> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  FirebaseStorage create(Ref ref) {
+    return firebaseStorage(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(FirebaseStorage value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<FirebaseStorage>(value),
+    );
+  }
+}
+
+String _$firebaseStorageHash() => r'47903c48019f7dfa1ba82fa0a905885442d69f6b';
+
 @ProviderFor(database)
 const databaseProvider = DatabaseProvider._();
 
@@ -409,6 +451,18 @@ final class CommentDataSourceProvider
 
 String _$commentDataSourceHash() => r'bc4aa84bd4220f1a2af80a37314147b030ce1767';
 
+@ProviderFor(storageDataSource)
+const storageDataSourceProvider = StorageDataSourceProvider._();
+
+final class StorageDataSourceProvider
+    extends
+        $FunctionalProvider<
+          StorageDataSource,
+          StorageDataSource,
+          StorageDataSource
+        >
+    with $Provider<StorageDataSource> {
+  const StorageDataSourceProvider._()
 @ProviderFor(notificationDataSource)
 const notificationDataSourceProvider = NotificationDataSourceProvider._();
 
@@ -425,6 +479,7 @@ final class NotificationDataSourceProvider
         from: null,
         argument: null,
         retry: null,
+        name: r'storageDataSourceProvider',
         name: r'notificationDataSourceProvider',
         isAutoDispose: true,
         dependencies: null,
@@ -432,30 +487,29 @@ final class NotificationDataSourceProvider
       );
 
   @override
-  String debugGetCreateSourceHash() => _$notificationDataSourceHash();
+  String debugGetCreateSourceHash() => _$storageDataSourceHash();
 
   @$internal
   @override
-  $ProviderElement<NotificationDataSource> $createElement(
+  $ProviderElement<StorageDataSource> $createElement(
     $ProviderPointer pointer,
   ) => $ProviderElement(pointer);
 
   @override
-  NotificationDataSource create(Ref ref) {
-    return notificationDataSource(ref);
+  StorageDataSource create(Ref ref) {
+    return storageDataSource(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(NotificationDataSource value) {
+  Override overrideWithValue(StorageDataSource value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<NotificationDataSource>(value),
+      providerOverride: $SyncValueProvider<StorageDataSource>(value),
     );
   }
 }
 
-String _$notificationDataSourceHash() =>
-    r'd91cd5f68f1c0e52a09defdc1946e7a0c2426efc';
+String _$storageDataSourceHash() => r'eae3b62fbaa0e855e5ef662ba9eea5bcb33a5f82';
 
 @ProviderFor(mealLocalDataSource)
 const mealLocalDataSourceProvider = MealLocalDataSourceProvider._();
@@ -841,53 +895,52 @@ final class CommentRepositoryProvider
 
 String _$commentRepositoryHash() => r'efb95a41385877555ad31b5f12622dfa6ff4cf20';
 
-@ProviderFor(notificationRepository)
-const notificationRepositoryProvider = NotificationRepositoryProvider._();
+@ProviderFor(storageRepository)
+const storageRepositoryProvider = StorageRepositoryProvider._();
 
-final class NotificationRepositoryProvider
+final class StorageRepositoryProvider
     extends
         $FunctionalProvider<
-          NotificationRepository,
-          NotificationRepository,
-          NotificationRepository
+          StorageRepository,
+          StorageRepository,
+          StorageRepository
         >
-    with $Provider<NotificationRepository> {
-  const NotificationRepositoryProvider._()
+    with $Provider<StorageRepository> {
+  const StorageRepositoryProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'notificationRepositoryProvider',
+        name: r'storageRepositoryProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$notificationRepositoryHash();
+  String debugGetCreateSourceHash() => _$storageRepositoryHash();
 
   @$internal
   @override
-  $ProviderElement<NotificationRepository> $createElement(
+  $ProviderElement<StorageRepository> $createElement(
     $ProviderPointer pointer,
   ) => $ProviderElement(pointer);
 
   @override
-  NotificationRepository create(Ref ref) {
-    return notificationRepository(ref);
+  StorageRepository create(Ref ref) {
+    return storageRepository(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(NotificationRepository value) {
+  Override overrideWithValue(StorageRepository value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<NotificationRepository>(value),
+      providerOverride: $SyncValueProvider<StorageRepository>(value),
     );
   }
 }
 
-String _$notificationRepositoryHash() =>
-    r'1a3278c215fde1e182197c1aa8857d9bc46b91b2';
+String _$storageRepositoryHash() => r'056e6bb6fc39466ac856297af2331f3f7029d334';
 
 @ProviderFor(postUsecase)
 const postUsecaseProvider = PostUsecaseProvider._();

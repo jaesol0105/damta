@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:damta/data/data_source/notification_data_source.dart';
+import 'package:damta/data/data_source/remote/notification_data_source.dart';
 import 'package:damta/data/dto/notification_dto.dart';
 
 class NotificationDataSourceImpl implements NotificationDataSource {
