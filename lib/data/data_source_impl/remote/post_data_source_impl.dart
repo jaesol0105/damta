@@ -63,7 +63,9 @@ class PostDataSourceImpl implements PostDataSource {
       data['p_id'] = doc.id;
       // Firestore Timestamp를 DateTime으로 변환
       if (data['p_created_at'] is Timestamp) {
-        data['p_created_at'] = (data['p_created_at'] as Timestamp).toDate().toIso8601String();
+        data['p_created_at'] = (data['p_created_at'] as Timestamp)
+            .toDate()
+            .toIso8601String();
       }
       return PostDto.fromJson(data);
     }).toList();

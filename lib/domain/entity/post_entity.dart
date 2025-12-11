@@ -13,6 +13,6 @@ abstract class PostEntity with _$PostEntity {
     required DateTime pCreatedAt,
     String? pImageUrl,
     List<String>? emojis,
-    int? view,
+    Set<String>? uIdForView,
   }) = _PostEntity;
 }

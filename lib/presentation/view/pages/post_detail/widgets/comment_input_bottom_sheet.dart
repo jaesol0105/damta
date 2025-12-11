@@ -1,10 +1,14 @@
+import 'package:damta/core/services/firebase_service.dart';
 import 'package:damta/domain/entity/comment_entity.dart';
+import 'package:damta/domain/entity/notification_entity.dart';
 import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/presentation/view_model/comment_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../../../view_model/notification_view_model.dart';
 
 class CommentInputBottomSheet extends HookConsumerWidget {
   const CommentInputBottomSheet({
@@ -45,7 +49,7 @@ class CommentInputBottomSheet extends HookConsumerWidget {
                   }
                   final commentEntity = CommentEntity(
                     cId: null,
-                    uId: post.uId,
+                    uId: FirebaseService.getUId.toString(),
                     cContent: commentController.text.trim(),
                     cWriter: writerController.text,
                     cCreatedAt: DateTime.now(),
@@ -54,6 +58,20 @@ class CommentInputBottomSheet extends HookConsumerWidget {
                   await ref
                       .read(commentViewModelProvider.notifier)
                       .addComment(commentEntity);
+                  // 댓글 알림 추가
+                  await ref // TODO : 더미데이터 > post.uId 바꾸기
+                      .read(notificationViewModelProvider(uId: 'uId').notifier)
+                      .addNoti(
+                        NotificationEntity(
+                          uId: 'uId', // TODO : 더미데이터 > post.uId 바꾸기
+                          pId: pId,
+                          pTitle: post.pTitle,
+                          isComment: true,
+                          content: commentController.text.trim(),
+                          isNew: true,
+                          isRead: false,
+                        ),
+                      );
                   commentController.clear();
                   writerController.clear();
                   if (context.mounted) {

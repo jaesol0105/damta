@@ -463,11 +463,24 @@ final class StorageDataSourceProvider
         >
     with $Provider<StorageDataSource> {
   const StorageDataSourceProvider._()
+@ProviderFor(notificationDataSource)
+const notificationDataSourceProvider = NotificationDataSourceProvider._();
+
+final class NotificationDataSourceProvider
+    extends
+        $FunctionalProvider<
+          NotificationDataSource,
+          NotificationDataSource,
+          NotificationDataSource
+        >
+    with $Provider<NotificationDataSource> {
+  const NotificationDataSourceProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'storageDataSourceProvider',
+        name: r'notificationDataSourceProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,

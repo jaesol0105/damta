@@ -4,11 +4,11 @@ import 'package:damta/domain/entity/notification_entity.dart';
 // DTO > Entity
 NotificationEntity dtoToEntity(NotificationDto dto) {
   return NotificationEntity(
-    nId: dto.nId!,
+    nId: dto.nId,
     uId: dto.uId,
     pId: dto.pId,
     pTitle: dto.pTitle,
-    createdAt: dto.createdAt,
+    nCreatedAt: dto.nCreatedAt,
     isComment: dto.isComment,
     content: dto.content,
     isNew: dto.isNew,
@@ -23,7 +23,7 @@ NotificationDto entityToDto(NotificationEntity entity) {
     uId: entity.uId,
     pId: entity.pId,
     pTitle: entity.pTitle,
-    createdAt: entity.createdAt,
+    nCreatedAt: entity.nCreatedAt,
     isComment: entity.isComment,
     content: entity.content,
     isNew: entity.isNew,

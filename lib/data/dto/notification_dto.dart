@@ -1,3 +1,4 @@
+import 'package:damta/data/util/timestamp_converter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'notification_dto.freezed.dart';
@@ -10,18 +11,17 @@ abstract class NotificationDto with _$NotificationDto {
     required String uId,
     required String pId,
     required String pTitle,
-    @JsonKey(fromJson: _convertToDateTime, toJson: _convertFromDateTime)
-    required DateTime createdAt,
+    @JsonKey(
+      fromJson: TimestampConverter.toDateTime,
+      toJson: TimestampConverter.toTimestamp,
+    )
+    DateTime? nCreatedAt,
     required bool isComment,
     required String content,
     required bool isNew,
     required bool isRead,
   }) = _NotificationDto;
 
-  factory NotificationDto.fromJson(Map<String, Object?> json) => _$NotificationDtoFromJson(json);
+  factory NotificationDto.fromJson(Map<String, Object?> json) =>
+      _$NotificationDtoFromJson(json);
 }
-
-// 나중에 data/util에있는 컨버터랑 통일 하기.
-// DateTime 변환 함수
-DateTime _convertToDateTime(String timeString) => DateTime.parse(timeString);
-String _convertFromDateTime(DateTime time) => time.toIso8601String();

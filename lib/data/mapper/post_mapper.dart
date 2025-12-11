@@ -12,7 +12,7 @@ PostEntity postDtoToPostEntity(PostDto postDto) {
     pCreatedAt: postDto.pCreatedAt,
     pImageUrl: postDto.pImageUrl,
     emojis: postDto.emojis,
-    view: postDto.view,
+    uIdForView: postDto.uIdForView,
   );
 }
 
@@ -27,6 +27,6 @@ PostDto postEntityToPostDto(PostEntity postEntity) {
     pCreatedAt: postEntity.pCreatedAt,
     emojis: postEntity.emojis,
     pImageUrl: postEntity.pImageUrl,
-    view: postEntity.view,
+    uIdForView: postEntity.uIdForView,
   );
 }
