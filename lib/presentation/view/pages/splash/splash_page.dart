@@ -101,7 +101,8 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
       backgroundColor: vrc(context).background,
       body: Center(
         child: Lottie.asset(
-          'assets/lottie/splash_chick.json',
+          // 'assets/lottie/splash_chick.json',
+          'assets/lottie/splash_chick_small.json',
           controller: _controller,
           onLoaded: (composition) {
             if (_initialized) return;
