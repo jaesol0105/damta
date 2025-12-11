@@ -1,10 +1,9 @@
-import 'dart:developer';
-
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:damta/core/services/firebase_service.dart';
+import 'package:damta/core/theme/app_theme.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
 class SplashPage extends StatefulWidget {
@@ -99,7 +98,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     // 추후 추가 예정 (애니메이션)
     return Scaffold(
-      backgroundColor: Colors.white, // 네이티브 스플래쉬 컬러와 동일하게 맞추면 자연스럽게 넘어가는거처럼 보임
+      backgroundColor: vrc(context).background,
       body: Center(
         child: Lottie.asset(
           'assets/lottie/splash_chick.json',

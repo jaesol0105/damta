@@ -12,31 +12,47 @@ import 'package:damta/presentation/view/pages/time_table/time_table_page.dart';
 import 'package:damta/presentation/view/pages/post_editor/post_editor_page.dart';
 import 'package:go_router/go_router.dart';
 
+class AppRoutePath {
+  // 인증 / 초기
+  static const login = '/';
+  static const splash = '/splash';
+  static const school = '/school';
+  // 메인
+  static const home = '/home';
+  // 게시글
+  static const post = '/post';
+  static const postEditor = '/posteditor';
+  // 알림
+  static const notification = '/notification/:uId';
+  // 시간표 급식 학사일정 등
+  static const timetable = '/timetable';
+  static const meal = '/meal';
+  static const schedule = '/schedule';
+  static const melon = '/melon';
+}
+
 final GoRouter router = GoRouter(
-  initialLocation: "/splash",
+  initialLocation: AppRoutePath.splash,
 
   routes: [
-    GoRoute(path: "/", builder: (context, state) => const LoginPage()),
-
-    GoRoute(path: "/splash", builder: (context, state) => const SplashPage()),
-
+    GoRoute(path: AppRoutePath.login, builder: (context, state) => const LoginPage()),
+    GoRoute(path: AppRoutePath.splash, builder: (context, state) => const SplashPage()),
     GoRoute(
-      path: "/school",
+      path: AppRoutePath.school,
       builder: (context, state) {
+        // 인자로 넘긴 kakaoId 값
         final String? kakaoId = state.extra as String?;
-
         if (kakaoId == null) {
-          // 비정상 접근 방지 (로그인 페이지로 이동)
           return const LoginPage();
         }
-
-        return SchoolInputPage(kakaoId: kakaoId!);
+        return SchoolInputPage();
       },
     ),
 
-    GoRoute(path: "/home", builder: (context, state) => const HomePage()),
+    GoRoute(path: AppRoutePath.home, builder: (context, state) => const HomePage()),
+
     GoRoute(
-      path: "/post",
+      path: AppRoutePath.post,
       builder: (context, state) => PostPage(),
       routes: [
         GoRoute(
@@ -44,26 +60,27 @@ final GoRouter router = GoRouter(
           builder: (context, state) {
             final String? pId = state.pathParameters['id'];
             if (pId == null) {
-              // 예외처리: id 파라미터가 없을 경우
-              return HomePage();
+              return PostPage();
             }
             return PostDetailPage(pId: pId);
           },
         ),
       ],
     ),
+
+    // 포스트 작성: extra 없이 push
+    // 포스트 수정: PostEntity를 extra로 넘겨서 push
     GoRoute(
-      path: "/posteditor",
-      builder: (context, state) => PostEditorPage(
-        post: PostEntity(
-          uId: '',
-          pTitle: '',
-          pContent: '',
-          pWriter: '',
-          pCreatedAt: DateTime.now(),
-        ),
-      ),
+      path: AppRoutePath.postEditor,
+      builder: (context, state) {
+        final PostEntity initialPost =
+            state.extra as PostEntity? ??
+            PostEntity(uId: '', pTitle: '', pContent: '', pWriter: '', pCreatedAt: DateTime.now());
+
+        return PostEditorPage(post: initialPost);
+      },
     ),
+
     GoRoute(
       path: "/notification/:uId",
       builder: (context, state) {
@@ -71,9 +88,10 @@ final GoRouter router = GoRouter(
         return NotificationPage(uId: uId);
       },
     ),
-    GoRoute(path: "/timetable", builder: (context, state) => TimeTablePage()),
-    GoRoute(path: "/meal", builder: (context, state) => MealPage()),
-    GoRoute(path: "/schedule", builder: (context, state) => SchedulePage()),
-    GoRoute(path: "/melon", builder: (context, state) => HomePage()),
+
+    GoRoute(path: AppRoutePath.timetable, builder: (context, state) => TimeTablePage()),
+    GoRoute(path: AppRoutePath.meal, builder: (context, state) => MealPage()),
+    GoRoute(path: AppRoutePath.schedule, builder: (context, state) => SchedulePage()),
+    GoRoute(path: AppRoutePath.melon, builder: (context, state) => HomePage()),
   ],
 );

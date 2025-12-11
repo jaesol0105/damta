@@ -11,11 +11,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../view_model/notification_view_model.dart';
 
 class CommentInputBottomSheet extends HookConsumerWidget {
-  const CommentInputBottomSheet({
-    super.key,
-    required this.post,
-    required this.pId,
-  });
+  const CommentInputBottomSheet({super.key, required this.post, required this.pId});
 
   final PostEntity post;
   final String pId;
@@ -47,6 +43,9 @@ class CommentInputBottomSheet extends HookConsumerWidget {
                   if (writerController.text.trim().isEmpty) {
                     writerController.text = "익명";
                   }
+                  if (context.mounted) {
+                    context.pop();
+                  }
                   final commentEntity = CommentEntity(
                     cId: null,
                     uId: FirebaseService.getUId.toString(),
@@ -55,9 +54,7 @@ class CommentInputBottomSheet extends HookConsumerWidget {
                     cCreatedAt: DateTime.now(),
                     pId: pId,
                   );
-                  await ref
-                      .read(commentViewModelProvider.notifier)
-                      .addComment(commentEntity);
+                  await ref.read(commentViewModelProvider.notifier).addComment(commentEntity);
                   // 댓글 알림 추가
                   await ref // TODO : 더미데이터 > post.uId 바꾸기
                       .read(notificationViewModelProvider(uId: 'uId').notifier)
@@ -74,9 +71,6 @@ class CommentInputBottomSheet extends HookConsumerWidget {
                       );
                   commentController.clear();
                   writerController.clear();
-                  if (context.mounted) {
-                    context.pop();
-                  }
                 },
                 child: const Text("완료"),
               ),

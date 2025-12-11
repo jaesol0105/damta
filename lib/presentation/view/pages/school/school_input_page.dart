@@ -6,8 +6,7 @@ import 'package:damta/data/data_source/remote/school_api_data_source.dart';
 import 'package:dio/dio.dart';
 
 class SchoolInputPage extends StatefulWidget {
-  final String kakaoId;
-  const SchoolInputPage({super.key, required this.kakaoId});
+  const SchoolInputPage({super.key});
 
   @override
   State<SchoolInputPage> createState() => _SchoolInputPageState();

@@ -76,10 +76,7 @@ class HomePage extends ConsumerWidget {
   AppBar _buildAppBar(BuildContext context, String schoolName) {
     return AppBar(
       // schoolName 변수를 사용하여 학교 이름을 AppBar의 왼쪽에 배치
-      title: Text(
-        schoolName,
-        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-      ),
+      title: Text(schoolName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
       centerTitle: false, // 제목을 왼쪽에 붙이기 위해 false 설정
       actions: [
         // 알림 아이콘
@@ -116,11 +113,7 @@ class HomePage extends ConsumerWidget {
       alignment: Alignment.center,
       child: const Text(
         '날씨 위젯 배치 공간 (데이터 연동 예정)',
-        style: TextStyle(
-          color: Colors.blueGrey,
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-        ),
+        style: TextStyle(color: Colors.blueGrey, fontSize: 16, fontWeight: FontWeight.w600),
       ),
     );
   }
@@ -133,12 +126,9 @@ class HomePage extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              '우리 학교 익명 게시판',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
+            const Text('우리 학교 익명 게시판', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             TextButton(
-              onPressed: () => context.go('/post'),
+              onPressed: () => context.push(AppRoutePath.post),
               child: const Text('더보기 >'),
             ),
           ],
@@ -170,11 +160,7 @@ class HomePage extends ConsumerWidget {
   }
 
   // 게시글 미리보기 단일 항목 위젯
-  Widget _buildPostItem({
-    required String title,
-    required String content,
-    VoidCallback? onTap,
-  }) {
+  Widget _buildPostItem({required String title, required String content, VoidCallback? onTap}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: GestureDetector(
@@ -204,32 +190,25 @@ class HomePage extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          '주요 서비스',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
+        const Text('주요 서비스', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         const SizedBox(height: 12),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildServiceButton(context, label: "급식표", route: "/meal"),
-            _buildServiceButton(context, label: "시간표", route: "/timetable"),
-            _buildServiceButton(context, label: "학사일정", route: "/schedule"),
+            _buildServiceButton(context, label: "급식표", route: AppRoutePath.meal),
+            _buildServiceButton(context, label: "시간표", route: AppRoutePath.timetable),
+            _buildServiceButton(context, label: "학사일정", route: AppRoutePath.schedule),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildServiceButton(
-    BuildContext context, {
-    required String label,
-    required String route,
-  }) {
+  Widget _buildServiceButton(BuildContext context, {required String label, required String route}) {
     return Column(
       children: [
         InkWell(
-          onTap: () => context.go(route),
+          onTap: () => context.push(route),
           child: Container(
             width: 80,
             height: 80,
@@ -245,11 +224,7 @@ class HomePage extends ConsumerWidget {
                 ),
               ],
             ),
-            child: Icon(
-              _getIconForLabel(label),
-              size: 40,
-              color: Theme.of(context).primaryColor,
-            ),
+            child: Icon(_getIconForLabel(label), size: 40, color: Theme.of(context).primaryColor),
           ),
         ),
         const SizedBox(height: 8),
