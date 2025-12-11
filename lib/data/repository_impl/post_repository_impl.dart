@@ -26,7 +26,11 @@ class PostRepositoryImpl implements PostRepository {
   Future<void> updatePost(PostEntity entity) async {
     try {
       final dto = postEntityToPostDto(entity);
-      await postDataSource.updatePost(dto);
+      if (entity.uId.isEmpty) {
+        await postDataSource.addPost(dto);
+      } else {
+        await postDataSource.updatePost(dto);
+      }
       // 예외 전파
     } catch (e, s) {
       log('Repository updatePost 실패: $e', error: e, stackTrace: s);

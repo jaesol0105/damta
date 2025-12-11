@@ -1,3 +1,4 @@
+import 'package:damta/core/config/routes.dart';
 import 'package:damta/presentation/view/pages/home/widgets/noti_button.dart';
 import 'package:damta/presentation/view/pages/post/widgets/post_input_bottom_sheet.dart';
 import 'package:damta/presentation/view/pages/post/widgets/post_list_item.dart';
@@ -50,11 +51,12 @@ class PostPage extends HookConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showModalBottomSheet(
-            isScrollControlled: true,
-            context: context,
-            builder: (context) => const PostInputBottomSheet(),
-          );
+          context.push(AppRoutePath.postEditor);
+          // showModalBottomSheet(
+          //   isScrollControlled: true,
+          //   context: context,
+          //   builder: (context) => const PostInputBottomSheet(),
+          // );
         },
         child: const Icon(Icons.add),
       ),

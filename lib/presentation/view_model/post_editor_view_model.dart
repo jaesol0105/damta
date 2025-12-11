@@ -162,7 +162,7 @@ class PostEditorViewModel extends _$PostEditorViewModel {
       );
       await repo.updatePost(updated); // 새 포스트, 수정으로 분기 해야함.(아직 안함) 둘다 update쓸려면 uuid사용필요
 
-      return (true, null, updated);
+      return (true, null, updated); // 일단 반환은 하는데 낙관적업데이트 안하고, 그냥 refresh함. 나중에 수정예정
       // 예외 전파
     } catch (e, s) {
       log('PostEditorViewModel save 실패: $e', error: e, stackTrace: s);
