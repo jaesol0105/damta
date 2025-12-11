@@ -11,7 +11,7 @@ import 'package:damta/presentation/view/pages/write_post/write_post_page.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(
-  initialLocation: "/post",
+  initialLocation: "/home",
 
   routes: [
     GoRoute(path: "/", builder: (context, state) => const LoginPage()),

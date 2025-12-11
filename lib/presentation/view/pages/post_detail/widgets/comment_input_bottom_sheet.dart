@@ -1,3 +1,4 @@
+import 'package:damta/core/services/firebase_service.dart';
 import 'package:damta/domain/entity/comment_entity.dart';
 import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/presentation/view_model/comment_view_model.dart';
@@ -45,7 +46,7 @@ class CommentInputBottomSheet extends HookConsumerWidget {
                   }
                   final commentEntity = CommentEntity(
                     cId: null,
-                    uId: post.uId,
+                    uId: FirebaseService.getUId.toString(),
                     cContent: commentController.text.trim(),
                     cWriter: writerController.text,
                     cCreatedAt: DateTime.now(),

@@ -25,6 +25,7 @@ class _SplashPageState extends State<SplashPage> {
     await Future.delayed(const Duration(milliseconds: 500));
 
     final fb_auth.User? user = FirebaseService.instance.auth.currentUser;
+  
 
     if (user == null) {
       // 미인증: 로그인 페이지로 이동
@@ -55,7 +56,7 @@ class _SplashPageState extends State<SplashPage> {
 
       if (hasSchoolInfo) {
         // 학교 정보 입력 완료: 홈 페이지로 이동 (자동 로그인)
-        if (mounted) context.go('/home');
+        if (mounted) context.go('/home'); 
       } else if (kakaoId != null) {
         // 학교 정보 미입력: 학교 입력 페이지로 이동 (kakaoId를 extra로 전달)
         if (mounted) context.go('/school', extra: kakaoId);
