@@ -52,7 +52,7 @@ class PostListItem extends StatelessWidget {
                     thickness: 0,
                     color: Colors.grey,
                   ),
-                  Text("조회 ${post.view.toString()}"),
+                  Text("조회 ${(post.uIdForView?.length ?? 0).toString()}"),
                 ],
               ),
             ),

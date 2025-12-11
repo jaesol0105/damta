@@ -10,6 +10,10 @@ class FirebaseService {
   late final FirebaseAuth auth;
   late final FirebaseFirestore firestore;
 
+  static String? get getUId {
+    return FirebaseAuth.instance.currentUser?.uid;
+  }
+
   FirebaseService._internal();
 
   // Firebase 초기화 메서드
