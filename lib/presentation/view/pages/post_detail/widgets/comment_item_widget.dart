@@ -1,4 +1,5 @@
 import 'package:damta/core/services/firebase_service.dart';
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/domain/entity/comment_entity.dart';
 import 'package:damta/presentation/core/util/time_ago.dart';
 import 'package:damta/presentation/view_model/comment_view_model.dart';
@@ -34,17 +35,12 @@ class CommentItemWidget extends StatelessWidget {
                       onPressed: () {
                         context.pop();
                         final cId = comment.cId;
-                        if (cId != null &&
-                            comment.uId == FirebaseService.getUId) {
-                          ref
-                              .read(commentViewModelProvider.notifier)
-                              .deleteComment(cId);
+                        if (cId != null && comment.uId == FirebaseService.getUId) {
+                          ref.read(commentViewModelProvider.notifier).deleteComment(cId);
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("사용자님이 작성하신 댓글만 삭제할 수 있습니다."),
-                            ),
-                          );
+                          ScaffoldMessenger.of(
+                            context,
+                          ).showSnackBar(SnackBar(content: Text("사용자님이 작성하신 댓글만 삭제할 수 있습니다.")));
                         }
                       },
                       child: Text("삭제"),
@@ -54,29 +50,32 @@ class CommentItemWidget extends StatelessWidget {
               },
             );
           },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              IntrinsicHeight(
-                child: Row(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 14.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
                       children: [
-                        Text(comment.cWriter),
-                        const VerticalDivider(
-                          width: 10,
-                          thickness: 0,
-                          color: Colors.grey,
+                        Text(comment.cWriter, style: TextStyle(color: vrc(context).detailText)),
+                        const SizedBox(width: 10),
+                        Container(width: 2, height: 12, color: vrc(context).border),
+                        const SizedBox(width: 10),
+                        Text(
+                          timeAgo(comment.cCreatedAt),
+                          style: TextStyle(color: vrc(context).detailText),
                         ),
-                        Text(timeAgo(comment.cCreatedAt)),
                       ],
                     ),
                   ],
                 ),
-              ),
-              Text(comment.cContent),
-            ],
+                const SizedBox(width: 4),
+                Text(comment.cContent),
+              ],
+            ),
           ),
         );
       },
