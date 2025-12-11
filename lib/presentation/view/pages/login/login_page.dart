@@ -20,25 +20,25 @@ class _LoginPageState extends State<LoginPage> {
       if (isInstalled) {
         try {
           token = await UserApi.instance.loginWithKakaoTalk();
-          print("카카오톡 로그인 성공함");
+          print("카카오톡 로그인 성공함 (-_- b)");
         } catch (error) {
-          print("카카오톡 로그인 실패함 (계정으로) : $error");
+          print("!!! 카카오톡 로그인 실패함 (계정으로) !!! : $error");
           token = await UserApi.instance.loginWithKakaoAccount();
-          print("카카오 계정(웹)으로 로그인 성공");
+          print("카카오 계정(웹)으로 로그인 성공 (-_- b)");
         }
       } else {
         token = await UserApi.instance.loginWithKakaoAccount();
-        print("카카오 계정(웹)으로 로그인 성공");
+        print("카카오 계정(웹)으로 로그인 성공 (-_- b)");
       }
 
       final user = await UserApi.instance.me();
       final String? kakaoId = user.id?.toString();
 
       if (kakaoId != null && mounted) {
-        print("사용자 고유 ID: $kakaoId");
-        // (임시) 일단은 무조건 임시 학교 찾기 페이지로 이동
+        print("사용자 고유 ID : $kakaoId");
+        // (임시) 일단은 무조건 임시 학교 찾기 페이지로 이동 (임시로 넣어두려 했는데 앱 실행에 문제 X, 그냥 그대로 가져갈듯)
         fb_auth.User? firebaseUser = await FirebaseService.instance
-            .signInAnonymouslyWithKakaoId(kakaoId);
+            .signInWithKakaoIdAndCreateUser(kakaoId);
         //
         if (firebaseUser == null) {
           _showErrorDialog(
@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
         _showErrorDialog("로그인 오류", "카카오 사용자 ID를 얻을 수 없습니다.");
       }
     } catch (error) {
-      print("최종 로그인 실패: $error");
+      print("!!! 최종 로그인 실패 !!! : $error");
       _showErrorDialog("로그인 실패", "로그인 중 오류가 발생했습니다. 다시 시도해 주세요.");
     }
   }

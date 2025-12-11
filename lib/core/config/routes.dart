@@ -9,9 +9,12 @@ import 'package:damta/presentation/view/pages/splash/splash_page.dart';
 import 'package:damta/presentation/view/pages/time_table/time_table_page.dart';
 import 'package:damta/presentation/view/pages/write_post/write_post_page.dart';
 import 'package:go_router/go_router.dart';
+import 'package:damta/presentation/view/pages/login/login_page.dart';
+import 'package:damta/presentation/view/pages/school/school_input_page.dart';
+import 'package:damta/presentation/view/pages/splash/splash_page.dart';
 
 final GoRouter router = GoRouter(
-  initialLocation: "/home",
+  initialLocation: "/splash",
 
   routes: [
     GoRoute(path: "/", builder: (context, state) => const LoginPage()),
@@ -28,7 +31,7 @@ final GoRouter router = GoRouter(
           return const LoginPage();
         }
 
-        return SchoolInputPage(kakaoId: kakaoId);
+        return SchoolInputPage(kakaoId: kakaoId!);
       },
     ),
 
