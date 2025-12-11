@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:damta/firebase_options.dart';
 
@@ -10,6 +12,10 @@ class FirebaseService {
 
   static FirebaseService? _instance;
   static bool _isInitialized = false;
+
+  static String? get getUId {
+    return FirebaseAuth.instance.currentUser?.uid;
+  }
 
   FirebaseService._internal();
 
@@ -47,16 +53,33 @@ class FirebaseService {
           options: DefaultFirebaseOptions.currentPlatform,
         );
       }
-
       _instance = FirebaseService._internal();
       _instance!._firestore = FirebaseFirestore.instance;
       _instance!._auth = fb_auth.FirebaseAuth.instance;
+
+      // iOS Foreground 알림 표시를 허용 (없으면 iOS에서 푸시 미표시)
+      await FirebaseMessaging.instance
+          .setForegroundNotificationPresentationOptions(
+            alert: true,
+            badge: true,
+            sound: true,
+          );
 
       _isInitialized = true;
       debugPrint('Firebase initialized successfully and services are ready.');
     } catch (e) {
       debugPrint('Error initializing Firebase: $e');
       _isInitialized = false;
+    }
+  }
+
+  // FCM 토큰 Firestore 저장
+  Future<void> saveFcmToken(String uId) async {
+    final token = await FirebaseMessaging.instance.getToken();
+    print('🩷 FCM token: $token');
+    if (token != null) {
+      await _firestore.collection('users').doc(uId).update({'fcmToken': token});
+      debugPrint('FCM token saved: $token');
     }
   }
 

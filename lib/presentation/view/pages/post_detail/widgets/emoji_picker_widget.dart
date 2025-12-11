@@ -1,7 +1,10 @@
+import 'package:damta/domain/entity/notification_entity.dart';
 import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/presentation/view_model/post_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../../../view_model/notification_view_model.dart';
 
 class EmojiPickerWidget {
   static const List<String> emojiList = [
@@ -222,6 +225,24 @@ class EmojiPickerWidget {
                                   .updatePost(
                                     post.copyWith(
                                       emojis: [...(post.emojis ?? []), emoji],
+                                    ),
+                                  );
+                              // 반응 알림 추가
+                              ref
+                                  .read(
+                                    notificationViewModelProvider(
+                                      uId: 'uId', // TODO : 더미데이터 > post.uId 바꾸기
+                                    ).notifier,
+                                  )
+                                  .addNoti(
+                                    NotificationEntity(
+                                      uId: 'uId', // TODO : 더미데이터 > post.uId 바꾸기
+                                      pId: post.pId!,
+                                      pTitle: post.pTitle,
+                                      isComment: false,
+                                      content: emoji,
+                                      isNew: true,
+                                      isRead: false,
                                     ),
                                   );
                               onClose();

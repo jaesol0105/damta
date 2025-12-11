@@ -1,5 +1,6 @@
 import 'package:damta/core/theme/app_theme.dart';
-import 'package:damta/core/di/notification_provider.dart';
+import 'package:damta/presentation/view_model/notification_view_model.dart';
+import 'package:damta/presentation/view_model/post_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -9,6 +10,7 @@ class NotificationView extends ConsumerWidget {
     super.key,
     required this.uId,
     required this.pId,
+    required this.nId,
     required this.isRead,
     required this.title,
     required this.content,
@@ -16,6 +18,7 @@ class NotificationView extends ConsumerWidget {
   });
   final String uId;
   final String pId;
+  final String nId;
   final bool isRead;
   final String title;
   final String content;
@@ -25,8 +28,24 @@ class NotificationView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
       onTap: () async {
+        // 전체 게시글 확인
+        final posts = ref.read(postViewModelProvider);
+        final exists = posts.any((p) => p.pId == pId);
+        // 게시글이 지워졌으면
+        if (!exists) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('게시물이 존재하지 않습니다.')));
+          await ref
+              .read(notificationViewModelProvider(uId: uId).notifier)
+              .deleteNotis(nId); // pId 없는 알림 자동 삭제
+          return; // 이동 막기
+        }
+
         context.push('/post/$pId');
-        ref.read(notificationViewModelProvider(uId).notifier).markAsRead(pId);
+        ref
+            .read(notificationViewModelProvider(uId: uId).notifier)
+            .markAsRead(pId);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -41,18 +60,17 @@ class NotificationView extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(title, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                // TODO : 알림 테스트용 삭제 버튼 > 지우기
+                Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
                 InkWell(
-                  onTap: () {
-                    ref.read(notificationViewModelProvider(uId).notifier).deleteNotis(pId);
-                  },
+                  onTap: () async => await ref
+                      .read(notificationViewModelProvider(uId: uId).notifier)
+                      .deleteNotis(nId),
                   child: Icon(Icons.clear),
                 ),
               ],
             ),
             Text(content),
-            Text(time),
+            Text(time, style: TextStyle(fontSize: 12, color: darkgrey)),
           ],
         ),
       ),

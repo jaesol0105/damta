@@ -35,6 +35,7 @@ void main() async {
   //   await helper.deleteDatabase();
   // }
 
+  // Firebase 초기화
   await FirebaseService.instance.initializeFirebase();
   // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
@@ -43,9 +44,20 @@ void main() async {
   // 앱 실행 전 해시 키 함수 호출
   _getHashKey();
 
-  // 로컬 알림 + FCM 초기화, Background 핸들러 등록
-  await NotificationService.initialize();
+  // FCM Background 핸들러 등록
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  //main 에서 FCM 권한과 Foreground 옵션 명시
+  await FirebaseMessaging.instance.requestPermission();
+
+  // 로컬 알림 + FCM Foreground 처리
+  await NotificationService.initialize();
+
+  // FCM 토큰 저장 (현재 로그인한 유저가 있으면)
+  final user = FirebaseService.instance.auth.currentUser;
+  if (user != null) {
+    await FirebaseService.instance.saveFcmToken(user.uid);
+  }
 
   runApp(ProviderScope(child: const MyApp()));
 }
