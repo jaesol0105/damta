@@ -4,11 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:damta/presentation/view/pages/home/widgets/weather_bar.dart';
+import 'package:damta/presentation/view/pages/home/widgets/noti_button.dart';
 
 class UserProfile {
   final String schoolName;
 
-  // schoolName이 null이거나 비어있으면 기본값으로 "학교 미지정"
   UserProfile({required this.schoolName});
 
   factory UserProfile.fromFirestore(Map<String, dynamic> data) {
@@ -47,26 +48,36 @@ class HomePage extends ConsumerWidget {
 
     final schoolName = userProfileAsyncValue.when(
       data: (profile) => profile.schoolName, // 데이터 로드 성공 시
-      loading: () => '학교 이름 로딩 중...', // 로딩 중일 때
+      loading: () => '학교 이름 로딩 중...',
       error: (e, st) {
-        print('!!! 학교 프로필 로드 오류 !!!: $e');
+        // print('!!! 학교 프로필 로드 오류 !!!: $e'); // 주석 처리
         return '오류 발생'; // 오류 발생 시
       },
     );
 
     return Scaffold(
-      // schoolName을 AppBar에 전달하여 표시
+      // schoolName => AppBar에 전달
       appBar: _buildAppBar(context, schoolName),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+      body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildWeatherWidgetPlaceholder(),
-            const SizedBox(height: 20),
-            _buildBulletinBoardPreview(context),
-            const SizedBox(height: 30),
-            _buildNavigationButtons(context),
+            // 최상단에 날씨 위젯 호출
+            const WeatherBar(),
+
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center, // 세로 중앙 정렬
+                  children: [
+                    const SizedBox(height: 120),
+                    _buildServiceButtonsGrid(context),
+
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -75,23 +86,26 @@ class HomePage extends ConsumerWidget {
 
   AppBar _buildAppBar(BuildContext context, String schoolName) {
     return AppBar(
-      // schoolName 변수를 사용하여 학교 이름을 AppBar의 왼쪽에 배치
-      title: Text(schoolName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-      centerTitle: false, // 제목을 왼쪽에 붙이기 위해 false 설정
+      title: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset("assets/images/logo.png", height: 28, width: 28),
+          const SizedBox(width: 8),
+          Text(
+            schoolName,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+        ],
+      ),
+      centerTitle: false,
       actions: [
-        // 알림 아이콘
-        IconButton(
-          icon: const Icon(Icons.notifications_none),
-          onPressed: () {
-            // 알림 페이지로 이동
-            context.go('/notification');
-          },
-        ),
-        // 설정 아이콘
+        // 노티 위젯 호출
+        const NotiButton(),
+        // 설정 아이콘(미구현)
         IconButton(
           icon: const Icon(Icons.settings),
           onPressed: () {
-            // 설정 페이지로 이동
+            // 설정 페이지로 이동 (미구현)
             context.go('/settings');
           },
         ),
@@ -100,149 +114,120 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  // 날씨 위젯 Placeholder
-  Widget _buildWeatherWidgetPlaceholder() {
-    return Container(
-      width: double.infinity,
-      height: 100,
-      decoration: BoxDecoration(
-        color: Colors.blue.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.blue.shade200),
-      ),
-      alignment: Alignment.center,
-      child: const Text(
-        '날씨 위젯 배치 공간 (데이터 연동 예정)',
-        style: TextStyle(color: Colors.blueGrey, fontSize: 16, fontWeight: FontWeight.w600),
-      ),
-    );
-  }
+  // 버튼 2x2 그리드로
+  Widget _buildServiceButtonsGrid(BuildContext context) {
+    // 서비스 목록
+    final services = [
+      {'label': "익명 게시판", 'route': "/post"},
+      {'label': "학사 일정", 'route': "/schedule"},
+      {'label': "급식표", 'route': "/meal"},
+      {'label': "시간표", 'route': "/timetable"},
+    ];
 
-  // 익명 게시판 미리보기
-  Widget _buildBulletinBoardPreview(BuildContext context) {
+    // 중앙 정렬
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text('우리 학교 익명 게시판', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            TextButton(
-              onPressed: () => context.push(AppRoutePath.post),
-              child: const Text('더보기 >'),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.grey.shade100,
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: Colors.grey.shade300),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                '여기에 Firestore DB에서 실시간 최신글 3개가 스트림으로 표시',
-                style: TextStyle(color: Colors.red),
-              ),
-              const Divider(height: 20, color: Colors.grey),
-              _buildPostItem(title: '익명글 제목 1', content: '게시글 내용 미리보기...'),
-              _buildPostItem(title: '익명글 제목 2', content: '또 다른 게시글 내용...'),
-              _buildPostItem(title: '익명글 제목 3', content: '세 번째 게시글 내용...'),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  // 게시글 미리보기 단일 항목 위젯
-  Widget _buildPostItem({required String title, required String content, VoidCallback? onTap}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: GestureDetector(
-        onTap: onTap ?? () => {}, // /post 라우트로 이동
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(fontWeight: FontWeight.w600),
-              overflow: TextOverflow.ellipsis,
-            ),
-            Text(
-              content,
-              style: const TextStyle(color: Colors.grey, fontSize: 13),
-              overflow: TextOverflow.ellipsis,
-            ),
-            const Divider(height: 10),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // 네비게이션 버튼 (급식, 시간표, 학사일정)
-  Widget _buildNavigationButtons(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('주요 서비스', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 12),
+        // 첫 번째 줄 (익게, 학사 일정)
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildServiceButton(context, label: "급식표", route: AppRoutePath.meal),
-            _buildServiceButton(context, label: "시간표", route: AppRoutePath.timetable),
-            _buildServiceButton(context, label: "학사일정", route: AppRoutePath.schedule),
+            Expanded(child: _buildServiceButton(context, data: services[0])),
+            const SizedBox(width: 20),
+            Expanded(child: _buildServiceButton(context, data: services[1])),
+          ],
+        ),
+        const SizedBox(height: 20),
+        // 두 번째 줄 (급식표, 시간표)
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Expanded(child: _buildServiceButton(context, data: services[2])),
+            const SizedBox(width: 20),
+            Expanded(child: _buildServiceButton(context, data: services[3])),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildServiceButton(BuildContext context, {required String label, required String route}) {
-    return Column(
-      children: [
-        InkWell(
-          onTap: () => context.push(route),
-          child: Container(
-            width: 80,
-            height: 80,
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Icon(_getIconForLabel(label), size: 40, color: Theme.of(context).primaryColor),
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(label, style: const TextStyle(fontWeight: FontWeight.w500)),
-      ],
+  // 에셋 이미지를 버튼 아이콘으로
+  Widget _getAssetIconOrPlaceholder(String label) {
+    String assetPath;
+
+    switch (label) {
+      case "익명 게시판":
+        assetPath = 'assets/images/post.png';
+        break;
+      case "학사 일정":
+        assetPath = 'assets/images/schedule.png';
+        break;
+      case "급식표":
+        assetPath = 'assets/images/meal.png';
+        break;
+      case "시간표":
+        assetPath = 'assets/images/time_table.png';
+        break;
+      default:
+        return const Icon(
+          // 주석처리 해도 됨
+          Icons.menu_book,
+          size: 55,
+          color: Colors.grey,
+        );
+    }
+
+    // Image.asset 위젯
+    return Image.asset(
+      assetPath,
+      width: 75, // 아이콘 크기
+      height: 75,
     );
   }
 
-  IconData _getIconForLabel(String label) {
-    switch (label) {
-      case "급식표":
-        return Icons.restaurant_menu;
-      case "시간표":
-        return Icons.schedule;
-      case "학사일정":
-        return Icons.calendar_month;
-      default:
-        return Icons.menu_book;
-    }
+  Widget _buildServiceButton(
+    BuildContext context, {
+    required Map<String, String> data,
+  }) {
+    final label = data['label']!;
+    final route = data['route']!;
+
+    return InkWell(
+      onTap: () => context.go(route),
+      child: Material(
+        elevation: 4.0,
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        shadowColor: Colors.blue.withOpacity(0.4), // 그림자 색상
+        child: AspectRatio(
+          aspectRatio: 1, // 정사각형 1ㄷ1
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              // 테두리 두께
+              border: Border.all(color: Colors.blue.shade400, width: 5.0),
+            ),
+            // 아이콘, 텍스트 Column 중앙 배치
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _getAssetIconOrPlaceholder(label),
+                const SizedBox(height: 30),
+                Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold, // 텍스트
+                    fontSize: 18,
+                    color: Colors.blueGrey,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
