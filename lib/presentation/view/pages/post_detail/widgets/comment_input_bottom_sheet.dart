@@ -49,7 +49,7 @@ class CommentInputBottomSheet extends HookConsumerWidget {
                   }
                   final commentEntity = CommentEntity(
                     cId: null,
-                    uId: 'uId', // TODO : 더미데이터 > post.uId 바꾸기
+                    uId: FirebaseService.getUId.toString(),
                     cContent: commentController.text.trim(),
                     cWriter: writerController.text,
                     cCreatedAt: DateTime.now(),

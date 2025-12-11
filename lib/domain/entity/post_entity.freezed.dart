@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PostEntity {
 
- String? get pId; String get uId; String get pTitle; String get pContent; String get pWriter; DateTime get pCreatedAt; String? get pImageUrl; List<String>? get emojis; int? get view;
+ String? get pId; String get uId; String get pTitle; String get pContent; String get pWriter; DateTime get pCreatedAt; String? get pImageUrl; List<String>? get emojis; Set<String>? get uIdForView;
 /// Create a copy of PostEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $PostEntityCopyWith<PostEntity> get copyWith => _$PostEntityCopyWithImpl<PostEnt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PostEntity&&(identical(other.pId, pId) || other.pId == pId)&&(identical(other.uId, uId) || other.uId == uId)&&(identical(other.pTitle, pTitle) || other.pTitle == pTitle)&&(identical(other.pContent, pContent) || other.pContent == pContent)&&(identical(other.pWriter, pWriter) || other.pWriter == pWriter)&&(identical(other.pCreatedAt, pCreatedAt) || other.pCreatedAt == pCreatedAt)&&(identical(other.pImageUrl, pImageUrl) || other.pImageUrl == pImageUrl)&&const DeepCollectionEquality().equals(other.emojis, emojis)&&(identical(other.view, view) || other.view == view));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PostEntity&&(identical(other.pId, pId) || other.pId == pId)&&(identical(other.uId, uId) || other.uId == uId)&&(identical(other.pTitle, pTitle) || other.pTitle == pTitle)&&(identical(other.pContent, pContent) || other.pContent == pContent)&&(identical(other.pWriter, pWriter) || other.pWriter == pWriter)&&(identical(other.pCreatedAt, pCreatedAt) || other.pCreatedAt == pCreatedAt)&&(identical(other.pImageUrl, pImageUrl) || other.pImageUrl == pImageUrl)&&const DeepCollectionEquality().equals(other.emojis, emojis)&&const DeepCollectionEquality().equals(other.uIdForView, uIdForView));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,pId,uId,pTitle,pContent,pWriter,pCreatedAt,pImageUrl,const DeepCollectionEquality().hash(emojis),view);
+int get hashCode => Object.hash(runtimeType,pId,uId,pTitle,pContent,pWriter,pCreatedAt,pImageUrl,const DeepCollectionEquality().hash(emojis),const DeepCollectionEquality().hash(uIdForView));
 
 @override
 String toString() {
-  return 'PostEntity(pId: $pId, uId: $uId, pTitle: $pTitle, pContent: $pContent, pWriter: $pWriter, pCreatedAt: $pCreatedAt, pImageUrl: $pImageUrl, emojis: $emojis, view: $view)';
+  return 'PostEntity(pId: $pId, uId: $uId, pTitle: $pTitle, pContent: $pContent, pWriter: $pWriter, pCreatedAt: $pCreatedAt, pImageUrl: $pImageUrl, emojis: $emojis, uIdForView: $uIdForView)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $PostEntityCopyWith<$Res>  {
   factory $PostEntityCopyWith(PostEntity value, $Res Function(PostEntity) _then) = _$PostEntityCopyWithImpl;
 @useResult
 $Res call({
- String? pId, String uId, String pTitle, String pContent, String pWriter, DateTime pCreatedAt, String? pImageUrl, List<String>? emojis, int? view
+ String? pId, String uId, String pTitle, String pContent, String pWriter, DateTime pCreatedAt, String? pImageUrl, List<String>? emojis, Set<String>? uIdForView
 });
 
 
@@ -62,7 +62,7 @@ class _$PostEntityCopyWithImpl<$Res>
 
 /// Create a copy of PostEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? pId = freezed,Object? uId = null,Object? pTitle = null,Object? pContent = null,Object? pWriter = null,Object? pCreatedAt = null,Object? pImageUrl = freezed,Object? emojis = freezed,Object? view = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? pId = freezed,Object? uId = null,Object? pTitle = null,Object? pContent = null,Object? pWriter = null,Object? pCreatedAt = null,Object? pImageUrl = freezed,Object? emojis = freezed,Object? uIdForView = freezed,}) {
   return _then(_self.copyWith(
 pId: freezed == pId ? _self.pId : pId // ignore: cast_nullable_to_non_nullable
 as String?,uId: null == uId ? _self.uId : uId // ignore: cast_nullable_to_non_nullable
@@ -72,8 +72,8 @@ as String,pWriter: null == pWriter ? _self.pWriter : pWriter // ignore: cast_nul
 as String,pCreatedAt: null == pCreatedAt ? _self.pCreatedAt : pCreatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime,pImageUrl: freezed == pImageUrl ? _self.pImageUrl : pImageUrl // ignore: cast_nullable_to_non_nullable
 as String?,emojis: freezed == emojis ? _self.emojis : emojis // ignore: cast_nullable_to_non_nullable
-as List<String>?,view: freezed == view ? _self.view : view // ignore: cast_nullable_to_non_nullable
-as int?,
+as List<String>?,uIdForView: freezed == uIdForView ? _self.uIdForView : uIdForView // ignore: cast_nullable_to_non_nullable
+as Set<String>?,
   ));
 }
 
@@ -158,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? pId,  String uId,  String pTitle,  String pContent,  String pWriter,  DateTime pCreatedAt,  String? pImageUrl,  List<String>? emojis,  int? view)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? pId,  String uId,  String pTitle,  String pContent,  String pWriter,  DateTime pCreatedAt,  String? pImageUrl,  List<String>? emojis,  Set<String>? uIdForView)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PostEntity() when $default != null:
-return $default(_that.pId,_that.uId,_that.pTitle,_that.pContent,_that.pWriter,_that.pCreatedAt,_that.pImageUrl,_that.emojis,_that.view);case _:
+return $default(_that.pId,_that.uId,_that.pTitle,_that.pContent,_that.pWriter,_that.pCreatedAt,_that.pImageUrl,_that.emojis,_that.uIdForView);case _:
   return orElse();
 
 }
@@ -179,10 +179,10 @@ return $default(_that.pId,_that.uId,_that.pTitle,_that.pContent,_that.pWriter,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? pId,  String uId,  String pTitle,  String pContent,  String pWriter,  DateTime pCreatedAt,  String? pImageUrl,  List<String>? emojis,  int? view)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? pId,  String uId,  String pTitle,  String pContent,  String pWriter,  DateTime pCreatedAt,  String? pImageUrl,  List<String>? emojis,  Set<String>? uIdForView)  $default,) {final _that = this;
 switch (_that) {
 case _PostEntity():
-return $default(_that.pId,_that.uId,_that.pTitle,_that.pContent,_that.pWriter,_that.pCreatedAt,_that.pImageUrl,_that.emojis,_that.view);case _:
+return $default(_that.pId,_that.uId,_that.pTitle,_that.pContent,_that.pWriter,_that.pCreatedAt,_that.pImageUrl,_that.emojis,_that.uIdForView);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -199,10 +199,10 @@ return $default(_that.pId,_that.uId,_that.pTitle,_that.pContent,_that.pWriter,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? pId,  String uId,  String pTitle,  String pContent,  String pWriter,  DateTime pCreatedAt,  String? pImageUrl,  List<String>? emojis,  int? view)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? pId,  String uId,  String pTitle,  String pContent,  String pWriter,  DateTime pCreatedAt,  String? pImageUrl,  List<String>? emojis,  Set<String>? uIdForView)?  $default,) {final _that = this;
 switch (_that) {
 case _PostEntity() when $default != null:
-return $default(_that.pId,_that.uId,_that.pTitle,_that.pContent,_that.pWriter,_that.pCreatedAt,_that.pImageUrl,_that.emojis,_that.view);case _:
+return $default(_that.pId,_that.uId,_that.pTitle,_that.pContent,_that.pWriter,_that.pCreatedAt,_that.pImageUrl,_that.emojis,_that.uIdForView);case _:
   return null;
 
 }
@@ -214,7 +214,7 @@ return $default(_that.pId,_that.uId,_that.pTitle,_that.pContent,_that.pWriter,_t
 
 
 class _PostEntity implements PostEntity {
-  const _PostEntity({this.pId, required this.uId, required this.pTitle, required this.pContent, required this.pWriter, required this.pCreatedAt, this.pImageUrl, final  List<String>? emojis, this.view}): _emojis = emojis;
+  const _PostEntity({this.pId, required this.uId, required this.pTitle, required this.pContent, required this.pWriter, required this.pCreatedAt, this.pImageUrl, final  List<String>? emojis, final  Set<String>? uIdForView}): _emojis = emojis,_uIdForView = uIdForView;
   
 
 @override final  String? pId;
@@ -233,7 +233,15 @@ class _PostEntity implements PostEntity {
   return EqualUnmodifiableListView(value);
 }
 
-@override final  int? view;
+ final  Set<String>? _uIdForView;
+@override Set<String>? get uIdForView {
+  final value = _uIdForView;
+  if (value == null) return null;
+  if (_uIdForView is EqualUnmodifiableSetView) return _uIdForView;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableSetView(value);
+}
+
 
 /// Create a copy of PostEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -245,16 +253,16 @@ _$PostEntityCopyWith<_PostEntity> get copyWith => __$PostEntityCopyWithImpl<_Pos
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PostEntity&&(identical(other.pId, pId) || other.pId == pId)&&(identical(other.uId, uId) || other.uId == uId)&&(identical(other.pTitle, pTitle) || other.pTitle == pTitle)&&(identical(other.pContent, pContent) || other.pContent == pContent)&&(identical(other.pWriter, pWriter) || other.pWriter == pWriter)&&(identical(other.pCreatedAt, pCreatedAt) || other.pCreatedAt == pCreatedAt)&&(identical(other.pImageUrl, pImageUrl) || other.pImageUrl == pImageUrl)&&const DeepCollectionEquality().equals(other._emojis, _emojis)&&(identical(other.view, view) || other.view == view));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PostEntity&&(identical(other.pId, pId) || other.pId == pId)&&(identical(other.uId, uId) || other.uId == uId)&&(identical(other.pTitle, pTitle) || other.pTitle == pTitle)&&(identical(other.pContent, pContent) || other.pContent == pContent)&&(identical(other.pWriter, pWriter) || other.pWriter == pWriter)&&(identical(other.pCreatedAt, pCreatedAt) || other.pCreatedAt == pCreatedAt)&&(identical(other.pImageUrl, pImageUrl) || other.pImageUrl == pImageUrl)&&const DeepCollectionEquality().equals(other._emojis, _emojis)&&const DeepCollectionEquality().equals(other._uIdForView, _uIdForView));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,pId,uId,pTitle,pContent,pWriter,pCreatedAt,pImageUrl,const DeepCollectionEquality().hash(_emojis),view);
+int get hashCode => Object.hash(runtimeType,pId,uId,pTitle,pContent,pWriter,pCreatedAt,pImageUrl,const DeepCollectionEquality().hash(_emojis),const DeepCollectionEquality().hash(_uIdForView));
 
 @override
 String toString() {
-  return 'PostEntity(pId: $pId, uId: $uId, pTitle: $pTitle, pContent: $pContent, pWriter: $pWriter, pCreatedAt: $pCreatedAt, pImageUrl: $pImageUrl, emojis: $emojis, view: $view)';
+  return 'PostEntity(pId: $pId, uId: $uId, pTitle: $pTitle, pContent: $pContent, pWriter: $pWriter, pCreatedAt: $pCreatedAt, pImageUrl: $pImageUrl, emojis: $emojis, uIdForView: $uIdForView)';
 }
 
 
@@ -265,7 +273,7 @@ abstract mixin class _$PostEntityCopyWith<$Res> implements $PostEntityCopyWith<$
   factory _$PostEntityCopyWith(_PostEntity value, $Res Function(_PostEntity) _then) = __$PostEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String? pId, String uId, String pTitle, String pContent, String pWriter, DateTime pCreatedAt, String? pImageUrl, List<String>? emojis, int? view
+ String? pId, String uId, String pTitle, String pContent, String pWriter, DateTime pCreatedAt, String? pImageUrl, List<String>? emojis, Set<String>? uIdForView
 });
 
 
@@ -282,7 +290,7 @@ class __$PostEntityCopyWithImpl<$Res>
 
 /// Create a copy of PostEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? pId = freezed,Object? uId = null,Object? pTitle = null,Object? pContent = null,Object? pWriter = null,Object? pCreatedAt = null,Object? pImageUrl = freezed,Object? emojis = freezed,Object? view = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? pId = freezed,Object? uId = null,Object? pTitle = null,Object? pContent = null,Object? pWriter = null,Object? pCreatedAt = null,Object? pImageUrl = freezed,Object? emojis = freezed,Object? uIdForView = freezed,}) {
   return _then(_PostEntity(
 pId: freezed == pId ? _self.pId : pId // ignore: cast_nullable_to_non_nullable
 as String?,uId: null == uId ? _self.uId : uId // ignore: cast_nullable_to_non_nullable
@@ -292,8 +300,8 @@ as String,pWriter: null == pWriter ? _self.pWriter : pWriter // ignore: cast_nul
 as String,pCreatedAt: null == pCreatedAt ? _self.pCreatedAt : pCreatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime,pImageUrl: freezed == pImageUrl ? _self.pImageUrl : pImageUrl // ignore: cast_nullable_to_non_nullable
 as String?,emojis: freezed == emojis ? _self._emojis : emojis // ignore: cast_nullable_to_non_nullable
-as List<String>?,view: freezed == view ? _self.view : view // ignore: cast_nullable_to_non_nullable
-as int?,
+as List<String>?,uIdForView: freezed == uIdForView ? _self._uIdForView : uIdForView // ignore: cast_nullable_to_non_nullable
+as Set<String>?,
   ));
 }
 

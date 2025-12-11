@@ -1,3 +1,5 @@
+import 'package:damta/core/services/firebase_service.dart';
+import 'package:damta/data/util/extension/date_time_extension.dart';
 import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/presentation/view_model/post_view_model.dart';
 import 'package:flutter/material.dart';
@@ -47,14 +49,14 @@ class PostInputBottomSheet extends HookConsumerWidget {
                   }
                   final postEntity = PostEntity(
                     pId: null,
-                    uId: "", // TODO: 실제 사용자 ID로 변경
+                    uId: FirebaseService.getUId.toString(),
                     pTitle: titleController.text.trim(),
                     pContent: contentController.text.trim(),
                     pWriter: writerController.text.trim(),
                     pCreatedAt: DateTime.now(),
                     pImageUrl: null,
                     emojis: null,
-                    view: 0,
+                    uIdForView: {},
                   );
                   await ref
                       .read(postViewModelProvider.notifier)
