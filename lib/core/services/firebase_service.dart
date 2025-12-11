@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+import 'package:damta/firebase_options.dart';
 
 class FirebaseService {
   static final FirebaseService instance = FirebaseService._internal();
@@ -19,6 +23,25 @@ class FirebaseService {
   // Firebase 초기화 메서드
   Future<void> initializeFirebase() async {
     try {
+      if (Firebase.apps.isEmpty) {
+        await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform,
+        );
+      }
+      _instance = FirebaseService._internal();
+      _instance!._firestore = FirebaseFirestore.instance;
+      _instance!._auth = fb_auth.FirebaseAuth.instance;
+
+      // iOS Foreground 알림 표시를 허용 (없으면 iOS에서 푸시 미표시)
+      await FirebaseMessaging.instance
+          .setForegroundNotificationPresentationOptions(
+            alert: true,
+            badge: true,
+            sound: true,
+          );
+
+      _isInitialized = true;
+      debugPrint('Firebase initialized successfully and services are ready.');
       await Firebase.initializeApp();
 
       auth = FirebaseAuth.instance;
@@ -35,6 +58,23 @@ class FirebaseService {
       }
     }
   }
+
+  // FCM 토큰 Firestore 저장
+  Future<void> saveFcmToken(String uId) async {
+    final token = await FirebaseMessaging.instance.getToken();
+    print('🩷 FCM token: $token');
+    if (token != null) {
+      await _firestore.collection('users').doc(uId).update({'fcmToken': token});
+      debugPrint('FCM token saved: $token');
+    }
+  }
+
+  // 카카오 ID를 기반으로 사용자를 익명 로그인 처리하고 Firestore에 사용자 정보를 저장
+  Future<fb_auth.User?> signInAnonymouslyWithKakaoId(String kakaoId) async {
+    if (!_isInitialized) {
+      debugPrint("FirebaseService not ready. Cannot sign in.");
+      return null;
+    }
 
   // 인증 및 사용자 문서 생성/업데이트 로직 (LoginPage에서 사용)
   // 카카오 ID 기반으로 Firebase Custom Token을 사용해서 로그인, Firestore 사용자 문서 생성 or 업데이트

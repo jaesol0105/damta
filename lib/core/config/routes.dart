@@ -1,6 +1,7 @@
 import 'package:damta/presentation/view/pages/home/home_page.dart';
 import 'package:damta/presentation/view/pages/login/login_page.dart';
 import 'package:damta/presentation/view/pages/meal/meal_page.dart';
+import 'package:damta/presentation/view/pages/notification/notification_page.dart';
 import 'package:damta/presentation/view/pages/post/post_page.dart';
 import 'package:damta/presentation/view/pages/post_detail/post_detail_page.dart';
 import 'package:damta/presentation/view/pages/schedule/schedule_page.dart';
@@ -50,7 +51,13 @@ final GoRouter router = GoRouter(
         ),
       ],
     ),
-    GoRoute(path: "/notification", builder: (context, state) => HomePage()),
+    GoRoute(
+      path: "/notification/:uId",
+      builder: (context, state) {
+        final uId = state.pathParameters['uId']!;
+        return NotificationPage(uId: uId);
+      },
+    ),
     GoRoute(path: "/writepost", builder: (context, state) => WritePostPage()),
     GoRoute(path: "/timetable", builder: (context, state) => TimeTablePage()),
     GoRoute(path: "/meal", builder: (context, state) => MealPage()),
