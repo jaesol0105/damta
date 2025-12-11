@@ -1,3 +1,4 @@
+import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/presentation/view/pages/home/home_page.dart';
 import 'package:damta/presentation/view/pages/login/login_page.dart';
 import 'package:damta/presentation/view/pages/meal/meal_page.dart';
@@ -11,7 +12,7 @@ import 'package:damta/presentation/view/pages/post_editor/post_editor_page.dart'
 import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(
-  initialLocation: "/splash",
+  initialLocation: "/posteditor",
 
   routes: [
     GoRoute(path: "/", builder: (context, state) => const LoginPage()),
@@ -51,7 +52,18 @@ final GoRouter router = GoRouter(
       ],
     ),
     GoRoute(path: "/notification", builder: (context, state) => HomePage()),
-    GoRoute(path: "/writepost", builder: (context, state) => PostEditorPage()),
+    GoRoute(
+      path: "/posteditor",
+      builder: (context, state) => PostEditorPage(
+        post: PostEntity(
+          uId: '',
+          pTitle: '',
+          pContent: '',
+          pWriter: '',
+          pCreatedAt: DateTime.now(),
+        ),
+      ),
+    ),
     GoRoute(path: "/timetable", builder: (context, state) => TimeTablePage()),
     GoRoute(path: "/meal", builder: (context, state) => MealPage()),
     GoRoute(path: "/schedule", builder: (context, state) => SchedulePage()),

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:damta/core/di/provider.dart';
 import 'package:damta/core/util/string_extension.dart';
@@ -23,6 +24,32 @@ abstract class PostEditorState with _$PostEditorState {
     required bool isEdited, // 수정 사항이 있는지
     @Default(false) bool loading, // 저장 중 로딩
   }) = _PostEditorState;
+
+  const PostEditorState._();
+
+  /// 현재 이미지가 존재하는지 (UI에 표시할지 결정)
+  bool get hasImage {
+    if (isImageRemoved) return false;
+    return image != null || originalPost.pImageUrl.isNotNullOrEmpty;
+  }
+
+  /// 로컬 파일 이미지
+  File? get localImageFile {
+    if (image == null) return null;
+    return File(image!.path);
+  }
+
+  /// 네트워크 이미지 URL
+  String? get imageUrl {
+    if (image != null) return null; // 새 이미지가 있으면 네트워크 이미지 무시
+    if (isImageRemoved) return null;
+    return originalPost.pImageUrl;
+  }
+
+  /// 완료 버튼 활성화 여부
+  bool get canSubmit {
+    return isEdited && !loading;
+  }
 }
 
 @riverpod

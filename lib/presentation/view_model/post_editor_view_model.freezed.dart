@@ -225,8 +225,8 @@ return $default(_that.originalPost,_that.title,_that.content,_that.image,_that.i
 /// @nodoc
 
 
-class _PostEditorState implements PostEditorState {
-  const _PostEditorState({required this.originalPost, this.title = '', this.content = '', this.image, this.isImageRemoved = false, required this.isEdited, this.loading = false});
+class _PostEditorState extends PostEditorState {
+  const _PostEditorState({required this.originalPost, this.title = '', this.content = '', this.image, this.isImageRemoved = false, required this.isEdited, this.loading = false}): super._();
   
 
 @override final  PostEntity originalPost;
