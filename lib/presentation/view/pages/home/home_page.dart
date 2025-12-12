@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:damta/core/config/routes.dart';
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:damta/presentation/view/pages/home/widgets/weather_bar.dart';
 import 'package:damta/presentation/view/pages/home/widgets/noti_button.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 class UserProfile {
   final String schoolName;
@@ -89,12 +91,9 @@ class HomePage extends ConsumerWidget {
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset("assets/images/logo.png", height: 28, width: 28),
-          const SizedBox(width: 8),
-          Text(
-            schoolName,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
+          Image.asset("assets/images/logo.png", height: 36, width: 36),
+          const SizedBox(width: 10),
+          Text(schoolName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
         ],
       ),
       centerTitle: false,
@@ -103,7 +102,13 @@ class HomePage extends ConsumerWidget {
         const NotiButton(),
         // 설정 아이콘(미구현)
         IconButton(
-          icon: const Icon(Icons.settings),
+          // icon: const Icon(Icons.settings),
+          icon: HugeIcon(
+            icon: HugeIcons.strokeRoundedSettings01,
+            size: 26,
+            color: vrc(context).contentText,
+            strokeWidth: 2,
+          ),
           onPressed: () {
             // 설정 페이지로 이동 (미구현)
             context.go('/settings');
@@ -185,10 +190,7 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildServiceButton(
-    BuildContext context, {
-    required Map<String, String> data,
-  }) {
+  Widget _buildServiceButton(BuildContext context, {required Map<String, String> data}) {
     final label = data['label']!;
     final route = data['route']!;
 

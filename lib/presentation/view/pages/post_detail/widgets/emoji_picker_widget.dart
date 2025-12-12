@@ -1,3 +1,4 @@
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/domain/entity/notification_entity.dart';
 import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/presentation/view_model/post_view_model.dart';
@@ -197,11 +198,11 @@ class EmojiPickerWidget {
               elevation: 8,
               borderRadius: BorderRadius.circular(12),
               child: Container(
-                width: screenSize.width * 0.8,
+                width: screenSize.width * 0.75,
                 constraints: BoxConstraints(maxHeight: screenSize.height * 0.5),
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: vrc(context).surface,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(

@@ -144,10 +144,7 @@ class PostEditorPage extends HookConsumerWidget {
                                 ),
                                 child: Text(
                                   '${state.content.length} / 8,000',
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.grey,
-                                  ), // 이 줄은 아래처럼 바꾸세요
+                                  style: const TextStyle(fontSize: 10, color: Colors.grey),
                                 ),
                               ),
                       ),

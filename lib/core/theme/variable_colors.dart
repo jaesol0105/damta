@@ -26,7 +26,8 @@ class VariableColors extends ThemeExtension<VariableColors> {
   /// 라이트 모드
   static const VariableColors light = VariableColors(
     background: Colors.white, // [배경] (white)
-    surface: Color(0xFFF5F5F5), // [레이어] (grey100)
+    surface: Colors.white, // [레이어] (grey100)
+    // surface: Color(0xFFF5F5F5), // [레이어] (grey100)
     border: Color(0xFFE0E0E0), // [테두리] (grey300)
     disabledText: Color(0xFFBDBDBD), // [비활성화] 텍스트 (grey400)
     detailText: Color(0xFF757575), // [디테일] 내용 텍스트, 설명/세부사항 등에 사용 (grey600)
