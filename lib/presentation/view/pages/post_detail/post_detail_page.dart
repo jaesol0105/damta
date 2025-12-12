@@ -2,6 +2,7 @@ import 'package:damta/core/config/routes.dart';
 import 'package:damta/core/services/firebase_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/core/util/time_ago.dart';
+import 'package:damta/presentation/view/pages/post_detail/full_image_page.dart';
 import 'package:damta/presentation/view/pages/post_detail/widgets/comment_input_bottom_sheet.dart';
 import 'package:damta/presentation/view/pages/post_detail/widgets/comment_item_widget.dart';
 import 'package:damta/presentation/view/pages/post_detail/widgets/emoji_picker_widget.dart';
@@ -185,6 +186,14 @@ class PostDetailPage extends HookConsumerWidget {
                 child: Text(post.pContent, style: TextStyle(height: 1.2)),
               ),
               SizedBox(height: 20),
+
+              // 이미지 출력 추가
+              if (post.pImageUrl != null && post.pImageUrl!.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: buildPostImage(context, post.pImageUrl!),
+                ),
+
               Row(
                 spacing: 5,
                 children: [
@@ -275,4 +284,17 @@ class PostDetailPage extends HookConsumerWidget {
       ),
     );
   }
+}
+
+Widget buildPostImage(BuildContext context, String url) {
+  return GestureDetector(
+    onTap: () {
+      // 확대 이미지 페이지로 이동
+      Navigator.push(context, MaterialPageRoute(builder: (_) => FullImagePage(imageUrl: url)));
+    },
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: Image.network(url, width: double.infinity, height: 180, fit: BoxFit.cover),
+    ),
+  );
 }
