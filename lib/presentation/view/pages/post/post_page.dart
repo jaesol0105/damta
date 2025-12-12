@@ -1,7 +1,6 @@
 import 'package:damta/core/config/routes.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/view/pages/home/widgets/noti_button.dart';
-import 'package:damta/presentation/view/pages/post/widgets/post_input_bottom_sheet.dart';
 import 'package:damta/presentation/view/pages/post/widgets/post_list_item.dart';
 import 'package:damta/presentation/view_model/comment_view_model.dart';
 import 'package:damta/presentation/view_model/post_view_model.dart';
