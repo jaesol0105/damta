@@ -43,13 +43,19 @@ class PostPage extends HookConsumerWidget {
             children: [
               Text(
                 '익명 게시판',
-                style: TextStyle(fontSize: 16, height: 0.95, fontWeight: FontWeight.w700),
+                style: TextStyle(
+                  fontSize: 16,
+                  height: 0.95,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-              Text('도장중학교', style: TextStyle(fontSize: 14, color: vrc(context).detailText)),
+              Text(
+                '도장중학교',
+                style: TextStyle(fontSize: 14, color: vrc(context).detailText),
+              ),
             ],
           ),
         ),
-        // TODO : 알림 버튼 지우기
         actions: [NotiButton()],
       ),
       body: Stack(
@@ -60,7 +66,11 @@ class PostPage extends HookConsumerWidget {
               return PostListItem(post: posts[index], comments: comments);
             },
             separatorBuilder: (BuildContext context, int index) {
-              return Divider(height: 1, thickness: 0, color: vrc(context).border);
+              return Divider(
+                height: 1,
+                thickness: 0,
+                color: vrc(context).border,
+              );
             },
           ),
           Positioned(
