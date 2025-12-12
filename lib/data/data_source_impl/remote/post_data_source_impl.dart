@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:damta/core/util/nick_name_generator.dart';
 import 'package:damta/data/data_source/remote/post_data_source.dart';
 import 'package:damta/data/dto/post_dto.dart';
 
@@ -14,6 +15,7 @@ class PostDataSourceImpl implements PostDataSource {
       final ref = await firestore.collection('post').add({
         ...post.toJson(),
         'p_created_at': FieldValue.serverTimestamp(), // 파이어베이스 서버 시간 사용
+        'p_writer': NicknameGenerator.generate(),
       });
       return post.copyWith(pId: ref.id); // 문서 id, 낙관적 업데이트를 위해 포스트 객체 반환
       // 예외 전파

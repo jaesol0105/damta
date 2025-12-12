@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:damta/core/util/nick_name_generator.dart';
 import 'package:damta/data/data_source/remote/comment_data_source.dart';
 import 'package:damta/data/dto/comment_dto.dart';
 
@@ -9,7 +10,9 @@ class CommentDataSourceImpl implements CommentDataSource {
   @override
   Future<void> addComment(CommentDto commentDto) async {
     final docRef = firestore.collection("comment").doc();
-    final json = commentDto.copyWith(cId: docRef.id).toJson();
+    final json = commentDto
+        .copyWith(cId: docRef.id, cWriter: NicknameGenerator.generate())
+        .toJson();
     await docRef.set(json);
   }
 

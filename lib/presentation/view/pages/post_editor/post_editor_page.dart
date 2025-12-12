@@ -343,7 +343,6 @@ class _PostImagePreview extends StatelessWidget {
         ),
       );
     }
-
     return Stack(
       children: [
         imageWidget,

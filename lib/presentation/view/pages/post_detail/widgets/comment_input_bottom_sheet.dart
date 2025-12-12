@@ -40,9 +40,9 @@ class CommentInputBottomSheet extends HookConsumerWidget {
                   if (commentController.text.trim().isEmpty) {
                     return;
                   }
-                  if (writerController.text.trim().isEmpty) {
-                    writerController.text = "익명";
-                  }
+                  // if (writerController.text.trim().isEmpty) {
+                  //   writerController.text = "익명";
+                  // }
                   if (context.mounted) {
                     context.pop();
                   }
@@ -76,26 +76,26 @@ class CommentInputBottomSheet extends HookConsumerWidget {
               ),
             ],
           ),
-          TextField(
-            autofocus: true,
-            controller: writerController,
-            maxLines: 1,
-            decoration: InputDecoration(
-              hintText: "닉네임을 입력해주세요",
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(width: 0.5),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(width: 0.5),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(width: 0.5),
-              ),
-            ),
-          ),
+          // TextField(
+          //   autofocus: true,
+          //   controller: writerController,
+          //   maxLines: 1,
+          //   decoration: InputDecoration(
+          //     hintText: "닉네임을 입력해주세요",
+          //     enabledBorder: OutlineInputBorder(
+          //       borderRadius: BorderRadius.circular(8),
+          //       borderSide: const BorderSide(width: 0.5),
+          //     ),
+          //     focusedBorder: OutlineInputBorder(
+          //       borderRadius: BorderRadius.circular(8),
+          //       borderSide: const BorderSide(width: 0.5),
+          //     ),
+          //     border: OutlineInputBorder(
+          //       borderRadius: BorderRadius.circular(8),
+          //       borderSide: const BorderSide(width: 0.5),
+          //     ),
+          //   ),
+          // ),
           const SizedBox(height: 5),
           TextField(
             maxLines: 5,
