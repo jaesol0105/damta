@@ -10,7 +10,6 @@ import 'package:damta/presentation/view_model/comment_view_model.dart';
 import 'package:damta/presentation/view_model/post_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -26,7 +25,10 @@ class PostDetailPage extends HookConsumerWidget {
 
     final post = ref
         .watch(postViewModelProvider)
-        .firstWhere((p) => p.pId == pId, orElse: () => throw Exception("Post not found"));
+        .firstWhere(
+          (p) => p.pId == pId,
+          orElse: () => throw Exception("Post not found"),
+        );
     final comments = ref.watch(commentViewModelProvider);
     final commentList = comments.where((c) => c.pId == pId).toList()
       ..sort((a, b) => a.cCreatedAt.compareTo(b.cCreatedAt));
@@ -38,7 +40,10 @@ class PostDetailPage extends HookConsumerWidget {
           .read(postViewModelProvider.notifier)
           .updatePost(
             post.copyWith(
-              uIdForView: {...(post.uIdForView ?? {}), FirebaseService.getUId.toString()},
+              uIdForView: {
+                ...(post.uIdForView ?? {}),
+                FirebaseService.getUId.toString(),
+              },
             ),
           );
       return null;
@@ -82,15 +87,13 @@ class PostDetailPage extends HookConsumerWidget {
         titleSpacing: 0,
         title: Padding(
           padding: const EdgeInsets.only(left: 4),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '익명 게시판',
-                style: TextStyle(fontSize: 16, height: 0.95, fontWeight: FontWeight.w700),
-              ),
-              Text('도장중학교', style: TextStyle(fontSize: 14, color: vrc(context).detailText)),
-            ],
+          child: Text(
+            '익명 게시판',
+            style: TextStyle(
+              fontSize: 20,
+              height: 0.95,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
         actions: [
@@ -122,7 +125,9 @@ class PostDetailPage extends HookConsumerWidget {
                                 context.pop(); // 다이얼로그 닫기
                                 context.pop(); // 상세 페이지 닫기
                               }
-                              await ref.read(postViewModelProvider.notifier).deletePost(pId);
+                              await ref
+                                  .read(postViewModelProvider.notifier)
+                                  .deletePost(pId);
                             },
                             child: const Text("삭제"),
                           ),
@@ -153,16 +158,27 @@ class PostDetailPage extends HookConsumerWidget {
                   padding: const EdgeInsets.only(left: 1),
                   child: Row(
                     children: [
-                      Text(post.pWriter, style: TextStyle(color: vrc(context).detailText)),
+                      Text(
+                        post.pWriter,
+                        style: TextStyle(color: vrc(context).detailText),
+                      ),
                       const SizedBox(width: 10),
-                      Container(width: 2, height: 12, color: vrc(context).border),
+                      Container(
+                        width: 2,
+                        height: 12,
+                        color: vrc(context).border,
+                      ),
                       const SizedBox(width: 10),
                       Text(
                         timeAgo(post.pCreatedAt),
                         style: TextStyle(color: vrc(context).detailText),
                       ),
                       const SizedBox(width: 10),
-                      Container(width: 2, height: 12, color: vrc(context).border),
+                      Container(
+                        width: 2,
+                        height: 12,
+                        color: vrc(context).border,
+                      ),
                       const SizedBox(width: 10),
                       Text(
                         '조회수 ${(post.uIdForView?.length ?? 0).toString()}',
@@ -206,10 +222,16 @@ class PostDetailPage extends HookConsumerWidget {
                       }
                     },
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: vrc(context).background,
-                        border: Border.all(color: vrc(context).border!, width: 1),
+                        border: Border.all(
+                          color: vrc(context).border!,
+                          width: 1,
+                        ),
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: HugeIcon(
@@ -228,7 +250,12 @@ class PostDetailPage extends HookConsumerWidget {
                         spacing: 5,
                         children:
                             post.emojis?.reversed
-                                .map((e) => Text(e, style: const TextStyle(fontSize: 24)))
+                                .map(
+                                  (e) => Text(
+                                    e,
+                                    style: const TextStyle(fontSize: 24),
+                                  ),
+                                )
                                 .toList() ??
                             [],
                       ),
@@ -260,7 +287,8 @@ class PostDetailPage extends HookConsumerWidget {
                       showModalBottomSheet(
                         isScrollControlled: true,
                         context: context,
-                        builder: (context) => CommentInputBottomSheet(post: post, pId: pId),
+                        builder: (context) =>
+                            CommentInputBottomSheet(post: post, pId: pId),
                       );
                     },
                     child: const Text("댓글달기"),
@@ -275,7 +303,11 @@ class PostDetailPage extends HookConsumerWidget {
                   return CommentItemWidget(comment: commentList[index]);
                 },
                 separatorBuilder: (BuildContext context, int index) {
-                  return Divider(height: 1, thickness: 0, color: vrc(context).border);
+                  return Divider(
+                    height: 1,
+                    thickness: 0,
+                    color: vrc(context).border,
+                  );
                 },
               ),
             ],
@@ -290,11 +322,19 @@ Widget buildPostImage(BuildContext context, String url) {
   return GestureDetector(
     onTap: () {
       // 확대 이미지 페이지로 이동
-      Navigator.push(context, MaterialPageRoute(builder: (_) => FullImagePage(imageUrl: url)));
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => FullImagePage(imageUrl: url)),
+      );
     },
     child: ClipRRect(
       borderRadius: BorderRadius.circular(12),
-      child: Image.network(url, width: double.infinity, height: 180, fit: BoxFit.cover),
+      child: Image.network(
+        url,
+        width: double.infinity,
+        height: 180,
+        fit: BoxFit.cover,
+      ),
     ),
   );
 }
