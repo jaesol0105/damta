@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:damta/core/di/provider.dart';
+import 'package:damta/core/services/firebase_service.dart';
 import 'package:damta/core/util/string_extension.dart';
 import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/domain/repository/post_repository.dart';
@@ -156,13 +157,20 @@ class PostEditorViewModel extends _$PostEditorViewModel {
       // }
 
       final updated = state.originalPost.copyWith(
+        uId: FirebaseService.getUId.toString(),
         pTitle: state.title,
         pContent: state.content,
         pImageUrl: url,
       );
-      await repo.updatePost(updated); // 새 포스트, 수정으로 분기 해야함.(아직 안함) 둘다 update쓸려면 uuid사용필요
+      await repo.updatePost(
+        updated,
+      ); // 새 포스트, 수정으로 분기 해야함.(아직 안함) 둘다 update쓸려면 uuid사용필요
 
-      return (true, null, updated); // 일단 반환은 하는데 낙관적업데이트 안하고, 그냥 refresh함. 나중에 수정예정
+      return (
+        true,
+        null,
+        updated,
+      ); // 일단 반환은 하는데 낙관적업데이트 안하고, 그냥 refresh함. 나중에 수정예정
       // 예외 전파
     } catch (e, s) {
       log('PostEditorViewModel save 실패: $e', error: e, stackTrace: s);

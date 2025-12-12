@@ -11,9 +11,9 @@ class NotiButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final uId = 'uId'; // TODO : 더미데이터 지우기
-    // final uId = FirebaseService.getUId.toString();
-    final notiList = ref.watch(notificationViewModelProvider(uId: uId)).value ?? [];
+    final uId = FirebaseService.getUId.toString();
+    final notiList =
+        ref.watch(notificationViewModelProvider(uId: uId)).value ?? [];
 
     // 내 알림 목록 중 isRead == false 인 알림이 하나라도 있는지 확인하는 변수
     final hasNewNoti = notiList.any((n) => n.isRead == false);

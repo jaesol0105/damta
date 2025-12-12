@@ -37,13 +37,22 @@ class PostPage extends HookConsumerWidget {
         titleSpacing: 0,
         title: Padding(
           padding: const EdgeInsets.only(left: 4),
-          child: Text(
-            '익명 게시판',
-            style: TextStyle(
-              fontSize: 20,
-              height: 0.95,
-              fontWeight: FontWeight.w700,
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '익명 게시판',
+                style: TextStyle(
+                  fontSize: 16,
+                  height: 0.95,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              Text(
+                '도장중학교',
+                style: TextStyle(fontSize: 14, color: vrc(context).detailText),
+              ),
+            ],
           ),
         ),
         actions: [NotiButton()],
