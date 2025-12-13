@@ -2,7 +2,7 @@ import 'package:damta/domain/entity/time_table_entity.dart';
 import 'package:damta/data/util/extension/date_time_extension.dart';
 
 /// SQLite 에 저장되는 시간표 캐시 모델
-class TimeTableCacheModel {
+class TimeTableCacheDto {
   final int? id;
   final String schoolCode;
   final String date; // yyyy-MM-dd 형식
@@ -12,7 +12,7 @@ class TimeTableCacheModel {
   final String subject; // 수업내용
   final int cachedAt; // Unix timestamp (밀리초)
 
-  TimeTableCacheModel({
+  TimeTableCacheDto({
     this.id,
     required this.schoolCode,
     required this.date,
@@ -38,8 +38,8 @@ class TimeTableCacheModel {
   }
 
   // DB Map > CacheModel
-  factory TimeTableCacheModel.fromMap(Map<String, dynamic> map) {
-    return TimeTableCacheModel(
+  factory TimeTableCacheDto.fromMap(Map<String, dynamic> map) {
+    return TimeTableCacheDto(
       id: map['id'] as int?,
       schoolCode: map['school_code'] as String,
       date: map['date'] as String,
@@ -63,11 +63,11 @@ class TimeTableCacheModel {
   }
 
   // Entity > CacheModel
-  factory TimeTableCacheModel.fromDomain({
+  factory TimeTableCacheDto.fromDomain({
     required TimeTableEntity entity,
     required String schoolCode,
   }) {
-    return TimeTableCacheModel(
+    return TimeTableCacheDto(
       schoolCode: schoolCode,
       date: entity.date.dbDate(),
       grade: entity.grade.toString(),
