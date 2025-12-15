@@ -12,9 +12,8 @@ class TimeTablePage extends ConsumerWidget {
   const TimeTablePage({super.key});
 
   // TODO : 더미데이터 지우기
-  final officeCode = 'B10';
-  // final schoolCode = '7041186'; // 중학교 코드 테스트용
-  final schoolCode = '7010096'; // 고등학교 코드 테스트용
+  final officeCode = 'J10';
+  final schoolCode = '7642041';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -30,10 +29,6 @@ class TimeTablePage extends ConsumerWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: darkgrey),
           onPressed: () => context.pop(),
-        ),
-        title: const SizedBox(
-          width: double.infinity,
-          child: Text('도장중학교', style: TextStyle(fontSize: 18)),
         ),
       ),
       body: state.when(

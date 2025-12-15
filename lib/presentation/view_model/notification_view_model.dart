@@ -1,4 +1,4 @@
-import 'package:cloud_functions/cloud_functions.dart';
+import 'dart:async';
 import 'package:damta/core/di/provider.dart';
 import 'package:damta/domain/entity/notification_entity.dart';
 import 'package:damta/domain/repository/notification_repository.dart';
@@ -12,6 +12,10 @@ class NotificationViewModel extends _$NotificationViewModel {
   late final NotificationRepository repo;
   late final String uId;
 
+  // FCM listener 관리용 StreamSubscription
+  StreamSubscription<RemoteMessage>? _fcmSub;
+  StreamSubscription<RemoteMessage>? _openedSub;
+
   @override
   FutureOr<List<NotificationEntity>> build({required String uId}) {
     repo = ref.watch(notificationRepositoryProvider);
@@ -21,39 +25,45 @@ class NotificationViewModel extends _$NotificationViewModel {
     return getNotis();
   }
 
-  // FCM 초기화
+  // FCM 초기화 + 안전한 dispose 처리
   void initFCM() {
-    FirebaseMessaging.onMessage.listen((message) async {
-      final entity = convertMessageToEntity(message);
-      await repo.addNoti(entity);
-      state = AsyncValue.data(await repo.getNotis(uId));
+    // 기존 listener가 있다면 먼저 정리 (중복 방지)
+    _fcmSub?.cancel();
+    _openedSub?.cancel();
+
+    // Foreground 메시지 수신 > 알림 목록 갱신
+    _fcmSub = FirebaseMessaging.onMessage.listen((message) async {
+      if (!ref.mounted) return;
+
+      // Firestore 최신 상태로 갱신
+      final latestNotis = await repo.getNotis(uId);
+
+      if (!ref.mounted) return;
+      state = AsyncValue.data(latestNotis);
     });
 
-    FirebaseMessaging.onMessageOpenedApp.listen((message) async {
+    // 알림 클릭 처리
+    _openedSub = FirebaseMessaging.onMessageOpenedApp.listen((message) async {
+      if (!ref.mounted) return;
+
       final pId = message.data['pId'];
       if (pId != null) {
         await markAsRead(pId);
       }
     });
-  }
 
-  NotificationEntity convertMessageToEntity(RemoteMessage msg) {
-    return NotificationEntity(
-      nId: '',
-      uId: uId,
-      pId: msg.data['pId'] ?? '',
-      pTitle: msg.data['pTitle'] ?? msg.notification?.title ?? '',
-      nCreatedAt: DateTime.now(),
-      isComment: msg.data['isComment'] == 'true',
-      content: msg.notification?.body ?? msg.data['content'] ?? '',
-      isNew: true,
-      isRead: false,
-    );
+    // Provider dispose 시 listener 해제
+    ref.onDispose(() {
+      _fcmSub?.cancel();
+      _openedSub?.cancel();
+    });
   }
 
   // 내 전체 알림 목록 가져오기
   Future<List<NotificationEntity>> getNotis() async {
     final list = await repo.getNotis(uId);
+
+    if (!ref.mounted) return list;
     state = AsyncValue.data(list);
     return list;
   }
@@ -74,31 +84,46 @@ class NotificationViewModel extends _$NotificationViewModel {
 
     if (filteredMoreNotis.isEmpty) return;
 
+    if (!ref.mounted) return;
     state = AsyncValue.data([...state.value!, ...filteredMoreNotis]);
   }
 
-  // 알림 추가 + FCM 발송
+  // 알림 추가
   Future<void> addNoti(NotificationEntity noti) async {
     await repo.addNoti(noti);
 
-    await FirebaseFunctions.instanceFor(
-      region: "asia-northeast3",
-    ).httpsCallable("sendPushNotification").call({
-      "uId": noti.uId,
-      "pId": noti.pId,
-      "pTitle": noti.pTitle,
-      "content": noti.content,
-      "isComment": noti.isComment,
-    });
+    final list = await repo.getNotis(uId);
 
-    state = AsyncValue.data(await repo.getNotis(uId));
+    if (!ref.mounted) return;
+    state = AsyncValue.data(list);
   }
 
   // 알림 삭제
   Future<void> deleteNotis(String nId) async {
     if (state.value == null) return;
 
-    state = AsyncValue.data(state.value!.where((n) => n.nId != nId).toList());
+    final currentList = state.value!;
+
+    // 삭제 대상 알림 찾기
+    final target = currentList.firstWhere(
+      (n) => n.nId == nId,
+      orElse: () => throw Exception("알림 없음"),
+    );
+
+    // 읽지 않은 상태라면 > 읽음 처리 (배지)
+    if (!target.isRead) {
+      final updatedList = currentList.map((n) {
+        if (n.nId == nId) {
+          return n.copyWith(isRead: true, isNew: false);
+        }
+        return n;
+      }).toList();
+      await repo.updateNotis(updatedList);
+    }
+
+    // UI에서 즉시 제거
+    state = AsyncValue.data(currentList.where((n) => n.nId != nId).toList());
+
     await repo.deleteNoti(nId);
   }
 
@@ -112,6 +137,8 @@ class NotificationViewModel extends _$NotificationViewModel {
     }).toList();
 
     await repo.updateNotis(updatedList);
+
+    if (!ref.mounted) return;
     state = AsyncValue.data(updatedList);
   }
 
@@ -122,7 +149,10 @@ class NotificationViewModel extends _$NotificationViewModel {
     final updatedList = state.value!
         .map((n) => n.copyWith(isRead: true, isNew: false))
         .toList();
+
     await repo.updateNotis(updatedList);
+
+    if (!ref.mounted) return;
     state = AsyncValue.data(updatedList);
   }
 }

@@ -10,11 +10,10 @@ import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:damta/core/services/firebase_service.dart';
 
-// Background > 로컬 알림 표시 (코드 반드시 main 최상단!)
+// 🔔 Background 알림 (코드 반드시 main 최상단!)
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await NotificationService.showLocalNotification(message);
 }
 
 Future<void> _getHashKey() async {
@@ -44,20 +43,20 @@ void main() async {
   // 앱 실행 전 해시 키 함수 호출
   _getHashKey();
 
-  // FCM Background 핸들러 등록
+  // 🔔 FCM Background 핸들러 등록
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
-  //main 에서 FCM 권한과 Foreground 옵션 명시
+  // 🔔 main 에서 FCM 권한과 Foreground 옵션 명시
   await FirebaseMessaging.instance.requestPermission();
 
-  // 로컬 알림 + FCM Foreground 처리
+  // 🔔 로컬 알림 + FCM Foreground 처리
   await NotificationService.initialize();
 
-  // FCM 토큰 저장 (현재 로그인한 유저가 있으면)
-  // final user = FirebaseService.instance.auth.currentUser;
-  // if (user != null) {
-  //   await FirebaseService.instance.saveFcmToken(user.uid);
-  // }
+  // 🔔 FCM 토큰 저장
+  final user = FirebaseService.instance.auth.currentUser;
+  if (user != null) {
+    await FirebaseService.instance.saveFcmToken(user.uid);
+  }
 
   runApp(ProviderScope(child: const MyApp()));
 }

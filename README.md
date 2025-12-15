@@ -2,7 +2,7 @@
 Damso Time
 </h1>
 <p align="center">
-  <img alt="mockup" src="./assets/readme_mockup.gif"/>
+  <img alt="mockup" src="./assets/images/readme_mockup.gif"/>
 </p>
 
 <br/>
@@ -25,7 +25,7 @@ Damso Time
 
 ## 🎨 앱 디자인 설계
 <p align="center">
-  <img alt="design" src="./assets/readme_design.webp"/>
+  <img alt="design" src="./assets/images/readme_design.webp"/>
 </p>
 
 <br/>
@@ -50,73 +50,117 @@ Damso Time
 
 ## 🛠️ 기술 스택
 
-| 구분                          | 사용 기술                      |
-| --------------------------- | -------------------------- |
-| Flutter                     | 크로스플랫폼 앱 프레임워크             |
-| Dart                        | 프로그래밍 언어                   |
-| Material                    | UI 디자인 시스템                 |
-| Cupertino                   | iOS 스타일 UI 구성 요소           |
-| GoRouter                    | 선언적 라우팅                    |
-| RiverPod                    | 상태 관리 (Notifier, Provider) |
-| Firebase Core               | Firebase 플랫폼 기반            |
-| Firestore                   | NoSQL 실시간 데이터베이스           |
-| Firebase Auth               | 인증 기능                      |
-| Firebase Messaging          | 푸시 알림                      |
-| Cloud Functions             | 서버리스 함수                    |
-| Flutter Local Notifications | 로컬 알림 표시                   |
-| Clean Architecture          | 의존성 역전, 도메인 중심 설계          |
-| Dio                         | HTTP 클라이언트                 |
-| Geolocator                  | 위치 정보                      |
-| Sqflite & Path              | 로컬 DB 관리                   |
-| Intl                        | 날짜, 시간, 지역화 처리             |
-| Shimmer                     | 로딩 UI 효과                   |
-| Kakao Flutter SDK           | 카카오 로그인/소셜 연동              |
-
+| 구분 | 사용 기술 |
+|---|---|
+| **Framework** | Flutter (Cross-platform) |
+| **Language** | Dart |
+| **UI System** | Material, Cupertino |
+| **Routing** | GoRouter (선언적 라우팅) |
+| **State Management** | Riverpod 3.x (Provider / Notifier / AsyncValue) |
+| **Architecture** | Clean Architecture (Domain 중심, 의존성 역전) |
+| **Backend Platform** | Firebase |
+| **Database (Remote)** | Cloud Firestore (NoSQL) |
+| **Database (Local)** | Sqflite |
+| **Authentication** | Firebase Auth, Kakao Login |
+| **Push Notification** | Firebase Cloud Messaging (FCM) |
+| **Serverless** | Firebase Cloud Functions |
+| **Local Notification** | flutter_local_notifications |
+| **Storage** | Firebase Storage |
+| **HTTP Client** | Dio |
+| **Location** | Geolocator |
+| **Date / Time** | Intl |
+| **Animation** | Lottie |
+| **Image / Asset** | Image Picker, SVG |
+| **UX / UI Effect** | Shimmer |
+| **Badge Handling** | flutter_app_badger |
+| **Icons** | Cupertino Icons, HugeIcons |
 
 <br/>
 
 ## 📖 라이브러리
 
-### Firebase / Backend 관련
-- firebase_core: ^4.2.1
-- cloud_firestore: ^6.1.0
-- firebase_auth: ^6.1.2
-- firebase_messaging: ^16.0.4
-- cloud_functions: ^6.0.4
-- flutter_local_notifications: ^19.5.0
+### Firebase / Backend
+- firebase_core: ^4.2.1  
+- cloud_firestore: ^6.1.0  
+- firebase_auth: ^6.1.2  
+- firebase_messaging: ^16.0.4  
+- cloud_functions: ^6.0.4  
+- firebase_storage: ^13.0.4  
+- flutter_local_notifications: ^19.5.0  
+
+> 실시간 데이터 동기화, 인증, 푸시 알림, 배지 관리 및  
+> Cloud Functions 기반 서버 로직 처리
+
 ### State Management / Architecture
-- freezed_annotation: ^3.1.0
-- flutter_hooks: ^0.21.3+1
-- hooks_riverpod: ^3.0.3
-- riverpod_annotation: ^3.0.3
-- flutter_riverpod: ^3.0.3
-- build_runner: ^2.7.1
-- freezed: ^3.2.3
-- json_annotation: ^4.9.0
-- json_serializable: ^6.11.2
-- riverpod_generator: ^3.0.3
-### Routing / UI / Utilities
-- go_router: ^17.0.0
-- cupertino_icons: ^1.0.8
-- shimmer: ^3.0.0
-- dio: ^5.9.0
-- geolocator: ^14.0.2
-- intl: ^0.20.2
-- kakao_flutter_sdk_user: ^1.10.0
-- sqflite: ^2.4.2
-- path: ^1.9.1
+- flutter_riverpod: ^3.0.3  
+- hooks_riverpod: ^3.0.3  
+- riverpod_annotation: ^3.0.3  
+- flutter_hooks: ^0.21.3+1  
+- freezed_annotation: ^3.1.0  
+- json_annotation: ^4.9.0  
+
+> Notifier 기반 상태 관리, 불변 객체(Entity / DTO),  
+> 테스트 및 의존성 주입에 최적화된 구조
+
+### Code Generation / Dev Tools
+- build_runner: ^2.7.1  
+- freezed: ^3.2.3  
+- json_serializable: ^6.11.2  
+- riverpod_generator: ^3.0.3  
+
+> Entity / DTO 자동 생성, Riverpod Provider 코드 자동화
+
+### Routing / UI / UX
+- go_router: ^17.0.0  
+- cupertino_icons: ^1.0.8  
+- shimmer: ^3.0.0  
+- lottie: ^3.3.2  
+- flutter_svg: ^2.2.3  
+- hugeicons: ^1.1.2  
+
+> 선언적 라우팅, 로딩 UX 개선, 애니메이션 및 아이콘 활용
+
+### Network / Utility
+- dio: ^5.9.0  
+- geolocator: ^14.0.2  
+- intl: ^0.20.2  
+- path: ^1.9.1  
+
+> REST API 통신, 위치 기반 기능, 날짜·시간·지역화 처리
+
+### Local / Media
+- sqflite: ^2.4.2  
+- image_picker: ^1.2.1  
+
+> 로컬 데이터 캐싱 및 이미지 업로드 처리
+
+### Social Login
+- kakao_flutter_sdk_user: ^1.10.0  
+
+> 카카오 계정 기반 로그인 및 사용자 연동
+
+### App Configuration
+- flutter_launcher_icons: ^0.14.4  
+- flutter_native_splash: ^2.4.7  
+- flutter_app_badger: ^1.5.0  
+
+> 앱 아이콘, 스플래시 화면 설정 및 iOS 배지 관리
+
+### Dev Dependencies
+- flutter_test  
+- flutter_lints: ^5.0.0  
 
 <br/>
 
 ## 📂 프로젝트 구조
 <pre>
-lib/
- ㄴ main                               
+lib/                      
  ㄴ core/
      ㄴ config/   
      ㄴ di/               
      ㄴ services/               
-     ㄴ theme/                                  
+     ㄴ theme/ 
+     ㄴ util/                             
  ㄴ data/
      ㄴ data_source/      
          ㄴ local/
@@ -138,7 +182,6 @@ lib/
      ㄴ usecase/                        
  ㄴ presentation/
      ㄴ core/util/                      
-     ㄴ view_model/                  
      ㄴ view/                          
          ㄴ pages/
              ㄴ home/   
@@ -147,13 +190,14 @@ lib/
              ㄴ notification/           
              ㄴ post/
              ㄴ post_detail/
+             ㄴ post_editor
              ㄴ schedule/
              ㄴ school/
              ㄴ splash/
              ㄴ time_table/
-             ㄴ write_post/
          ㄴ widgets/ 
-             
+     ㄴ view_model/    
+ ㄴ main         
 test/      
 assets/     
 README.md  

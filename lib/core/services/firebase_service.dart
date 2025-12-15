@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class FirebaseService {
   static final FirebaseService instance = FirebaseService._internal();
@@ -89,5 +90,37 @@ class FirebaseService {
           FieldValue.serverTimestamp(), // 학교 정보를 설정한 시간 기록 (흠 근데 굳이? 넣을 필요가 있었나... 진짜 정말 ㄹㅇ)
     });
     print("학교 정보 Firestore 저장 성공 (-_- b) (학교명: $schoolName, UID: ${user.uid})");
+  }
+
+  // FCM 토큰 Firestore에 저장
+  Future<void> saveFcmToken(String uid) async {
+    try {
+      final token = await FirebaseMessaging.instance.getToken();
+      if (token == null) {
+        print("FCM 토큰을 가져오지 못했습니다.");
+        return;
+      }
+
+      await firestore.collection('users').doc(uid).set({
+        'fcmToken': token,
+        'tokenUpdatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+
+      print("🩷 FCM 토큰 Firestore 저장 성공 : $token");
+    } catch (e) {
+      print("FCM 토큰 저장 오류 : $e");
+    }
+  }
+
+  // 토큰 변경 시 갱신
+  void listenTokenRefresh(String uid) {
+    FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
+      await firestore.collection('users').doc(uid).set({
+        'fcmToken': newToken,
+        'tokenUpdatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+
+      print("🔄 FCM 토큰 갱신됨: $newToken");
+    });
   }
 }

@@ -93,7 +93,10 @@ class HomePage extends ConsumerWidget {
         children: [
           Image.asset("assets/images/logo.png", height: 36, width: 36),
           const SizedBox(width: 10),
-          Text(schoolName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+          Text(
+            schoolName,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
         ],
       ),
       centerTitle: false,
@@ -190,7 +193,10 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildServiceButton(BuildContext context, {required Map<String, String> data}) {
+  Widget _buildServiceButton(
+    BuildContext context, {
+    required Map<String, String> data,
+  }) {
     final label = data['label']!;
     final route = data['route']!;
 
@@ -221,7 +227,7 @@ class HomePage extends ConsumerWidget {
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold, // 텍스트
-                    fontSize: 18,
+                    fontSize: 16,
                     color: Colors.blueGrey,
                   ),
                 ),

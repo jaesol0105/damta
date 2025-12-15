@@ -60,7 +60,13 @@ class NotificationView extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
                 InkWell(
                   onTap: () async => await ref
                       .read(notificationViewModelProvider(uId: uId).notifier)
@@ -69,7 +75,7 @@ class NotificationView extends ConsumerWidget {
                 ),
               ],
             ),
-            Text(content),
+            Text(content, overflow: TextOverflow.ellipsis),
             Text(time, style: TextStyle(fontSize: 12, color: darkgrey)),
           ],
         ),
