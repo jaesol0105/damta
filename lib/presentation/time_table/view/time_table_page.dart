@@ -4,6 +4,7 @@ import 'package:damta/presentation/time_table/view/widgets/choose_week.dart';
 import 'package:damta/presentation/time_table/view/widgets/time_table.dart';
 import 'package:damta/presentation/time_table/view/widgets/time_table_shimmer.dart';
 import 'package:damta/presentation/time_table/view_model/time_table_view_model.dart';
+import 'package:damta/presentation/ui_provider/users_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -11,18 +12,10 @@ import 'package:go_router/go_router.dart';
 class TimeTablePage extends ConsumerWidget {
   const TimeTablePage({super.key});
 
-  // TODO : 더미데이터 지우기
-  final officeCode = 'J10';
-  final schoolCode = '7642041';
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(
-      timeTableViewModelProvider(
-        officeCode: officeCode,
-        schoolCode: schoolCode,
-      ),
-    );
+    // user 불러오기
+    final userAsync = ref.watch(userProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -31,11 +24,34 @@ class TimeTablePage extends ConsumerWidget {
           onPressed: () => context.pop(),
         ),
       ),
-      body: state.when(
-        data: (timeTableState) =>
-            _timeTableContent(context, ref, timeTableState),
+      body: userAsync.when(
         loading: () => const TimeTableShimmer(),
-        error: (error, stackTrace) => _timeTableError(context, ref, error),
+        error: (e, _) => _timeTableError(context, ref, e),
+        data: (user) {
+          // user 에 저장된 officeCode, schoolCode 가져오기
+          final officeCode = user.officeCode;
+          final schoolCode = user.schoolCode;
+          print('🩷 시간표 : $officeCode, $schoolCode, ${user.schoolName}');
+
+          final state = ref.watch(
+            timeTableViewModelProvider(
+              officeCode: officeCode,
+              schoolCode: schoolCode,
+            ),
+          );
+
+          return state.when(
+            loading: () => const TimeTableShimmer(),
+            error: (e, _) => _timeTableError(context, ref, e),
+            data: (timeTableState) => _timeTableContent(
+              context,
+              ref,
+              timeTableState,
+              officeCode,
+              schoolCode,
+            ),
+          );
+        },
       ),
     );
   }
@@ -44,6 +60,8 @@ class TimeTablePage extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     TimeTableState state,
+    String officeCode,
+    String schoolCode,
   ) {
     return SingleChildScrollView(
       child: Padding(
@@ -113,22 +131,8 @@ class TimeTablePage extends ConsumerWidget {
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
-              ref
-                  .read(
-                    timeTableViewModelProvider(
-                      officeCode: officeCode,
-                      schoolCode: schoolCode,
-                    ).notifier,
-                  )
-                  .loadTimeTables(
-                    officeCode: officeCode,
-                    schoolCode: schoolCode,
-                  );
+              ref.invalidate(userProvider);
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFA7D7FE),
-              foregroundColor: Colors.white,
-            ),
             child: const Text('다시 시도'),
           ),
         ],

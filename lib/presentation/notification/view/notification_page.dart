@@ -1,4 +1,5 @@
 import 'package:damta/core/theme/app_theme.dart';
+import 'package:damta/presentation/ui_provider/users_provider.dart';
 import 'package:damta/presentation/util/time_ago.dart';
 import 'package:damta/presentation/notification/view/widgets/notification_view.dart';
 import 'package:damta/presentation/notification/view_model/notification_view_model.dart';
@@ -13,6 +14,9 @@ class NotificationPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // user 불러오기
+    final userAsync = ref.watch(userProvider);
+
     final notis =
         ref.watch(notificationViewModelProvider(uId: uId)).value ?? [];
 
@@ -31,7 +35,14 @@ class NotificationPage extends ConsumerWidget {
                 '알림',
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ),
-              Text('도장중학교', style: TextStyle(fontSize: 14, color: darkgrey)),
+              Text(
+                userAsync.when(
+                  data: (user) => user.schoolName,
+                  error: (e, _) => "학교 정보를 찾을 수 없습니다.",
+                  loading: () => "",
+                ),
+                style: TextStyle(fontSize: 14, color: darkgrey),
+              ),
             ],
           ),
         ),
