@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:damta/core/services/analytics_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/core/util/debouncer.dart';
 import 'package:damta/domain/entity/post_entity.dart';
@@ -73,6 +74,9 @@ class PostEditorPage extends HookConsumerWidget {
         ref.read(postViewModelProvider.notifier).loadPosts();
         context.pop();
       }
+
+      // 📝
+      AnalyticsService.event('post_action', p: {'action': 'create'});
     }
 
     /// 뒤로가기 시 나가기 여부 확인

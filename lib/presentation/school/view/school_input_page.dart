@@ -1,3 +1,4 @@
+import 'package:damta/core/services/analytics_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:damta/core/services/firebase_service.dart';
@@ -50,7 +51,8 @@ class _SchoolInputPageState extends State<SchoolInputPage> {
     }
 
     // 이미 선택된 학교와 동일한 이름으로 검색하는 경우 중복 실행 방지
-    if (_selectedSchool != null && _selectedSchool!.schoolName == trimmedQuery) {
+    if (_selectedSchool != null &&
+        _selectedSchool!.schoolName == trimmedQuery) {
       return;
     }
 
@@ -98,6 +100,12 @@ class _SchoolInputPageState extends State<SchoolInputPage> {
       if (mounted) {
         context.go('/home');
       }
+
+      // 📝
+      AnalyticsService.event(
+        'school_saved',
+        p: {'school_name': school.schoolName},
+      );
     } catch (e) {
       print('!!! 학교 정보 Firebase 저장 실패!!!: $e');
       _showErrorDialog("저장 오류", "학교 정보 저장 중 오류가 발생했습니다. 다시 시도해 주세요.");
@@ -128,7 +136,10 @@ class _SchoolInputPageState extends State<SchoolInputPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('학교 선택', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28)),
+        title: const Text(
+          '학교 선택',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+        ),
         centerTitle: true,
         elevation: 0,
       ),
@@ -145,10 +156,16 @@ class _SchoolInputPageState extends State<SchoolInputPage> {
                     decoration: InputDecoration(
                       hintText: '학교 이름을 입력하세요.',
                       hintStyle: const TextStyle(color: Colors.grey),
-                      contentPadding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 15.0,
+                        horizontal: 10.0,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: Colors.blueGrey, width: 3.0),
+                        borderSide: BorderSide(
+                          color: Colors.blueGrey,
+                          width: 3.0,
+                        ),
                       ),
                       suffixIcon: null,
                     ),
@@ -158,7 +175,11 @@ class _SchoolInputPageState extends State<SchoolInputPage> {
                 const SizedBox(width: 8),
 
                 IconButton(
-                  icon: const Icon(Icons.search, size: 40, color: Colors.blueGrey),
+                  icon: const Icon(
+                    Icons.search,
+                    size: 40,
+                    color: Colors.blueGrey,
+                  ),
                   onPressed: () => _performSearch(_controller.text),
                 ),
               ],
@@ -169,7 +190,8 @@ class _SchoolInputPageState extends State<SchoolInputPage> {
             Expanded(
               child: _isLoading
                   ? const Center(child: CircularProgressIndicator())
-                  : _searchResults.isEmpty && _controller.text.trim().length >= 2
+                  : _searchResults.isEmpty &&
+                        _controller.text.trim().length >= 2
                   ? Center(child: Text("검색 결과가 없습니다: ${_controller.text}"))
                   : _searchResults.isEmpty && _controller.text.trim().isEmpty
                   ? const Center(child: Text("학교 이름을 입력해 주세요."))
@@ -182,14 +204,17 @@ class _SchoolInputPageState extends State<SchoolInputPage> {
                           child: ListTile(
                             title: Text(
                               school.schoolName,
-                              style: const TextStyle(fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             // 도로명 주소에서 앞에 두 단어(도.시)만 나옴 + 교육청 코드
                             subtitle: Text(
                               '지역: ${school.location.split(' ')[0]} ${school.location.split(' ')[1]} | 교육청 코드: ${school.officeCode}',
                             ),
 
-                            onTap: () => _selectSchool(school), // 학교 선택 시 저장 로직 실행
+                            onTap: () =>
+                                _selectSchool(school), // 학교 선택 시 저장 로직 실행
                           ),
                         );
                       },

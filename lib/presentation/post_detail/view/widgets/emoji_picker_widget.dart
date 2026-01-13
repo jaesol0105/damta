@@ -1,3 +1,4 @@
+import 'package:damta/core/services/analytics_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/domain/entity/notification_entity.dart';
 import 'package:damta/domain/entity/post_entity.dart';
@@ -247,6 +248,12 @@ class EmojiPickerWidget {
                                     ),
                                   );
                               onClose();
+
+                              // 📝
+                              AnalyticsService.event(
+                                'post_action',
+                                p: {'action': 'emoji'},
+                              );
                             },
                             child: Container(
                               width: 40,

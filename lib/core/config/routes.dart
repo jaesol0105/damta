@@ -1,3 +1,4 @@
+import 'package:damta/core/config/app_router_observer.dart';
 import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/presentation/home/view/home_page.dart';
 import 'package:damta/presentation/login/view/login_page.dart';
@@ -34,17 +35,23 @@ class AppRoutePath {
 final GoRouter router = GoRouter(
   initialLocation: AppRoutePath.splash,
 
+  // 📝 Crashlytics, Analytics observer 연결
+  observers: [AppRouteObserver()],
+
   routes: [
     GoRoute(
       path: AppRoutePath.login,
+      name: AppRoutePath.login,
       builder: (context, state) => const LoginPage(),
     ),
     GoRoute(
       path: AppRoutePath.splash,
+      name: AppRoutePath.splash,
       builder: (context, state) => const SplashPage(),
     ),
     GoRoute(
       path: AppRoutePath.school,
+      name: AppRoutePath.school,
       builder: (context, state) {
         // 인자로 넘긴 kakaoId 값
         final String? kakaoId = state.extra as String?;
@@ -57,11 +64,13 @@ final GoRouter router = GoRouter(
 
     GoRoute(
       path: AppRoutePath.home,
+      name: AppRoutePath.home,
       builder: (context, state) => const HomePage(),
     ),
 
     GoRoute(
       path: AppRoutePath.post,
+      name: AppRoutePath.post,
       builder: (context, state) => PostPage(),
       routes: [
         GoRoute(
@@ -81,6 +90,7 @@ final GoRouter router = GoRouter(
     // 포스트 수정: PostEntity를 extra로 넘겨서 push
     GoRoute(
       path: AppRoutePath.postEditor,
+      name: AppRoutePath.postEditor,
       builder: (context, state) {
         final PostEntity initialPost =
             state.extra as PostEntity? ??
@@ -97,7 +107,8 @@ final GoRouter router = GoRouter(
     ),
 
     GoRoute(
-      path: "/notification/:uId",
+      path: AppRoutePath.notification,
+      name: AppRoutePath.notification,
       builder: (context, state) {
         final uId = state.pathParameters['uId']!;
         return NotificationPage(uId: uId);
@@ -106,13 +117,23 @@ final GoRouter router = GoRouter(
 
     GoRoute(
       path: AppRoutePath.timetable,
+      name: AppRoutePath.timetable,
       builder: (context, state) => TimeTablePage(),
     ),
-    GoRoute(path: AppRoutePath.meal, builder: (context, state) => MealPage()),
+    GoRoute(
+      path: AppRoutePath.meal,
+      name: AppRoutePath.meal,
+      builder: (context, state) => MealPage(),
+    ),
     GoRoute(
       path: AppRoutePath.schedule,
+      name: AppRoutePath.schedule,
       builder: (context, state) => SchedulePage(),
     ),
-    GoRoute(path: AppRoutePath.melon, builder: (context, state) => HomePage()),
+    GoRoute(
+      path: AppRoutePath.melon,
+      name: AppRoutePath.melon,
+      builder: (context, state) => HomePage(),
+    ),
   ],
 );

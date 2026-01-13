@@ -1,3 +1,4 @@
+import 'package:damta/core/services/analytics_service.dart';
 import 'package:damta/core/services/firebase_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/domain/entity/comment_entity.dart';
@@ -40,6 +41,12 @@ class CommentItemWidget extends StatelessWidget {
                           ref
                               .read(commentViewModelProvider.notifier)
                               .deleteComment(cId);
+
+                          // 📝
+                          AnalyticsService.event(
+                            'post_action',
+                            p: {'action': 'cmt_delete'},
+                          );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
