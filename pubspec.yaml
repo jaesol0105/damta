@@ -60,6 +60,8 @@ dependencies:
   flutter_app_badger: ^1.5.0
   firebase_crashlytics: ^5.0.6
   firebase_analytics: ^12.1.0
+  flutter_dotenv: ^6.0.0
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:
@@ -84,6 +86,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - .env
     - assets/images/
     - assets/lottie/
     - assets/icons/

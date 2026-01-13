@@ -1,8 +1,10 @@
+import 'package:damta/presentation/login/view/widgets/terms_agreement_text.dart';
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:go_router/go_router.dart';
 import 'package:damta/core/services/firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
+import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -93,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: _kakaoLogin,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFEE500),
-                  minimumSize: const Size(double.infinity, 60),
+                  minimumSize: const Size(double.infinity, 52),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                     side: BorderSide.none,
@@ -104,7 +106,11 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     //
-                    Image.asset("assets/images/kakao_logo.png", height: 50),
+                    SvgPicture.asset(
+                      "assets/images/kakao_logo.svg",
+                      height: 16.8,
+                      width: 18,
+                    ),
 
                     const SizedBox(width: 8),
 
@@ -120,7 +126,9 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 60),
+            const SizedBox(height: 24),
+            const TermsAgreementText(),
+            const SizedBox(height: 40),
           ],
         ),
       ),
