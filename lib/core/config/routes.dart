@@ -1,16 +1,16 @@
 import 'package:damta/core/config/app_router_observer.dart';
 import 'package:damta/domain/entity/post_entity.dart';
-import 'package:damta/presentation/view/pages/home/home_page.dart';
-import 'package:damta/presentation/view/pages/login/login_page.dart';
-import 'package:damta/presentation/view/pages/meal/meal_page.dart';
-import 'package:damta/presentation/view/pages/notification/notification_page.dart';
-import 'package:damta/presentation/view/pages/post/post_page.dart';
-import 'package:damta/presentation/view/pages/post_detail/post_detail_page.dart';
-import 'package:damta/presentation/view/pages/schedule/schedule_page.dart';
-import 'package:damta/presentation/view/pages/school/school_input_page.dart';
-import 'package:damta/presentation/view/pages/splash/splash_page.dart';
-import 'package:damta/presentation/view/pages/time_table/time_table_page.dart';
-import 'package:damta/presentation/view/pages/post_editor/post_editor_page.dart';
+import 'package:damta/presentation/home/view/home_page.dart';
+import 'package:damta/presentation/login/view/login_page.dart';
+import 'package:damta/presentation/meal/view/meal_page.dart';
+import 'package:damta/presentation/notification/view/notification_page.dart';
+import 'package:damta/presentation/post/view/post_page.dart';
+import 'package:damta/presentation/post_detail/view/post_detail_page.dart';
+import 'package:damta/presentation/schedule/view/schedule_page.dart';
+import 'package:damta/presentation/school/view/school_input_page.dart';
+import 'package:damta/presentation/splash/view/splash_page.dart';
+import 'package:damta/presentation/time_table/view/time_table_page.dart';
+import 'package:damta/presentation/post_editor/view/post_editor_page.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRoutePath {
