@@ -1,3 +1,4 @@
+import 'package:damta/core/services/analytics_service.dart';
 import 'package:damta/core/services/firebase_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/domain/entity/comment_entity.dart';
@@ -35,12 +36,23 @@ class CommentItemWidget extends StatelessWidget {
                       onPressed: () {
                         context.pop();
                         final cId = comment.cId;
-                        if (cId != null && comment.uId == FirebaseService.getUId) {
-                          ref.read(commentViewModelProvider.notifier).deleteComment(cId);
+                        if (cId != null &&
+                            comment.uId == FirebaseService.getUId) {
+                          ref
+                              .read(commentViewModelProvider.notifier)
+                              .deleteComment(cId);
+
+                          // 📝
+                          AnalyticsService.event(
+                            'post_action',
+                            p: {'action': 'cmt_delete'},
+                          );
                         } else {
-                          ScaffoldMessenger.of(
-                            context,
-                          ).showSnackBar(SnackBar(content: Text("사용자님이 작성하신 댓글만 삭제할 수 있습니다.")));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("사용자님이 작성하신 댓글만 삭제할 수 있습니다."),
+                            ),
+                          );
                         }
                       },
                       child: Text("삭제"),
@@ -60,9 +72,16 @@ class CommentItemWidget extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text(comment.cWriter, style: TextStyle(color: vrc(context).detailText)),
+                        Text(
+                          comment.cWriter,
+                          style: TextStyle(color: vrc(context).detailText),
+                        ),
                         const SizedBox(width: 10),
-                        Container(width: 2, height: 12, color: vrc(context).border),
+                        Container(
+                          width: 2,
+                          height: 12,
+                          color: vrc(context).border,
+                        ),
                         const SizedBox(width: 10),
                         Text(
                           timeAgo(comment.cCreatedAt),

@@ -1,4 +1,5 @@
 import 'package:damta/core/config/routes.dart';
+import 'package:damta/core/services/analytics_service.dart';
 import 'package:damta/core/services/firebase_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/core/util/time_ago.dart';
@@ -128,6 +129,12 @@ class PostDetailPage extends HookConsumerWidget {
                               await ref
                                   .read(postViewModelProvider.notifier)
                                   .deletePost(pId);
+
+                              // 📝
+                              AnalyticsService.event(
+                                'post_action',
+                                p: {'action': 'delete'},
+                              );
                             },
                             child: const Text("삭제"),
                           ),

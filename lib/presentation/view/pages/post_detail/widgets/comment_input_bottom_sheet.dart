@@ -1,3 +1,4 @@
+import 'package:damta/core/services/analytics_service.dart';
 import 'package:damta/core/services/firebase_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/domain/entity/comment_entity.dart';
@@ -91,6 +92,12 @@ class CommentInputBottomSheet extends HookConsumerWidget {
                   }
                   commentController.clear();
                   writerController.clear();
+
+                  // 📝
+                  AnalyticsService.event(
+                    'post_action',
+                    p: {'action': 'cmt_create'},
+                  );
                 },
                 child: const Text("완료"),
               ),
