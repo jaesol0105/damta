@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:damta/core/config/routes.dart';
+import 'package:damta/core/services/analytics_service.dart';
 import 'package:damta/core/services/notification_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/core/config/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,40 +29,53 @@ Future<void> _getHashKey() async {
   }
 }
 
-void main() async {
-  // 위젯 바인딩 초기화
-  WidgetsFlutterBinding.ensureInitialized();
+Future<void> main() async {
+  // 📝 Zone 에러(비동기)
+  runZonedGuarded(
+    () async {
+      // 위젯 바인딩 초기화
+      WidgetsFlutterBinding.ensureInitialized();
 
-  // if (kDebugMode) {
-  //   final helper = DatabaseHelper();
-  //   await helper.deleteDatabase();
-  // }
+      // if (kDebugMode) {
+      //   final helper = DatabaseHelper();
+      //   await helper.deleteDatabase();
+      // }
 
-  // Firebase 초기화
-  await FirebaseService.instance.initializeFirebase();
-  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+      // Firebase 초기화
+      await FirebaseService.instance.initializeFirebase();
+      // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // 카카오 SDK 초기화
-  KakaoSdk.init(nativeAppKey: '905586a95c550bb2604245bee31dd16c');
-  // 앱 실행 전 해시 키 함수 호출
-  _getHashKey();
+      // 카카오 SDK 초기화
+      KakaoSdk.init(nativeAppKey: '905586a95c550bb2604245bee31dd16c');
+      // 앱 실행 전 해시 키 함수 호출
+      _getHashKey();
 
-  // 🔔 FCM Background 핸들러 등록
-  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+      // 🔔 FCM Background 핸들러 등록
+      FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+      // main 에서 FCM 권한과 Foreground 옵션 명시
+      await FirebaseMessaging.instance.requestPermission();
+      // 로컬 알림 + FCM Foreground 처리
+      await NotificationService.initialize();
+      // FCM 토큰 저장
+      final user = FirebaseService.instance.auth.currentUser;
+      if (user != null) {
+        await FirebaseService.instance.saveFcmToken(user.uid);
+      }
 
-  // 🔔 main 에서 FCM 권한과 Foreground 옵션 명시
-  await FirebaseMessaging.instance.requestPermission();
+      // 📝 Flutter 프레임워크 에러
+      FlutterError.onError = (errorDetails) {
+        FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+      };
 
-  // 🔔 로컬 알림 + FCM Foreground 처리
-  await NotificationService.initialize();
+      runApp(ProviderScope(child: const MyApp()));
 
-  // 🔔 FCM 토큰 저장
-  final user = FirebaseService.instance.auth.currentUser;
-  if (user != null) {
-    await FirebaseService.instance.saveFcmToken(user.uid);
-  }
-
-  runApp(ProviderScope(child: const MyApp()));
+      // 📝
+      AnalyticsService.appOpen();
+    },
+    (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    },
+  );
 }
 
 class MyApp extends StatelessWidget {

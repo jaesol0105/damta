@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:damta/core/services/analytics_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/core/util/debouncer.dart';
 import 'package:damta/domain/entity/post_entity.dart';
@@ -63,7 +64,9 @@ class PostEditorPage extends HookConsumerWidget {
       final (success, error, updated) = await viewModel.save();
       if (!success) {
         if (error != null && context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(error)));
         }
         return;
       }
@@ -71,6 +74,9 @@ class PostEditorPage extends HookConsumerWidget {
         ref.read(postViewModelProvider.notifier).loadPosts();
         context.pop();
       }
+
+      // 📝
+      AnalyticsService.event('post_action', p: {'action': 'create'});
     }
 
     /// 뒤로가기 시 나가기 여부 확인
@@ -139,7 +145,10 @@ class PostEditorPage extends HookConsumerWidget {
             children: [
               Text(
                 isEditMode ? '글 수정' : '글 쓰기',
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               // SizedBox(height: 2),
               // Text('도장중학교', style: TextStyle(fontSize: 12, color: Colors.grey)),
@@ -195,7 +204,10 @@ class PostEditorPage extends HookConsumerWidget {
                         keyboardType: TextInputType.multiline,
                         decoration: const InputDecoration(
                           hintText: '내용을 입력하세요',
-                          hintStyle: TextStyle(color: Colors.grey, fontSize: 16),
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 16,
+                          ),
                           border: InputBorder.none,
                           isCollapsed: true,
                         ),
@@ -218,14 +230,22 @@ class PostEditorPage extends HookConsumerWidget {
                             );
                           },
                           child: state.content.isEmpty
-                              ? const SizedBox.shrink(key: ValueKey('counter-empty'))
+                              ? const SizedBox.shrink(
+                                  key: ValueKey('counter-empty'),
+                                )
                               : Container(
                                   key: const ValueKey('counter-visible'),
                                   margin: const EdgeInsets.only(bottom: 4),
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 4,
+                                  ),
                                   decoration: BoxDecoration(
                                     color: vrc(context).background,
-                                    border: Border.all(color: vrc(context).border!, width: 1),
+                                    border: Border.all(
+                                      color: vrc(context).border!,
+                                      width: 1,
+                                    ),
                                     borderRadius: BorderRadius.circular(10),
                                     boxShadow: [
                                       BoxShadow(
@@ -237,7 +257,10 @@ class PostEditorPage extends HookConsumerWidget {
                                   ),
                                   child: Text(
                                     '${state.content.length} / 8,000',
-                                    style: const TextStyle(fontSize: 10, color: Colors.grey),
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      color: Colors.grey,
+                                    ),
                                   ),
                                 ),
                         ),
@@ -266,7 +289,11 @@ class PostEditorPage extends HookConsumerWidget {
                       child: Row(
                         children: const [
                           SizedBox(width: 6),
-                          Icon(Icons.image_outlined, size: 28, color: Color(0xFFBDBDBD)),
+                          Icon(
+                            Icons.image_outlined,
+                            size: 28,
+                            color: Color(0xFFBDBDBD),
+                          ),
                           // SizedBox(width: 6),
                           // Text('이미지', style: TextStyle(fontSize: 14, color: Color(0xFFBDBDBD))),
                         ],
@@ -281,11 +308,17 @@ class PostEditorPage extends HookConsumerWidget {
                             : const Color(0xFFEDEDED),
                         foregroundColor: Colors.black87,
                         shape: const StadiumBorder(),
-                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 40,
+                          vertical: 12,
+                        ),
                       ),
                       child: const Text(
                         '완료',
-                        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                        ),
                       ),
                     ),
                   ],
@@ -325,12 +358,22 @@ class _PostImagePreview extends StatelessWidget {
     if (localImageFile != null) {
       imageWidget = ClipRRect(
         borderRadius: BorderRadius.circular(12),
-        child: Image.file(localImageFile!, width: double.infinity, height: 180, fit: BoxFit.cover),
+        child: Image.file(
+          localImageFile!,
+          width: double.infinity,
+          height: 180,
+          fit: BoxFit.cover,
+        ),
       );
     } else if (imageUrl != null && imageUrl!.isNotEmpty) {
       imageWidget = ClipRRect(
         borderRadius: BorderRadius.circular(12),
-        child: Image.network(imageUrl!, width: double.infinity, height: 180, fit: BoxFit.cover),
+        child: Image.network(
+          imageUrl!,
+          width: double.infinity,
+          height: 180,
+          fit: BoxFit.cover,
+        ),
       );
     } else {
       imageWidget = Container(
