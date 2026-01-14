@@ -112,8 +112,8 @@ class HomePage extends ConsumerWidget {
             strokeWidth: 2,
           ),
           onPressed: () {
-            // 설정 페이지로 이동 (미구현)
-            context.go('/settings');
+            // TODO : 설정 페이지로 이동 (미구현)
+            context.push('/settings');
           },
         ),
         const SizedBox(width: 8),
@@ -198,9 +198,10 @@ class HomePage extends ConsumerWidget {
   }) {
     final label = data['label']!;
     final route = data['route']!;
+    final extra = data['extra'];
 
     return InkWell(
-      onTap: () => context.push(route),
+      onTap: () => context.push(route, extra: extra),
       child: Material(
         elevation: 4.0,
         color: Colors.white,

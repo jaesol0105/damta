@@ -546,6 +546,48 @@ final class NotificationDataSourceProvider
 String _$notificationDataSourceHash() =>
     r'd91cd5f68f1c0e52a09defdc1946e7a0c2426efc';
 
+@ProviderFor(usersDataSource)
+const usersDataSourceProvider = UsersDataSourceProvider._();
+
+final class UsersDataSourceProvider
+    extends
+        $FunctionalProvider<UsersDataSource, UsersDataSource, UsersDataSource>
+    with $Provider<UsersDataSource> {
+  const UsersDataSourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'usersDataSourceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$usersDataSourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<UsersDataSource> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  UsersDataSource create(Ref ref) {
+    return usersDataSource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(UsersDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<UsersDataSource>(value),
+    );
+  }
+}
+
+String _$usersDataSourceHash() => r'd6fe03f0610965045668cb872cec5a42dd840c45';
+
 @ProviderFor(mealLocalDataSource)
 const mealLocalDataSourceProvider = MealLocalDataSourceProvider._();
 
@@ -1024,6 +1066,48 @@ final class NotificationRepositoryProvider
 
 String _$notificationRepositoryHash() =>
     r'1a3278c215fde1e182197c1aa8857d9bc46b91b2';
+
+@ProviderFor(usersRepository)
+const usersRepositoryProvider = UsersRepositoryProvider._();
+
+final class UsersRepositoryProvider
+    extends
+        $FunctionalProvider<UsersRepository, UsersRepository, UsersRepository>
+    with $Provider<UsersRepository> {
+  const UsersRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'usersRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$usersRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<UsersRepository> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  UsersRepository create(Ref ref) {
+    return usersRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(UsersRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<UsersRepository>(value),
+    );
+  }
+}
+
+String _$usersRepositoryHash() => r'474ebdc65e29645a87d8932324df9362a9f72dca';
 
 @ProviderFor(postUsecase)
 const postUsecaseProvider = PostUsecaseProvider._();

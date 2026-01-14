@@ -68,3 +68,17 @@ lib/generated_plugin_registrant.dart
 # End of https://www.toptal.com/developers/gitignore/api/flutter
 
  .flutter-plugins-dependencies
+
+ # End of https://www.toptal.com/developers/gitignore/api/flutter
+
+# Environment variables (Sensitive data)
+.env
+*.env
+.env.*
+
+# Keystore files
+*.jks
+*.keystore
+
+# Android key.properties
+android/key.properties

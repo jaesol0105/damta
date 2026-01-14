@@ -9,6 +9,7 @@ import 'package:damta/data/data_source/remote/meal_remote_data_source.dart';
 import 'package:damta/data/data_source/remote/schedule_remote_data_source.dart';
 import 'package:damta/data/data_source/remote/storage_data_source.dart';
 import 'package:damta/data/data_source/remote/time_table_remote_data_source.dart';
+import 'package:damta/data/data_source/remote/users_data_source.dart';
 import 'package:damta/data/data_source/remote/weather_data_source.dart';
 import 'package:damta/data/database/database_helper.dart';
 import 'package:damta/data/repository_impl/comment_repository_impl.dart';
@@ -18,6 +19,7 @@ import 'package:damta/data/repository_impl/post_repository_impl.dart';
 import 'package:damta/data/repository_impl/schedule_repository_impl.dart';
 import 'package:damta/data/repository_impl/storage_repository_impl.dart';
 import 'package:damta/data/repository_impl/time_table_repository_impl.dart';
+import 'package:damta/data/repository_impl/users_repository_impl.dart';
 import 'package:damta/data/repository_impl/weather_repostitory_impl.dart';
 import 'package:damta/domain/repository/comment_repository.dart';
 import 'package:damta/domain/repository/meal_repository.dart';
@@ -26,6 +28,7 @@ import 'package:damta/domain/repository/post_repository.dart';
 import 'package:damta/domain/repository/schedule_repository.dart';
 import 'package:damta/domain/repository/storage_repository.dart';
 import 'package:damta/domain/repository/time_table_repository.dart';
+import 'package:damta/domain/repository/users_repository.dart';
 import 'package:damta/domain/repository/weather_repository.dart';
 import 'package:damta/domain/usecase/comment_usecase.dart';
 import 'package:damta/domain/usecase/post_usecase.dart';
@@ -99,6 +102,12 @@ StorageDataSource storageDataSource(Ref ref) {
 NotificationDataSource notificationDataSource(Ref ref) {
   final firestore = ref.watch(firestoreProvider);
   return NotificationDataSourceImpl(firestore);
+}
+
+@riverpod
+UsersDataSource usersDataSource(Ref ref) {
+  final firestore = ref.watch(firestoreProvider);
+  return UsersDataSourceImpl(firestore);
 }
 
 // Local DataSource
@@ -180,6 +189,12 @@ StorageRepository storageRepository(Ref ref) {
 NotificationRepository notificationRepository(Ref ref) {
   final dataSource = ref.watch(notificationDataSourceProvider);
   return NotificationRepositoryImpl(dataSource);
+}
+
+@riverpod
+UsersRepository usersRepository(Ref ref) {
+  final dataSource = ref.watch(usersDataSourceProvider);
+  return UsersRepositoryImpl(dataSource);
 }
 
 // Usecase

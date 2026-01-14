@@ -7,7 +7,9 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:7.4.2")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0") 
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0")
+        classpath("com.google.gms:google-services:4.3.15")
+        classpath("com.google.firebase:firebase-crashlytics-gradle:2.9.9") 
     }
 }
 
@@ -34,4 +36,15 @@ subprojects {
 
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
+}
+
+subprojects {
+    plugins.withType<com.android.build.gradle.BasePlugin> {
+        val android = project.extensions.findByName("android") as? com.android.build.gradle.BaseExtension
+        android?.let {
+            if (it.namespace == null) {
+                it.namespace = project.group.toString()
+            }
+        }
+    }
 }

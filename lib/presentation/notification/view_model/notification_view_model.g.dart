@@ -55,7 +55,7 @@ final class NotificationViewModelProvider
 }
 
 String _$notificationViewModelHash() =>
-    r'1f3ac7c946b5b5111a7e6bc756b40c49c5bde976';
+    r'06c817049180076caf1bd03aeebfa29b95fcb581';
 
 final class NotificationViewModelFamily extends $Family
     with
