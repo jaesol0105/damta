@@ -1,8 +1,7 @@
 import 'dart:io';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_badger/flutter_app_badger.dart';
+// import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
 
@@ -60,9 +59,9 @@ class NotificationService {
     }
 
     // 6. 앱 실행 시 배지 초기화 (ios)
-    if (Platform.isIOS) {
-      FlutterAppBadger.removeBadge();
-    }
+    // if (Platform.isIOS) {
+    //   FlutterAppBadger.removeBadge();
+    // }
   }
 
   // 로컬 알림 표시
