@@ -13,6 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:damta/core/services/firebase_service.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // 🔔 Background 알림 (코드 반드시 main 최상단!)
 @pragma('vm:entry-point')
@@ -36,6 +37,9 @@ Future<void> main() async {
       // 위젯 바인딩 초기화
       WidgetsFlutterBinding.ensureInitialized();
 
+      await dotenv.load(fileName: ".env");
+      print("damta 릴리즈 키 해시: ${await KakaoSdk.origin}");
+
       // if (kDebugMode) {
       //   final helper = DatabaseHelper();
       //   await helper.deleteDatabase();
@@ -46,7 +50,8 @@ Future<void> main() async {
       // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
       // 카카오 SDK 초기화
-      KakaoSdk.init(nativeAppKey: '905586a95c550bb2604245bee31dd16c');
+      final String kakaoNativeKey = dotenv.get('KAKAO_NATIVE_APP_KEY');
+      KakaoSdk.init(nativeAppKey: kakaoNativeKey);
       // 앱 실행 전 해시 키 함수 호출
       _getHashKey();
 
@@ -69,7 +74,7 @@ Future<void> main() async {
 
       runApp(ProviderScope(child: const MyApp()));
 
-      // 📝
+      // 📝 앱 오픈 분석
       AnalyticsService.appOpen();
     },
     (error, stack) {
