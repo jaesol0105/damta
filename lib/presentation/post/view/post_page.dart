@@ -4,6 +4,7 @@ import 'package:damta/presentation/home/view/widgets/noti_button.dart';
 import 'package:damta/presentation/post/view/widgets/post_list_item.dart';
 import 'package:damta/presentation/post_detail/view_model/comment_view_model.dart';
 import 'package:damta/presentation/post/view_model/post_view_model.dart';
+import 'package:damta/presentation/ui_provider/users_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -15,6 +16,9 @@ class PostPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // user 불러오기
+    final userAsync = ref.watch(userProvider);
+
     final posts = ref.watch(postViewModelProvider);
     final comments = ref.watch(commentViewModelProvider);
 
@@ -49,7 +53,11 @@ class PostPage extends HookConsumerWidget {
                 ),
               ),
               Text(
-                '도장중학교',
+                userAsync.when(
+                  data: (user) => user.schoolName,
+                  error: (e, _) => "학교 정보를 찾을 수 없습니다.",
+                  loading: () => "",
+                ),
                 style: TextStyle(fontSize: 14, color: vrc(context).detailText),
               ),
             ],

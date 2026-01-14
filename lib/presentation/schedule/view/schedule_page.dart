@@ -1,4 +1,5 @@
 import 'package:damta/core/theme/app_theme.dart';
+import 'package:damta/presentation/ui_provider/users_provider.dart';
 import 'package:damta/presentation/schedule/view/widgets/month_selector.dart';
 import 'package:damta/presentation/schedule/view/widgets/schedule_card.dart';
 import 'package:damta/presentation/schedule/view/widgets/schedule_shimmer.dart';
@@ -10,28 +11,43 @@ import 'package:go_router/go_router.dart';
 class SchedulePage extends ConsumerWidget {
   const SchedulePage({super.key});
 
-  final officeCode = 'P10';
-  final schoolCode = '8321175';
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scheduleState = ref.watch(
-      scheduleViewModelProvider(officeCode: officeCode, schoolCode: schoolCode),
-    );
+    // user 불러오기
+    final userAsync = ref.watch(userProvider);
 
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back), // 백 버튼
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
         ),
       ),
-
-      body: scheduleState.when(
-        data: (state) => _scheduleContent(context, ref, state),
+      body: userAsync.when(
         loading: () => const ScheduleShimmer(),
-        error: (error, stackTrace) => _scheduleError(context, ref),
+        error: (e, _) => Center(child: Text(e.toString())),
+        data: (user) {
+          // user 에 저장된 officeCode, schoolCode 가져오기
+          final officeCode = user.officeCode;
+          final schoolCode = user.schoolCode;
+          print('🩷 학사 일정 : $officeCode, $schoolCode, ${user.schoolName}');
+
+          final scheduleAsync = ref.watch(
+            scheduleViewModelProvider(
+              officeCode: officeCode,
+              schoolCode: schoolCode,
+            ),
+          );
+
+          return scheduleAsync.when(
+            loading: () => const ScheduleShimmer(),
+            error: (e, _) =>
+                _scheduleError(context, ref, officeCode, schoolCode),
+            data: (state) =>
+                _scheduleContent(context, ref, state, officeCode, schoolCode),
+          );
+        },
       ),
     );
   }
@@ -40,6 +56,8 @@ class SchedulePage extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     ScheduleState state,
+    String officeCode,
+    String schoolCode,
   ) {
     final groupedSchedules = state.groupedSchedulesByDateExcludingWeekends;
 
@@ -104,7 +122,12 @@ class SchedulePage extends ConsumerWidget {
     );
   }
 
-  Widget _scheduleError(BuildContext context, WidgetRef ref) {
+  Widget _scheduleError(
+    BuildContext context,
+    WidgetRef ref,
+    String officeCode,
+    String schoolCode,
+  ) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
