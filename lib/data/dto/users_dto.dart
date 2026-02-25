@@ -7,9 +7,10 @@ part 'users_dto.g.dart';
 abstract class UsersDto with _$UsersDto {
   const factory UsersDto({
     String? uId,
-    required String officeCode,
-    required String schoolCode,
-    required String schoolName,
+    String? email,
+    String? officeCode,
+    String? schoolCode,
+    String? schoolName,
   }) = _UsersDto;
 
   factory UsersDto.fromJson(Map<String, Object?> json) =>

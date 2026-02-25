@@ -5,6 +5,7 @@ import 'package:damta/domain/entity/users_entity.dart';
 UsersEntity toEntity(UsersDto dto) {
   return UsersEntity(
     uId: dto.uId,
+    email: dto.email,
     officeCode: dto.officeCode,
     schoolCode: dto.schoolCode,
     schoolName: dto.schoolName,
@@ -15,6 +16,7 @@ UsersEntity toEntity(UsersDto dto) {
 UsersDto toDto(UsersEntity entity) {
   return UsersDto(
     uId: entity.uId,
+    email: entity.email,
     officeCode: entity.officeCode,
     schoolCode: entity.schoolCode,
     schoolName: entity.schoolName,

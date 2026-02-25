@@ -9,8 +9,15 @@ final Color blue = Color(0xFFD5ECFF);
 
 class AppTheme {
   static ThemeData light = ThemeData(
-    colorScheme: ColorScheme.fromSeed(brightness: Brightness.light, seedColor: blue),
-    appBarTheme: AppBarTheme(backgroundColor: Colors.white, scrolledUnderElevation: 0),
+    colorScheme: ColorScheme.fromSeed(
+      brightness: Brightness.light,
+      seedColor: blue,
+    ),
+    appBarTheme: AppBarTheme(
+      backgroundColor: Colors.white,
+      scrolledUnderElevation: 0,
+    ),
+    drawerTheme: DrawerThemeData(backgroundColor: Colors.white),
     scaffoldBackgroundColor: Colors.white,
     extensions: const [VariableColors.light, FixedColors.constant],
     // textTheme: GoogleFonts.notoSansKrTextTheme(),
@@ -18,8 +25,15 @@ class AppTheme {
   );
 
   static ThemeData dark = ThemeData(
-    colorScheme: ColorScheme.fromSeed(brightness: Brightness.dark, seedColor: blue),
-    appBarTheme: AppBarTheme(backgroundColor: Color(0xFF121212), scrolledUnderElevation: 0),
+    colorScheme: ColorScheme.fromSeed(
+      brightness: Brightness.dark,
+      seedColor: blue,
+    ),
+    appBarTheme: AppBarTheme(
+      backgroundColor: Color(0xFF121212),
+      scrolledUnderElevation: 0,
+    ),
+    drawerTheme: DrawerThemeData(backgroundColor: Color(0xFF121212)),
     scaffoldBackgroundColor: Color(0xFF121212),
     extensions: const [VariableColors.dark, FixedColors.constant],
     // textTheme: GoogleFonts.notoSansKrTextTheme(ThemeData.dark().textTheme),
@@ -27,5 +41,7 @@ class AppTheme {
   );
 }
 
-VariableColors vrc(BuildContext context) => Theme.of(context).extension<VariableColors>()!;
-FixedColors fxc(BuildContext context) => Theme.of(context).extension<FixedColors>()!;
+VariableColors vrc(BuildContext context) =>
+    Theme.of(context).extension<VariableColors>()!;
+FixedColors fxc(BuildContext context) =>
+    Theme.of(context).extension<FixedColors>()!;

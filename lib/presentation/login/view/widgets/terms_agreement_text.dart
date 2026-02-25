@@ -18,31 +18,23 @@ class TermsAgreementText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final variable = vrc(context);
-    final fixed = fxc(context);
-
-    final Color subTextColor = variable.detailText ?? Colors.grey;
-    final Color linkColor = variable.labelText ?? Colors.black;
+    final Color textColor = vrc(context).detailText!;
 
     final TextStyle linkStyle = TextStyle(
-      color: linkColor,
-      fontWeight: FontWeight.bold,
+      color: textColor,
+      fontWeight: FontWeight.w500,
       decoration: TextDecoration.underline,
-      decorationColor: linkColor,
+      decorationColor: textColor,
       fontSize: 12,
     );
 
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-        style: TextStyle(
-          color: subTextColor,
-          fontSize: 12,
-          fontFamily: 'pretendard',
-        ),
+        style: TextStyle(color: textColor, fontSize: 12),
         children: [
           TextSpan(
-            text: '이용 약관',
+            text: '이용약관',
             style: linkStyle,
             recognizer: TapGestureRecognizer()
               ..onTap = () => _launchURL(_policyUrl),

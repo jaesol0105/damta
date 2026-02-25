@@ -3,7 +3,7 @@ import 'package:damta/presentation/ui_provider/users_provider.dart';
 import 'package:damta/presentation/schedule/view/widgets/month_selector.dart';
 import 'package:damta/presentation/schedule/view/widgets/schedule_card.dart';
 import 'package:damta/presentation/schedule/view/widgets/schedule_shimmer.dart';
-import 'package:damta/presentation/school/view_model/schedule_view_model.dart';
+import 'package:damta/presentation/schedule/view_model/schedule_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -29,8 +29,8 @@ class SchedulePage extends ConsumerWidget {
         error: (e, _) => Center(child: Text(e.toString())),
         data: (user) {
           // user 에 저장된 officeCode, schoolCode 가져오기
-          final officeCode = user.officeCode;
-          final schoolCode = user.schoolCode;
+          final officeCode = user.officeCode ?? 'J10';
+          final schoolCode = user.schoolCode ?? '7642041';
           print('🩷 학사 일정 : $officeCode, $schoolCode, ${user.schoolName}');
 
           final scheduleAsync = ref.watch(

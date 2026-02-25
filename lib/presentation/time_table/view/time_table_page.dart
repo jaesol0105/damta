@@ -29,8 +29,8 @@ class TimeTablePage extends ConsumerWidget {
         error: (e, _) => _timeTableError(context, ref, e),
         data: (user) {
           // user 에 저장된 officeCode, schoolCode 가져오기
-          final officeCode = user.officeCode;
-          final schoolCode = user.schoolCode;
+          final officeCode = user.officeCode ?? 'J10';
+          final schoolCode = user.schoolCode ?? '7642041';
           print('🩷 시간표 : $officeCode, $schoolCode, ${user.schoolName}');
 
           final state = ref.watch(
