@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:damta/data/data_source/remote/auth_data_source.dart';
 import 'package:damta/data/data_source/remote/comment_data_source.dart';
 import 'package:damta/data/data_source/local/meal_local_data_source.dart';
 import 'package:damta/data/data_source/local/schedule_local_data_source.dart';
@@ -12,6 +13,7 @@ import 'package:damta/data/data_source/remote/time_table_remote_data_source.dart
 import 'package:damta/data/data_source/remote/users_data_source.dart';
 import 'package:damta/data/data_source/remote/weather_data_source.dart';
 import 'package:damta/data/database/database_helper.dart';
+import 'package:damta/data/repository_impl/auth_repository_impl.dart';
 import 'package:damta/data/repository_impl/comment_repository_impl.dart';
 import 'package:damta/data/repository_impl/meal_repository_impl.dart';
 import 'package:damta/data/repository_impl/notification_repository_impl.dart';
@@ -21,6 +23,7 @@ import 'package:damta/data/repository_impl/storage_repository_impl.dart';
 import 'package:damta/data/repository_impl/time_table_repository_impl.dart';
 import 'package:damta/data/repository_impl/users_repository_impl.dart';
 import 'package:damta/data/repository_impl/weather_repostitory_impl.dart';
+import 'package:damta/domain/repository/auth_repository.dart';
 import 'package:damta/domain/repository/comment_repository.dart';
 import 'package:damta/domain/repository/meal_repository.dart';
 import 'package:damta/domain/repository/notification_repository.dart';
@@ -33,6 +36,7 @@ import 'package:damta/domain/repository/weather_repository.dart';
 import 'package:damta/domain/usecase/comment_usecase.dart';
 import 'package:damta/domain/usecase/post_usecase.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
@@ -48,13 +52,16 @@ FirebaseFirestore firestore(Ref ref) => FirebaseFirestore.instance;
 @riverpod
 FirebaseStorage firebaseStorage(Ref ref) => FirebaseStorage.instance;
 
+@riverpod
+FirebaseAuth auth(Ref ref) => FirebaseAuth.instance;
+
 @Riverpod(keepAlive: true)
 Future<Database> database(Ref ref) async {
   final helper = DatabaseHelper();
   return helper.database;
 }
 
-// Remote DataSource
+// ==================== Remote DataSource ====================
 
 @riverpod
 MealRemoteDataSource mealRemoteDataSource(Ref ref) {
@@ -110,7 +117,14 @@ UsersDataSource usersDataSource(Ref ref) {
   return UsersDataSourceImpl(firestore);
 }
 
-// Local DataSource
+@riverpod
+AuthDataSource authDataSource(Ref ref) {
+  final auth = ref.watch(authProvider);
+  final firestore = ref.watch(firestoreProvider);
+  return AuthDataSourceImpl(auth, firestore);
+}
+
+// ==================== Local DataSource ====================
 
 @riverpod
 Future<MealLocalDataSource> mealLocalDataSource(Ref ref) async {
@@ -130,7 +144,7 @@ Future<TimeTableLocalDataSource> timeTableLocalDataSource(Ref ref) async {
   return TimeTableLocalDataSourceImpl(database: db);
 }
 
-// Repository
+// ==================== Repository ====================
 
 @riverpod
 Future<MealRepository> mealRepository(Ref ref) async {
@@ -197,7 +211,13 @@ UsersRepository usersRepository(Ref ref) {
   return UsersRepositoryImpl(dataSource);
 }
 
-// Usecase
+@riverpod
+AuthRepository authRepository(Ref ref) {
+  final dataSource = ref.watch(authDataSourceProvider);
+  return AuthRepositoryImpl(dataSource);
+}
+
+// ==================== Usecase ====================
 
 @riverpod
 PostUsecase postUsecase(Ref ref) {

@@ -46,4 +46,43 @@ final class UserProvider
   }
 }
 
-String _$userHash() => r'67c89901b509b150a0aa8fe095da23c0911790d0';
+String _$userHash() => r'688dfabfaecfcb822c4118fac645daf3d2a75190';
+
+@ProviderFor(authState)
+const authStateProvider = AuthStateProvider._();
+
+final class AuthStateProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<UsersEntity?>,
+          UsersEntity?,
+          Stream<UsersEntity?>
+        >
+    with $FutureModifier<UsersEntity?>, $StreamProvider<UsersEntity?> {
+  const AuthStateProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'authStateProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$authStateHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<UsersEntity?> $createElement(
+    $ProviderPointer pointer,
+  ) => $StreamProviderElement(pointer);
+
+  @override
+  Stream<UsersEntity?> create(Ref ref) {
+    return authState(ref);
+  }
+}
+
+String _$authStateHash() => r'2afb8f66c2354ac8d34795dfba1def6572931ea2';

@@ -1,64 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:damta/core/theme/app_theme.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:damta/presentation/home/view/widgets/home_actions.dart';
+import 'package:damta/presentation/home/view/widgets/home_drawer.dart';
+import 'package:damta/presentation/ui_provider/users_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:damta/presentation/home/view/widgets/weather_bar.dart';
-import 'package:damta/presentation/home/view/widgets/noti_button.dart';
-import 'package:hugeicons/hugeicons.dart';
-
-class UserProfile {
-  final String schoolName;
-
-  UserProfile({required this.schoolName});
-
-  factory UserProfile.fromFirestore(Map<String, dynamic> data) {
-    // 'schoolName' 필드가 없거나 null이면 기본값
-    final schoolName = data['schoolName'] as String? ?? '학교 미지정';
-
-    return UserProfile(schoolName: schoolName);
-  }
-}
-
-final userProfileProvider = StreamProvider<UserProfile>((ref) {
-  final auth = FirebaseAuth.instance;
-  final firestore = FirebaseFirestore.instance;
-
-  final user = auth.currentUser;
-  if (user == null) {
-    return Stream.value(UserProfile(schoolName: '로그인 필요'));
-  }
-
-  final userDocRef = firestore.collection('users').doc(user.uid);
-
-  return userDocRef.snapshots().map((snapshot) {
-    if (!snapshot.exists || snapshot.data() == null) {
-      return UserProfile(schoolName: '학교 미지정');
-    }
-
-    return UserProfile.fromFirestore(snapshot.data()!);
-  });
-});
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userProfileAsyncValue = ref.watch(userProfileProvider);
-
-    final schoolName = userProfileAsyncValue.when(
-      data: (profile) => profile.schoolName, // 데이터 로드 성공 시
-      loading: () => '학교 이름 로딩 중...',
-      error: (e, st) {
-        // print('!!! 학교 프로필 로드 오류 !!!: $e'); // 주석 처리
-        return '오류 발생'; // 오류 발생 시
-      },
-    );
-
     return Scaffold(
-      // schoolName => AppBar에 전달
-      appBar: _buildAppBar(context, schoolName),
+      appBar: _buildAppBar(context, ref),
+      endDrawer: HomeDrawer(),
       body: SafeArea(
         child: Column(
           children: [
@@ -85,39 +39,29 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  AppBar _buildAppBar(BuildContext context, String schoolName) {
+  AppBar _buildAppBar(BuildContext context, WidgetRef ref) {
+    // user 불러오기
+    final userAsync = ref.watch(userProvider);
+    debugPrint('현재 UserEntity 🩷 : $userAsync');
+
     return AppBar(
+      centerTitle: false,
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Image.asset("assets/images/logo.png", height: 36, width: 36),
           const SizedBox(width: 10),
           Text(
-            schoolName,
+            userAsync.when(
+              loading: () => '',
+              error: (e, _) => '',
+              data: (user) => user.schoolName ?? '학교 미지정',
+            ),
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
         ],
       ),
-      centerTitle: false,
-      actions: [
-        // 노티 위젯 호출
-        const NotiButton(),
-        // 설정 아이콘(미구현)
-        IconButton(
-          // icon: const Icon(Icons.settings),
-          icon: HugeIcon(
-            icon: HugeIcons.strokeRoundedSettings01,
-            size: 26,
-            color: vrc(context).contentText,
-            strokeWidth: 2,
-          ),
-          onPressed: () {
-            // TODO : 설정 페이지로 이동 (미구현)
-            context.push('/settings');
-          },
-        ),
-        const SizedBox(width: 8),
-      ],
+      actions: [Builder(builder: (context) => HomeActions())],
     );
   }
 

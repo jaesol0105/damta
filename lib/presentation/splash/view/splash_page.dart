@@ -32,8 +32,7 @@ class _SplashPageState extends State<SplashPage>
 
   /// 앱 시작전 스플래시 화면에서 수행할 초기화 작업
   Future<void> _loadHomeData() async {
-    await Future.delayed(const Duration(seconds: 4)); // 데모용 딜레이
-    // await ref.read(initAppUseCaseProvider).execute();
+    await Future.delayed(const Duration(seconds: 1));
   }
 
   /// 인증, 유저 정보, 학교 정보 여부 체크하고 라우팅 분기 (+ 홈 화면에서 필요한 데이터 로드)
@@ -68,7 +67,7 @@ class _SplashPageState extends State<SplashPage>
       }
 
       final data = userDoc.data() as Map<String, dynamic>?;
-      final kakaoId = data?['kakaoId'] as String?;
+      // final kakaoId = data?['kakaoId'] as String?;
 
       // schoolName 필드가 없거나 비어 있으면 학교 정보 미입력으로 간주!
       final hasSchoolInfo =
@@ -81,13 +80,8 @@ class _SplashPageState extends State<SplashPage>
       if (!mounted) return;
       if (hasSchoolInfo) {
         context.go('/home'); // 학교 정보 입력 완료: 홈으로 이동 (자동 로그인)
-      } else if (kakaoId != null) {
-        context.go(
-          '/school',
-          extra: kakaoId,
-        ); // 학교 정보 미입력: 학교 입력 페이지로 이동 (kakaoId를 extra로 전달)
       } else {
-        context.go('/'); // 카카오 ID도 없는 경우 로그인 페이지로 이동
+        context.go('/school');
       }
     } catch (e, _) {
       print("!!! 사용자 프로필 상태 확인 오류 !!! : $e");

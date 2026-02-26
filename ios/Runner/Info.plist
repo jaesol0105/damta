@@ -35,7 +35,8 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>kakao905586a95c550bb2604245bee31dd16c</string>
+				<string>com.googleusercontent.apps.436072449092-fkstkr05qrsup10f80b373kv0iecrstf</string>
+				<string>EdesQvmeQjtvE_PXeZSK</string>
 			</array>
 		</dict>
 	</array>
@@ -48,6 +49,8 @@
 		<string>kakaolink</string>
 		<string>kakaotalk</string>
 		<string>storylink</string>
+    	<string>naversearchapp</string>
+    	<string>naversearchthirdlogin</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

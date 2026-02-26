@@ -37,7 +37,7 @@ class NotificationPage extends ConsumerWidget {
               ),
               Text(
                 userAsync.when(
-                  data: (user) => user.schoolName,
+                  data: (user) => user.schoolName ?? '도장중학교',
                   error: (e, _) => "학교 정보를 찾을 수 없습니다.",
                   loading: () => "",
                 ),
