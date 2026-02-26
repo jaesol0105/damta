@@ -1,8 +1,11 @@
 import 'package:damta/core/di/provider.dart';
 import 'package:damta/domain/entity/time_table_entity.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'time_table_view_model.g.dart';
+
+const _kSelectedClassKey = 'timetable_selected_class';
 
 class TimeTableState {
   final String selectedClass;
@@ -27,7 +30,7 @@ class TimeTableState {
     );
   }
 
-  // 선택한 반 + 현재 주 필터링된 시간표
+  /// 선택한 반 + 현재 주 필터링된 시간표
   List<TimeTableEntity> get filtered {
     final sp = selectedClass.split("-");
     final grade = int.tryParse(sp[0]) ?? 1;
@@ -48,7 +51,38 @@ class TimeTableState {
     }).toList();
   }
 
-  // 전체 반 목록 (1-1 ~ 3-10)
+  /// 오늘 날짜의 시간표. 홈 화면 모듈에서 사용.
+  List<TimeTableEntity> get todayEntries {
+    final today = DateTime.now();
+    return filtered
+        .where(
+          (e) =>
+              e.date.year == today.year &&
+              e.date.month == today.month &&
+              e.date.day == today.day,
+        )
+        .toList()
+      ..sort((a, b) => a.period.compareTo(b.period));
+  }
+
+  /// 시간표 2열 정렬. 홈 화면 모듈에서 사용.
+  ({List<String> col1, List<String> col2}) get todayColumns {
+    final entries = todayEntries;
+    return (
+      col1:
+          entries // 1~4 교시
+              .where((e) => e.period <= 4)
+              .map((e) => '${e.period} ${e.subject}')
+              .toList(),
+      col2:
+          entries // 5교시 이상
+              .where((e) => e.period > 4)
+              .map((e) => '${e.period} ${e.subject}')
+              .toList(),
+    );
+  }
+
+  /// 전체 반 목록 (1-1 ~ 3-10)
   List<String> get classList {
     final List<String> classesList = [];
     for (int g = 1; g <= 3; g++) {
@@ -71,8 +105,12 @@ class TimeTableViewModel extends _$TimeTableViewModel {
     // 현재 주의 월요일을 계산
     final monday = now.subtract(Duration(days: now.weekday - 1));
 
+    // SharedPreferences에서 마지막으로 선택한 학년-반 불러오기
+    final prefs = await SharedPreferences.getInstance();
+    final savedClass = prefs.getString(_kSelectedClassKey) ?? '1-1';
+
     final initialState = TimeTableState(
-      selectedClass: "1-1",
+      selectedClass: savedClass,
       currentMonday: monday,
       list: [],
     );
@@ -125,7 +163,7 @@ class TimeTableViewModel extends _$TimeTableViewModel {
     }
   }
 
-  // 반 변경
+  // 학년-반 변경
   void changeClass(
     String value, {
     required String officeCode,
@@ -133,6 +171,11 @@ class TimeTableViewModel extends _$TimeTableViewModel {
   }) {
     print("Changing class to: $value");
     if (!state.hasValue) return;
+
+    // SharedPreferences에 저장
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setString(_kSelectedClassKey, value);
+    });
 
     final current = state.value!;
     final newState = current.copyWith(selectedClass: value);

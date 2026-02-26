@@ -38,7 +38,7 @@ class VariableColors extends ThemeExtension<VariableColors> {
 
   /// 다크모드
   static const VariableColors dark = VariableColors(
-    background: Color(0xFF121212), // [배경] (material_dark)
+    background: Color(0xFF121416), // [배경] (material_dark)
     surface: Color(0xFF1E1E1E), // [레이어] (material_surface_dark)
     border: Color(0x1FFFFFFF), // [테두리] (white12)
     disabledText: Color(0x61FFFFFF), // [비활성화] 텍스트 (white38)

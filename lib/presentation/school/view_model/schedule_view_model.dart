@@ -17,6 +17,26 @@ abstract class ScheduleState with _$ScheduleState {
     required List<ScheduleEntity> allSchedules,
   }) = _ScheduleState;
 
+  /// 오늘부터 7일치 학사일정 불러오기. 홈 화면 모듈에서 사용.
+  List<ScheduleEntity> get weekSchedules {
+    final today = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+    );
+    final weekEnd = today.add(const Duration(days: 6));
+    final result = allSchedules.where((s) {
+      final d = DateTime(s.date.year, s.date.month, s.date.day);
+      return !d.isBefore(today) && !d.isAfter(weekEnd);
+    }).toList()..sort((a, b) => a.date.compareTo(b.date));
+    return result;
+  }
+
+  /// M. D 학사일정명. 홈 화면 모듈에서 사용.
+  List<String> get weekScheduleLines => weekSchedules
+      .map((s) => '${s.date.month}. ${s.date.day} ${s.eventName}')
+      .toList();
+
   /// 선택된 월의 학사일정만 필터링
   List<ScheduleEntity> get schedulesForSelectedMonth {
     return allSchedules
@@ -45,8 +65,7 @@ abstract class ScheduleState with _$ScheduleState {
     );
   }
 
-  /// MonthSelector에 표시할 목록
-  /// 현재년도 1 ~ 12월
+  /// MonthSelector에 표시할 목록. 현재년도 1 ~ 12월.
   List<DateTime> get displayableMonths {
     final now = DateTime.now();
     final months = <DateTime>[];

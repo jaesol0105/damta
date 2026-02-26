@@ -6,6 +6,7 @@ import 'package:damta/core/services/firebase_service.dart';
 import 'package:damta/core/util/string_extension.dart';
 import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/domain/repository/post_repository.dart';
+import 'package:damta/presentation/ui_provider/users_provider.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -133,11 +134,6 @@ class PostEditorViewModel extends _$PostEditorViewModel {
       state = state.copyWith(loading: true); // 더블 탭 방지용 로딩 플래그
       final storageRepo = ref.read(storageRepositoryProvider);
 
-      // final uid = ref.read(currentUserIdProvider);
-      // if (uid == null) {
-      //   throw Exception('로그인 오류');
-      // }
-
       String url;
       if (state.isImageRemoved) {
         // 이미지 삭제 했을경우
@@ -151,10 +147,12 @@ class PostEditorViewModel extends _$PostEditorViewModel {
         url = state.originalPost.pImageUrl ?? '';
       }
 
-      // final user = ref.read(userGlobalViewModelProvider).value;
-      // if (user == null) {
-      //   throw Exception('유저 정보 없음');
-      // }
+      // 유저 schoolCode 가져오기
+      String? schoolCode;
+      try {
+        final user = await ref.read(userProvider.future);
+        schoolCode = user.schoolCode;
+      } catch (_) {}
 
       final updated = state.originalPost.copyWith(
         uId: FirebaseService.getUId.toString(),
@@ -164,13 +162,14 @@ class PostEditorViewModel extends _$PostEditorViewModel {
       );
       await repo.updatePost(
         updated,
+        schoolCode: schoolCode,
       ); // 새 포스트, 수정으로 분기 해야함.(아직 안함) 둘다 update쓸려면 uuid사용필요
 
       return (
         true,
         null,
         updated,
-      ); // 일단 반환은 하는데 낙관적업데이트 안하고, 그냥 refresh함. 나중에 수정예정
+      ); // 일단 반환은 하는데 낙관적업데이트 안하고, 그냥 refresh함. 나중에 수정 예정
       // 예외 전파
     } catch (e, s) {
       log('PostEditorViewModel save 실패: $e', error: e, stackTrace: s);

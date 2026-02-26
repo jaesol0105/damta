@@ -3,6 +3,7 @@ import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/presentation/home/view/home_page.dart';
 import 'package:damta/presentation/login/view/login_page.dart';
 import 'package:damta/presentation/meal/view/meal_page.dart';
+import 'package:damta/presentation/memo/view/memo_page.dart';
 import 'package:damta/presentation/notification/view/notification_page.dart';
 import 'package:damta/presentation/post/view/post_page.dart';
 import 'package:damta/presentation/post_detail/view/post_detail_page.dart';
@@ -30,6 +31,8 @@ class AppRoutePath {
   static const meal = '/meal';
   static const schedule = '/schedule';
   static const melon = '/melon';
+  // 메모
+  static const memo = '/memo';
 }
 
 final GoRouter router = GoRouter(
@@ -134,6 +137,11 @@ final GoRouter router = GoRouter(
       path: AppRoutePath.melon,
       name: AppRoutePath.melon,
       builder: (context, state) => HomePage(),
+    ),
+    GoRoute(
+      path: AppRoutePath.memo,
+      name: AppRoutePath.memo,
+      builder: (context, state) => const MemoPage(),
     ),
   ],
 );

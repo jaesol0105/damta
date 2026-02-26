@@ -9,4 +9,6 @@ abstract interface class TimeTableRepository {
     required int grade,
     required int classes,
   });
+  Future<String> getSelectedClass();
+  Future<void> saveSelectedClass(String value);
 }

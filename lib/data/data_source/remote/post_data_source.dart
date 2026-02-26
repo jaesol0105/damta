@@ -4,11 +4,11 @@ import 'package:damta/core/util/nick_name_generator.dart';
 import 'package:damta/data/dto/post_dto.dart';
 
 abstract interface class PostDataSource {
-  /// post 목록 조회
-  Future<List<PostDto>> getAllPosts();
+  /// 해당 학교의 post 목록 조회
+  Future<List<PostDto>> getAllPosts({String? schoolCode});
 
-  /// post 추가
-  Future<PostDto> addPost(PostDto post);
+  /// 해당 학교에 post 추가
+  Future<PostDto> addPost(PostDto post, {String? schoolCode});
 
   /// post 수정
   Future<void> updatePost(PostDto post);
@@ -22,15 +22,15 @@ class PostDataSourceImpl implements PostDataSource {
   final FirebaseFirestore firestore;
 
   @override
-  Future<PostDto> addPost(PostDto post) async {
+  Future<PostDto> addPost(PostDto post, {String? schoolCode}) async {
     try {
       final ref = await firestore.collection('post').add({
         ...post.toJson(),
+        if (schoolCode != null) 'school_code': schoolCode,
         'p_created_at': FieldValue.serverTimestamp(), // 파이어베이스 서버 시간 사용
         'p_writer': NicknameGenerator.generate(),
       });
       return post.copyWith(pId: ref.id); // 문서 id, 낙관적 업데이트를 위해 포스트 객체 반환
-      // 예외 전파
     } on FirebaseException catch (e, s) {
       log('Firebase addPost 실패: ${e.message}', error: e, stackTrace: s);
       rethrow;
@@ -45,7 +45,6 @@ class PostDataSourceImpl implements PostDataSource {
     try {
       print('😡호출');
       await firestore.collection('post').doc(post.pId).update(post.toJson());
-      // 예외 전파
     } on FirebaseException catch (e, s) {
       log('Firebase updatePost 실패: ${e.message}', error: e, stackTrace: s);
       rethrow;
@@ -59,7 +58,6 @@ class PostDataSourceImpl implements PostDataSource {
   Future<void> deletePost(String id) async {
     try {
       await firestore.collection('post').doc(id).delete();
-      // 예외 전파
     } on FirebaseException catch (e, s) {
       log('Firebase deletePost 실패: ${e.message}', error: e, stackTrace: s);
       rethrow;
@@ -70,10 +68,16 @@ class PostDataSourceImpl implements PostDataSource {
   }
 
   @override
-  Future<List<PostDto>> getAllPosts() async {
-    final snapshot = await firestore.collection("post").get();
+  Future<List<PostDto>> getAllPosts({String? schoolCode}) async {
+    Query<Map<String, dynamic>> query = firestore.collection('post');
+
+    if (schoolCode != null) {
+      query = query.where('school_code', isEqualTo: schoolCode);
+    }
+
+    final snapshot = await query.get();
     return snapshot.docs.map((doc) {
-      final data = doc.data();
+      final data = doc.data() as Map<String, dynamic>;
       // Firestore 문서 ID를 p_id로 설정
       data['p_id'] = doc.id;
       // Firestore Timestamp를 DateTime으로 변환

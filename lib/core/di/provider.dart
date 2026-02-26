@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:damta/data/data_source/remote/comment_data_source.dart';
 import 'package:damta/data/data_source/local/meal_local_data_source.dart';
+import 'package:damta/data/data_source/local/memo_local_data_source.dart';
 import 'package:damta/data/data_source/local/schedule_local_data_source.dart';
 import 'package:damta/data/data_source/local/time_table_local_data_source.dart';
 import 'package:damta/data/data_source/remote/notification_data_source.dart';
@@ -14,6 +15,7 @@ import 'package:damta/data/data_source/remote/weather_data_source.dart';
 import 'package:damta/data/database/database_helper.dart';
 import 'package:damta/data/repository_impl/comment_repository_impl.dart';
 import 'package:damta/data/repository_impl/meal_repository_impl.dart';
+import 'package:damta/data/repository_impl/memo_repository_impl.dart';
 import 'package:damta/data/repository_impl/notification_repository_impl.dart';
 import 'package:damta/data/repository_impl/post_repository_impl.dart';
 import 'package:damta/data/repository_impl/schedule_repository_impl.dart';
@@ -23,6 +25,7 @@ import 'package:damta/data/repository_impl/users_repository_impl.dart';
 import 'package:damta/data/repository_impl/weather_repostitory_impl.dart';
 import 'package:damta/domain/repository/comment_repository.dart';
 import 'package:damta/domain/repository/meal_repository.dart';
+import 'package:damta/domain/repository/memo_repository.dart';
 import 'package:damta/domain/repository/notification_repository.dart';
 import 'package:damta/domain/repository/post_repository.dart';
 import 'package:damta/domain/repository/schedule_repository.dart';
@@ -34,6 +37,7 @@ import 'package:damta/domain/usecase/comment_usecase.dart';
 import 'package:damta/domain/usecase/post_usecase.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -130,6 +134,11 @@ Future<TimeTableLocalDataSource> timeTableLocalDataSource(Ref ref) async {
   return TimeTableLocalDataSourceImpl(database: db);
 }
 
+@riverpod
+MemoLocalDataSource memoLocalDataSource(Ref ref) {
+  return MemoLocalDataSourceImpl();
+}
+
 // Repository
 
 @riverpod
@@ -195,6 +204,12 @@ NotificationRepository notificationRepository(Ref ref) {
 UsersRepository usersRepository(Ref ref) {
   final dataSource = ref.watch(usersDataSourceProvider);
   return UsersRepositoryImpl(dataSource);
+}
+
+@riverpod
+MemoRepository memoRepository(Ref ref) {
+  final dataSource = ref.watch(memoLocalDataSourceProvider);
+  return MemoRepositoryImpl(dataSource);
 }
 
 // Usecase

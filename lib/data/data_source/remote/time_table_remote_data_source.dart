@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:damta/data/util/extension/date_time_extension.dart';
 import 'package:damta/data/dto/neis_time_table_dto.dart';
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 abstract interface class TimeTableRemoteDataSource {
   Future<List<NeisTimeTableDto>> getTimeTables({

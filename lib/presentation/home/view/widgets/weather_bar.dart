@@ -1,3 +1,4 @@
+import 'package:damta/core/theme/app_colors.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/home/view_model/weather_view_model.dart';
 import 'package:flutter/material.dart';
@@ -33,16 +34,28 @@ class WeatherBar extends ConsumerWidget {
             children: [
               Text(
                 "${w.time.month}/${w.time.day} (${convertWeekday(w.time.weekday)})",
-                style: const TextStyle(fontSize: 16),
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textStrong,
+                ),
               ),
               if (w.precipitation >= 50)
                 const Text(
                   "우산 챙겨!",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textStrong,
+                  ),
                 ),
               Text(
                 "${w.temperature.round()}° ☔️ ${w.precipitation}%",
-                style: const TextStyle(fontSize: 16),
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textStrong,
+                ),
               ),
             ],
           );

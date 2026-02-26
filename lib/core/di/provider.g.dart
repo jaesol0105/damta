@@ -714,6 +714,54 @@ final class TimeTableLocalDataSourceProvider
 String _$timeTableLocalDataSourceHash() =>
     r'295645c167b7ded8e4e90d838534c7020f526613';
 
+@ProviderFor(memoLocalDataSource)
+const memoLocalDataSourceProvider = MemoLocalDataSourceProvider._();
+
+final class MemoLocalDataSourceProvider
+    extends
+        $FunctionalProvider<
+          MemoLocalDataSource,
+          MemoLocalDataSource,
+          MemoLocalDataSource
+        >
+    with $Provider<MemoLocalDataSource> {
+  const MemoLocalDataSourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'memoLocalDataSourceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$memoLocalDataSourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<MemoLocalDataSource> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  MemoLocalDataSource create(Ref ref) {
+    return memoLocalDataSource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(MemoLocalDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<MemoLocalDataSource>(value),
+    );
+  }
+}
+
+String _$memoLocalDataSourceHash() =>
+    r'a2a2df95b1487c1410172405d9a53e6c5cb350b0';
+
 @ProviderFor(mealRepository)
 const mealRepositoryProvider = MealRepositoryProvider._();
 
@@ -1108,6 +1156,47 @@ final class UsersRepositoryProvider
 }
 
 String _$usersRepositoryHash() => r'474ebdc65e29645a87d8932324df9362a9f72dca';
+
+@ProviderFor(memoRepository)
+const memoRepositoryProvider = MemoRepositoryProvider._();
+
+final class MemoRepositoryProvider
+    extends $FunctionalProvider<MemoRepository, MemoRepository, MemoRepository>
+    with $Provider<MemoRepository> {
+  const MemoRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'memoRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$memoRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<MemoRepository> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  MemoRepository create(Ref ref) {
+    return memoRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(MemoRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<MemoRepository>(value),
+    );
+  }
+}
+
+String _$memoRepositoryHash() => r'1e3abf239f67c4e3dc8c517c83ccca10f77448d2';
 
 @ProviderFor(postUsecase)
 const postUsecaseProvider = PostUsecaseProvider._();

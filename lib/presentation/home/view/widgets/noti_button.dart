@@ -18,31 +18,32 @@ class NotiButton extends ConsumerWidget {
     // 내 알림 목록 중 isRead == false 인 알림이 하나라도 있는지 확인하는 변수
     final hasNewNoti = notiList.any((n) => n.isRead == false);
 
-    return InkWell(
-      onTap: () => context.push("/notification/$uId"),
-      child: SizedBox(
-        width: 60,
-        height: 60,
-        child: Stack(
-          children: [
-            Center(
-              child: HugeIcon(
-                icon: HugeIcons.strokeRoundedNotification02,
-                size: 26,
-                color: vrc(context).contentText,
-                strokeWidth: 2,
-              ),
-              // child: Icon(Icons.notifications_none, size: 30, color: darkgrey),
-            ),
-            hasNewNoti
-                ? const Align(
-                    alignment: Alignment(0.3, -0.4),
-                    child: Icon(Icons.circle, size: 10, color: Colors.red),
-                  )
-                : const SizedBox.shrink(),
-          ],
+    return Stack(
+      children: [
+        IconButton(
+          onPressed: () => context.push("/notification/$uId"),
+          icon: HugeIcon(
+            icon: HugeIcons.strokeRoundedNotification02,
+            size: 24,
+            color: vrc(context).labelText,
+            strokeWidth: 2,
+          ),
+          // child: Icon(Icons.notifications_none, size: 30, color: darkgrey),
         ),
-      ),
+        if (hasNewNoti)
+          Positioned(
+            right: 11,
+            top: 11,
+            child: Container(
+              width: 9.5,
+              height: 9.5,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.red,
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

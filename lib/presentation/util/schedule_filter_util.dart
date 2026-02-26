@@ -53,14 +53,14 @@ class ScheduleFilterUtil {
     final Map<DateTime, List<ScheduleEntity>> grouped = {};
     for (final schedule in schedules) {
       // 반복 이벤트 제외
-      if (repeatedEvents.contains(schedule.eventName)) {
-        continue;
-      }
+      // if (repeatedEvents.contains(schedule.eventName)) {
+      //   continue;
+      // }
       final date = DateTime(schedule.date.year, schedule.date.month, schedule.date.day);
       // 주말 제외
-      if (date.weekday == DateTime.saturday || date.weekday == DateTime.sunday) {
-        continue;
-      }
+      // if (date.weekday == DateTime.saturday || date.weekday == DateTime.sunday) {
+      //   continue;
+      // }
       grouped.putIfAbsent(date, () => []).add(schedule);
     }
 

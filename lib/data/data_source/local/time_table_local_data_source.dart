@@ -3,6 +3,7 @@ import 'package:damta/data/util/extension/date_time_extension.dart';
 import 'package:damta/data/database/database_helper.dart';
 import 'package:damta/data/dto/local_cache_dto/time_table_cache_dto.dart';
 import 'package:damta/domain/entity/time_table_entity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 abstract interface class TimeTableLocalDataSource {
@@ -18,6 +19,8 @@ abstract interface class TimeTableLocalDataSource {
     required String schoolCode,
     required List<TimeTableEntity> tables,
   });
+  Future<String> getSelectedClass();
+  Future<void> saveSelectedClass(String value);
 }
 
 class TimeTableLocalDataSourceImpl implements TimeTableLocalDataSource {
@@ -89,5 +92,19 @@ class TimeTableLocalDataSourceImpl implements TimeTableLocalDataSource {
 
     await batch.commit(noResult: true);
     print('🥕캐시 저장 완료');
+  }
+  
+  static const _kSelectedClassKey = 'timetable_selected_class';
+
+  @override
+  Future<String> getSelectedClass() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_kSelectedClassKey) ?? '1-1';
+  }
+
+  @override
+  Future<void> saveSelectedClass(String value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_kSelectedClassKey, value);
   }
 }
