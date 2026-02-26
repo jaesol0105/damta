@@ -1,3 +1,4 @@
+import 'package:damta/core/services/analytics_service.dart';
 import 'package:damta/presentation/login/view_model/auth_view_model.dart';
 import 'package:damta/presentation/util/custom_snackbar.dart';
 import 'package:flutter/material.dart';
@@ -15,24 +16,35 @@ class SocialLoginSmall extends HookConsumerWidget {
         smallButton(
           label: 'Apple',
           iconPath: 'assets/images/apple_login_s.png',
-          onTap: () => ref.read(authViewModelProvider.notifier).signInApple(),
+          onTap: () {
+            ref.read(authViewModelProvider.notifier).signInApple();
+            AnalyticsService.event('login', p: {'type': 'apple'}); // 📝
+          },
         ),
         smallButton(
           label: 'Google',
           iconPath: 'assets/images/google_login_s.png',
-          onTap: () => ref.read(authViewModelProvider.notifier).signInGoogle(),
+          onTap: () {
+            ref.read(authViewModelProvider.notifier).signInGoogle();
+            AnalyticsService.event('login', p: {'type': 'google'}); // 📝
+          },
         ),
         smallButton(
           label: '카카오',
           iconPath: 'assets/images/kakao_login_s.png',
-          onTap: () => ref.read(authViewModelProvider.notifier).signInKakao(),
+          onTap: () {
+            ref.read(authViewModelProvider.notifier).signInKakao();
+            AnalyticsService.event('login', p: {'type': 'kakao'}); // 📝
+          },
         ),
         smallButton(
           label: '네이버',
           iconPath: 'assets/images/naver_login_s.png',
-          onTap:
-              // () => ref.read(authViewModelProvider.notifier).signInNaver(),
-              () => showCustomSnackBar(context, '이용할 수 없습니다'),
+          onTap: () {
+            // ref.read(authViewModelProvider.notifier).signInNaver();
+            // AnalyticsService.event('login', p: {'type': 'naver'}); // 📝
+            showCustomSnackBar(context, '이용할 수 없습니다');
+          },
         ),
       ],
     );

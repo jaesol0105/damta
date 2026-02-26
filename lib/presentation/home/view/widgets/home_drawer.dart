@@ -1,3 +1,4 @@
+import 'package:damta/core/services/analytics_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/login/view_model/auth_view_model.dart';
 import 'package:damta/presentation/util/custom_dialog.dart';
@@ -19,8 +20,9 @@ class HomeDrawer extends HookConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(top: 30),
             child: drawerItem(
-              onTap: () {},
-              // () => context.push('/melon'),
+              onTap:
+                  // () {},
+                  () => context.push('/melon'),
               context: context,
               leading: Image.asset("assets/images/logo.png"),
             ),
@@ -46,15 +48,18 @@ class HomeDrawer extends HookConsumerWidget {
               confirmText: '탈퇴하기',
               cancelText: '유지하기',
               reverseButtons: true,
-              onConfirm: () => ref
-                  .read(authViewModelProvider.notifier)
-                  .deleteAccount(
-                    onError: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      showCustomSnackBar(context, '회원 탈퇴에 실패했습니다');
-                    },
-                  ),
+              onConfirm: () {
+                ref
+                    .read(authViewModelProvider.notifier)
+                    .deleteAccount(
+                      onError: () {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        showCustomSnackBar(context, '회원 탈퇴에 실패했습니다');
+                      },
+                    );
+                AnalyticsService.event('withdraw'); // 📝
+              },
             ),
             context: context,
             leading: Icon(Icons.delete),
@@ -70,15 +75,18 @@ class HomeDrawer extends HookConsumerWidget {
               confirmText: '확인',
               cancelText: '취소',
               reverseButtons: false,
-              onConfirm: () => ref
-                  .read(authViewModelProvider.notifier)
-                  .deleteAccount(
-                    onError: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      showCustomSnackBar(context, '로그아웃에 실패했습니다');
-                    },
-                  ),
+              onConfirm: () {
+                ref
+                    .read(authViewModelProvider.notifier)
+                    .signOut(
+                      onError: () {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        showCustomSnackBar(context, '로그아웃에 실패했습니다');
+                      },
+                    );
+                AnalyticsService.event('logout'); // 📝
+              },
             ),
             context: context,
             leading: Icon(Icons.logout),
