@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:damta/core/config/routes.dart';
 import 'package:damta/core/services/analytics_service.dart';
 import 'package:damta/core/services/notification_service.dart';
@@ -9,8 +8,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:damta/core/services/firebase_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -24,9 +23,9 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> _getHashKey() async {
   try {
     final hash = await KakaoSdk.origin;
-    print('카카오 키 해시: $hash'); // 키 해시 추출
+    debugPrint('카카오 키 해시: $hash'); // 키 해시 추출
   } on PlatformException catch (e) {
-    print('!!! 키 해시 얻기 실패 !!! : $e');
+    debugPrint('!!! 키 해시 얻기 실패 !!! : $e');
   }
 }
 
@@ -38,7 +37,7 @@ Future<void> main() async {
       WidgetsFlutterBinding.ensureInitialized();
 
       await dotenv.load(fileName: ".env");
-      print("damta 릴리즈 키 해시: ${await KakaoSdk.origin}");
+      debugPrint("damta 릴리즈 키 해시: ${await KakaoSdk.origin}");
 
       // if (kDebugMode) {
       //   final helper = DatabaseHelper();
@@ -83,11 +82,13 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends HookConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
+
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: router,

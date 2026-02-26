@@ -12,7 +12,9 @@ import 'package:damta/presentation/school/view/school_input_page.dart';
 import 'package:damta/presentation/splash/view/splash_page.dart';
 import 'package:damta/presentation/time_table/view/time_table_page.dart';
 import 'package:damta/presentation/post_editor/view/post_editor_page.dart';
+import 'package:damta/presentation/ui_provider/users_provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AppRoutePath {
   // 인증 / 초기
@@ -35,113 +37,134 @@ class AppRoutePath {
   static const memo = '/memo';
 }
 
-final GoRouter router = GoRouter(
-  initialLocation: AppRoutePath.splash,
+final routerProvider = Provider<GoRouter>((ref) {
+  final authState = ref.watch(authStateProvider);
 
-  // 📝 Crashlytics, Analytics observer 연결
-  observers: [AppRouteObserver()],
+  return GoRouter(
+    initialLocation: AppRoutePath.splash,
 
-  routes: [
-    GoRoute(
-      path: AppRoutePath.login,
-      name: AppRoutePath.login,
-      builder: (context, state) => const LoginPage(),
-    ),
-    GoRoute(
-      path: AppRoutePath.splash,
-      name: AppRoutePath.splash,
-      builder: (context, state) => const SplashPage(),
-    ),
-    GoRoute(
-      path: AppRoutePath.school,
-      name: AppRoutePath.school,
-      builder: (context, state) {
-        // 인자로 넘긴 kakaoId 값
-        final String? kakaoId = state.extra as String?;
-        if (kakaoId == null) {
-          return const LoginPage();
-        }
-        return SchoolInputPage();
-      },
-    ),
+    // 📝 Crashlytics, Analytics observer 연결
+    observers: [AppRouteObserver()],
 
-    GoRoute(
-      path: AppRoutePath.home,
-      name: AppRoutePath.home,
-      builder: (context, state) => const HomePage(),
-    ),
+    redirect: (context, state) {
+      final user = authState.value;
+      final isLoginPage = state.uri.path == '/';
+      final isSplashPage = state.uri.path == '/splash';
 
-    GoRoute(
-      path: AppRoutePath.post,
-      name: AppRoutePath.post,
-      builder: (context, state) => PostPage(),
-      routes: [
-        GoRoute(
-          path: ":id",
-          builder: (context, state) {
-            final String? pId = state.pathParameters['id'];
-            if (pId == null) {
-              return PostPage();
-            }
-            return PostDetailPage(pId: pId);
-          },
-        ),
-      ],
-    ),
+      // 비로그인 접근 차단 (로그아웃, 회원탈퇴 시에도 redirect)
+      if (user == null && !isLoginPage && !isSplashPage) {
+        return '/';
+      }
 
-    // 포스트 작성: extra 없이 push
-    // 포스트 수정: PostEntity를 extra로 넘겨서 push
-    GoRoute(
-      path: AppRoutePath.postEditor,
-      name: AppRoutePath.postEditor,
-      builder: (context, state) {
-        final PostEntity initialPost =
-            state.extra as PostEntity? ??
-            PostEntity(
-              uId: '',
-              pTitle: '',
-              pContent: '',
-              pWriter: '',
-              pCreatedAt: DateTime.now(),
-            );
+      return null;
+    },
 
-        return PostEditorPage(post: initialPost);
-      },
-    ),
+    routes: [
+      GoRoute(
+        path: AppRoutePath.login,
+        name: AppRoutePath.login,
+        builder: (context, state) => const LoginPage(),
+      ),
+      GoRoute(
+        path: AppRoutePath.splash,
+        name: AppRoutePath.splash,
+        builder: (context, state) => const SplashPage(),
+      ),
+      GoRoute(
+        path: AppRoutePath.school,
+        name: AppRoutePath.school,
+        builder: (context, state) {
+          // 인자로 넘긴 kakaoId 값
+          // final String? kakaoId = state.extra as String?;
+          // if (kakaoId == null) {
+          //   return const LoginPage();
+          // }
+          return SchoolInputPage();
+        },
+      ),
 
-    GoRoute(
-      path: AppRoutePath.notification,
-      name: AppRoutePath.notification,
-      builder: (context, state) {
-        final uId = state.pathParameters['uId']!;
-        return NotificationPage(uId: uId);
-      },
-    ),
+      GoRoute(
+        path: AppRoutePath.home,
+        name: AppRoutePath.home,
+        builder: (context, state) => HomePage(),
+      ),
 
-    GoRoute(
-      path: AppRoutePath.timetable,
-      name: AppRoutePath.timetable,
-      builder: (context, state) => TimeTablePage(),
-    ),
-    GoRoute(
-      path: AppRoutePath.meal,
-      name: AppRoutePath.meal,
-      builder: (context, state) => MealPage(),
-    ),
-    GoRoute(
-      path: AppRoutePath.schedule,
-      name: AppRoutePath.schedule,
-      builder: (context, state) => SchedulePage(),
-    ),
-    GoRoute(
-      path: AppRoutePath.melon,
-      name: AppRoutePath.melon,
-      builder: (context, state) => HomePage(),
-    ),
-    GoRoute(
-      path: AppRoutePath.memo,
-      name: AppRoutePath.memo,
-      builder: (context, state) => const MemoPage(),
-    ),
-  ],
-);
+      GoRoute(
+        path: AppRoutePath.post,
+        name: AppRoutePath.post,
+        builder: (context, state) => PostPage(),
+        routes: [
+          GoRoute(
+            path: ":id",
+            builder: (context, state) {
+              final String? pId = state.pathParameters['id'];
+              if (pId == null) {
+                return PostPage();
+              }
+              return PostDetailPage(pId: pId);
+            },
+          ),
+        ],
+      ),
+
+      // 포스트 작성: extra 없이 push
+      // 포스트 수정: PostEntity를 extra로 넘겨서 push
+      GoRoute(
+        path: AppRoutePath.postEditor,
+        name: AppRoutePath.postEditor,
+        builder: (context, state) {
+          final PostEntity initialPost =
+              state.extra as PostEntity? ??
+              PostEntity(
+                uId: '',
+                pTitle: '',
+                pContent: '',
+                pWriter: '',
+                pCreatedAt: DateTime.now(),
+              );
+
+          return PostEditorPage(post: initialPost);
+        },
+      ),
+
+      GoRoute(
+        path: AppRoutePath.notification,
+        name: AppRoutePath.notification,
+        builder: (context, state) {
+          final uId = state.pathParameters['uId']!;
+          return NotificationPage(uId: uId);
+        },
+      ),
+
+      GoRoute(
+        path: AppRoutePath.timetable,
+        name: AppRoutePath.timetable,
+        builder: (context, state) => TimeTablePage(),
+      ),
+
+      GoRoute(
+        path: AppRoutePath.meal,
+        name: AppRoutePath.meal,
+        builder: (context, state) => MealPage(),
+      ),
+
+      GoRoute(
+        path: AppRoutePath.schedule,
+        name: AppRoutePath.schedule,
+        builder: (context, state) => SchedulePage(),
+      ),
+
+      GoRoute(
+        path: AppRoutePath.memo,
+        name: AppRoutePath.memo,
+        builder: (context, state) => const MemoPage(),
+      ),
+
+      // GoRoute(
+      //   path: AppRoutePath.melon,
+      //   name: AppRoutePath.melon,
+      //   builder: (context, state) => MelonPage(),
+      // ),
+    ],
+  );
+});

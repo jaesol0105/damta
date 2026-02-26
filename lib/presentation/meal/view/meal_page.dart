@@ -3,7 +3,7 @@ import 'package:damta/domain/enum/meal_type_enum.dart';
 import 'package:damta/presentation/meal/view/widgets/date_selector.dart';
 import 'package:damta/presentation/meal/view/widgets/meal_card.dart';
 import 'package:damta/presentation/meal/view/widgets/meal_shimmer.dart';
-import 'package:damta/presentation/meal/%20view_model/meal_view_model.dart';
+import 'package:damta/presentation/meal/view_model/meal_view_model.dart';
 import 'package:damta/presentation/ui_provider/users_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,8 +30,8 @@ class MealPage extends ConsumerWidget {
         error: (e, _) => Center(child: Text(e.toString())),
         data: (user) {
           // user 에 저장된 officeCode, schoolCode 가져오기
-          final officeCode = user.officeCode;
-          final schoolCode = user.schoolCode;
+          final officeCode = user.officeCode ?? 'J10';
+          final schoolCode = user.schoolCode ?? '7642041';
           print('🩷 급식표 : $officeCode, $schoolCode, ${user.schoolName}');
 
           final mealState = ref.watch(

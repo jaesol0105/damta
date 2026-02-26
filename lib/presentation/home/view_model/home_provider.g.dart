@@ -51,7 +51,7 @@ final class ScheduleForCurrentUserProvider
 }
 
 String _$scheduleForCurrentUserHash() =>
-    r'ca882ae6853e499ad05977fc51cfaf4c8f5debb7';
+    r'e2b4ef03e693f4477c4ce037529c6ac8e1c595ba';
 
 /// 현재 사용자의 급식 Provider.
 
@@ -95,7 +95,7 @@ final class MealForCurrentUserProvider
 }
 
 String _$mealForCurrentUserHash() =>
-    r'b738d98a865a749f987a7e660a32336e724b98ca';
+    r'1b273e635e1d560a405de229174381368d59a205';
 
 /// 현재 사용자의 시간표 Provider.
 
@@ -140,4 +140,4 @@ final class TimetableForCurrentUserProvider
 }
 
 String _$timetableForCurrentUserHash() =>
-    r'8f5971c704644f9ce76cb037ea2b916591fc61e1';
+    r'e802b9b93a859c0d6d67acdcf361226575b96a29';

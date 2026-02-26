@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UsersDto {
 
- String? get uId; String get officeCode; String get schoolCode; String get schoolName;
+ String? get uId; String? get email; String? get officeCode; String? get schoolCode; String? get schoolName;
 /// Create a copy of UsersDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $UsersDtoCopyWith<UsersDto> get copyWith => _$UsersDtoCopyWithImpl<UsersDto>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UsersDto&&(identical(other.uId, uId) || other.uId == uId)&&(identical(other.officeCode, officeCode) || other.officeCode == officeCode)&&(identical(other.schoolCode, schoolCode) || other.schoolCode == schoolCode)&&(identical(other.schoolName, schoolName) || other.schoolName == schoolName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UsersDto&&(identical(other.uId, uId) || other.uId == uId)&&(identical(other.email, email) || other.email == email)&&(identical(other.officeCode, officeCode) || other.officeCode == officeCode)&&(identical(other.schoolCode, schoolCode) || other.schoolCode == schoolCode)&&(identical(other.schoolName, schoolName) || other.schoolName == schoolName));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,uId,officeCode,schoolCode,schoolName);
+int get hashCode => Object.hash(runtimeType,uId,email,officeCode,schoolCode,schoolName);
 
 @override
 String toString() {
-  return 'UsersDto(uId: $uId, officeCode: $officeCode, schoolCode: $schoolCode, schoolName: $schoolName)';
+  return 'UsersDto(uId: $uId, email: $email, officeCode: $officeCode, schoolCode: $schoolCode, schoolName: $schoolName)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $UsersDtoCopyWith<$Res>  {
   factory $UsersDtoCopyWith(UsersDto value, $Res Function(UsersDto) _then) = _$UsersDtoCopyWithImpl;
 @useResult
 $Res call({
- String? uId, String officeCode, String schoolCode, String schoolName
+ String? uId, String? email, String? officeCode, String? schoolCode, String? schoolName
 });
 
 
@@ -65,13 +65,14 @@ class _$UsersDtoCopyWithImpl<$Res>
 
 /// Create a copy of UsersDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? uId = freezed,Object? officeCode = null,Object? schoolCode = null,Object? schoolName = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? uId = freezed,Object? email = freezed,Object? officeCode = freezed,Object? schoolCode = freezed,Object? schoolName = freezed,}) {
   return _then(_self.copyWith(
 uId: freezed == uId ? _self.uId : uId // ignore: cast_nullable_to_non_nullable
-as String?,officeCode: null == officeCode ? _self.officeCode : officeCode // ignore: cast_nullable_to_non_nullable
-as String,schoolCode: null == schoolCode ? _self.schoolCode : schoolCode // ignore: cast_nullable_to_non_nullable
-as String,schoolName: null == schoolName ? _self.schoolName : schoolName // ignore: cast_nullable_to_non_nullable
-as String,
+as String?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,officeCode: freezed == officeCode ? _self.officeCode : officeCode // ignore: cast_nullable_to_non_nullable
+as String?,schoolCode: freezed == schoolCode ? _self.schoolCode : schoolCode // ignore: cast_nullable_to_non_nullable
+as String?,schoolName: freezed == schoolName ? _self.schoolName : schoolName // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -156,10 +157,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? uId,  String officeCode,  String schoolCode,  String schoolName)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? uId,  String? email,  String? officeCode,  String? schoolCode,  String? schoolName)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UsersDto() when $default != null:
-return $default(_that.uId,_that.officeCode,_that.schoolCode,_that.schoolName);case _:
+return $default(_that.uId,_that.email,_that.officeCode,_that.schoolCode,_that.schoolName);case _:
   return orElse();
 
 }
@@ -177,10 +178,10 @@ return $default(_that.uId,_that.officeCode,_that.schoolCode,_that.schoolName);ca
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? uId,  String officeCode,  String schoolCode,  String schoolName)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? uId,  String? email,  String? officeCode,  String? schoolCode,  String? schoolName)  $default,) {final _that = this;
 switch (_that) {
 case _UsersDto():
-return $default(_that.uId,_that.officeCode,_that.schoolCode,_that.schoolName);case _:
+return $default(_that.uId,_that.email,_that.officeCode,_that.schoolCode,_that.schoolName);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +198,10 @@ return $default(_that.uId,_that.officeCode,_that.schoolCode,_that.schoolName);ca
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? uId,  String officeCode,  String schoolCode,  String schoolName)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? uId,  String? email,  String? officeCode,  String? schoolCode,  String? schoolName)?  $default,) {final _that = this;
 switch (_that) {
 case _UsersDto() when $default != null:
-return $default(_that.uId,_that.officeCode,_that.schoolCode,_that.schoolName);case _:
+return $default(_that.uId,_that.email,_that.officeCode,_that.schoolCode,_that.schoolName);case _:
   return null;
 
 }
@@ -212,13 +213,14 @@ return $default(_that.uId,_that.officeCode,_that.schoolCode,_that.schoolName);ca
 @JsonSerializable()
 
 class _UsersDto implements UsersDto {
-  const _UsersDto({this.uId, required this.officeCode, required this.schoolCode, required this.schoolName});
+  const _UsersDto({this.uId, this.email, this.officeCode, this.schoolCode, this.schoolName});
   factory _UsersDto.fromJson(Map<String, dynamic> json) => _$UsersDtoFromJson(json);
 
 @override final  String? uId;
-@override final  String officeCode;
-@override final  String schoolCode;
-@override final  String schoolName;
+@override final  String? email;
+@override final  String? officeCode;
+@override final  String? schoolCode;
+@override final  String? schoolName;
 
 /// Create a copy of UsersDto
 /// with the given fields replaced by the non-null parameter values.
@@ -233,16 +235,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UsersDto&&(identical(other.uId, uId) || other.uId == uId)&&(identical(other.officeCode, officeCode) || other.officeCode == officeCode)&&(identical(other.schoolCode, schoolCode) || other.schoolCode == schoolCode)&&(identical(other.schoolName, schoolName) || other.schoolName == schoolName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UsersDto&&(identical(other.uId, uId) || other.uId == uId)&&(identical(other.email, email) || other.email == email)&&(identical(other.officeCode, officeCode) || other.officeCode == officeCode)&&(identical(other.schoolCode, schoolCode) || other.schoolCode == schoolCode)&&(identical(other.schoolName, schoolName) || other.schoolName == schoolName));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,uId,officeCode,schoolCode,schoolName);
+int get hashCode => Object.hash(runtimeType,uId,email,officeCode,schoolCode,schoolName);
 
 @override
 String toString() {
-  return 'UsersDto(uId: $uId, officeCode: $officeCode, schoolCode: $schoolCode, schoolName: $schoolName)';
+  return 'UsersDto(uId: $uId, email: $email, officeCode: $officeCode, schoolCode: $schoolCode, schoolName: $schoolName)';
 }
 
 
@@ -253,7 +255,7 @@ abstract mixin class _$UsersDtoCopyWith<$Res> implements $UsersDtoCopyWith<$Res>
   factory _$UsersDtoCopyWith(_UsersDto value, $Res Function(_UsersDto) _then) = __$UsersDtoCopyWithImpl;
 @override @useResult
 $Res call({
- String? uId, String officeCode, String schoolCode, String schoolName
+ String? uId, String? email, String? officeCode, String? schoolCode, String? schoolName
 });
 
 
@@ -270,13 +272,14 @@ class __$UsersDtoCopyWithImpl<$Res>
 
 /// Create a copy of UsersDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? uId = freezed,Object? officeCode = null,Object? schoolCode = null,Object? schoolName = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? uId = freezed,Object? email = freezed,Object? officeCode = freezed,Object? schoolCode = freezed,Object? schoolName = freezed,}) {
   return _then(_UsersDto(
 uId: freezed == uId ? _self.uId : uId // ignore: cast_nullable_to_non_nullable
-as String?,officeCode: null == officeCode ? _self.officeCode : officeCode // ignore: cast_nullable_to_non_nullable
-as String,schoolCode: null == schoolCode ? _self.schoolCode : schoolCode // ignore: cast_nullable_to_non_nullable
-as String,schoolName: null == schoolName ? _self.schoolName : schoolName // ignore: cast_nullable_to_non_nullable
-as String,
+as String?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,officeCode: freezed == officeCode ? _self.officeCode : officeCode // ignore: cast_nullable_to_non_nullable
+as String?,schoolCode: freezed == schoolCode ? _self.schoolCode : schoolCode // ignore: cast_nullable_to_non_nullable
+as String?,schoolName: freezed == schoolName ? _self.schoolName : schoolName // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

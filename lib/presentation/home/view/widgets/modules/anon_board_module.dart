@@ -15,11 +15,14 @@ class AnonBoardModule extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // 학교명 줄이기
-    final schoolShort = ref.watch(userProvider).when(
-      data: (user) => abbreviateSchoolName(user.schoolName),
-      loading: () => '',
-      error: (_, __) => '',
-    );
+    final schoolShort = ref
+        .watch(userProvider)
+        .when(
+          data: (user) => abbreviateSchoolName(user.schoolName!),
+          loading: () => '',
+          error: (_, __) => '',
+        );
+
     // 게시글 3개
     final posts = ref.watch(postViewModelProvider);
     final titles = posts.take(3).map((p) => p.pTitle).toList();

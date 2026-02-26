@@ -1,6 +1,7 @@
 import 'package:damta/presentation/home/view/edit_animated_card.dart';
 import 'package:damta/presentation/home/view/home_app_bar.dart';
 import 'package:damta/presentation/home/view/module_builder.dart';
+import 'package:damta/presentation/home/view/widgets/home_drawer.dart';
 import 'package:damta/presentation/home/view_model/home_view_model.dart';
 import 'package:damta/presentation/home/view_model/module_item.dart';
 import 'package:damta/presentation/ui_provider/users_provider.dart';
@@ -47,6 +48,7 @@ class HomePage extends HookConsumerWidget {
         if (isEditMode.value) exitEditMode();
       },
       child: Scaffold(
+        endDrawer: HomeDrawer(),
         body: SafeArea(
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
@@ -66,7 +68,7 @@ class HomePage extends HookConsumerWidget {
                   title: HomeAppBar.buildTitle(
                     context: context,
                     isEditMode: isEditMode.value,
-                    schoolName: schoolName,
+                    schoolName: schoolName!,
                   ),
                   actions: HomeAppBar.buildActions(
                     context: context,

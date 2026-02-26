@@ -1,6 +1,5 @@
 import 'package:damta/core/config/routes.dart';
 import 'package:damta/core/theme/app_theme.dart';
-import 'package:damta/presentation/home/view/widgets/noti_button.dart';
 import 'package:damta/presentation/post/view/widgets/post_list_item.dart';
 import 'package:damta/presentation/post_detail/view_model/comment_view_model.dart';
 import 'package:damta/presentation/post/view_model/post_view_model.dart';
@@ -54,7 +53,7 @@ class PostPage extends HookConsumerWidget {
               ),
               Text(
                 userAsync.when(
-                  data: (user) => user.schoolName,
+                  data: (user) => user.schoolName ?? '도장중학교',
                   error: (e, _) => "학교 정보를 찾을 수 없습니다.",
                   loading: () => "",
                 ),
@@ -63,7 +62,6 @@ class PostPage extends HookConsumerWidget {
             ],
           ),
         ),
-        actions: [NotiButton()],
       ),
       body: Stack(
         children: [

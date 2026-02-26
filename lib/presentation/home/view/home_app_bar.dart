@@ -1,7 +1,6 @@
 import 'package:damta/core/theme/app_theme.dart';
-import 'package:damta/presentation/home/view/widgets/noti_button.dart';
+import 'package:damta/presentation/home/view/widgets/home_actions.dart';
 import 'package:flutter/material.dart';
-import 'package:hugeicons/hugeicons.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBar({
@@ -31,8 +30,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Image.asset('assets/images/app_logo_ver_2.png', height: 28, width: 28),
-        const SizedBox(width: 12),
+        Image.asset('assets/images/app_logo_ver_2.png', height: 36, width: 36),
+        const SizedBox(width: 10),
         Transform.translate(
           offset: const Offset(0, 2),
           child: Text(
@@ -98,19 +97,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ];
     } else {
-      return [
-        const NotiButton(),
-        IconButton(
-          onPressed: onSettings,
-          icon: HugeIcon(
-            icon: HugeIcons.strokeRoundedSettings01,
-            size: 24,
-            color: vrc(context).labelText,
-            strokeWidth: 2,
-          ),
-        ),
-        const SizedBox(width: 8),
-      ];
+      return [Builder(builder: (context) => HomeActions())];
     }
   }
 
