@@ -30,8 +30,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Image.asset('assets/images/app_logo_ver_2.png', height: 36, width: 36),
-        const SizedBox(width: 10),
+        Image.asset('assets/images/damta_icon.png', height: 50),
         Transform.translate(
           offset: const Offset(0, 2),
           child: Text(

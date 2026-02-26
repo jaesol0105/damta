@@ -1,4 +1,3 @@
-import 'package:damta/presentation/login/view/widgets/social_login_large.dart';
 import 'package:damta/presentation/login/view/widgets/social_login_small.dart';
 import 'package:damta/presentation/login/view/widgets/terms_agreement_text.dart';
 import 'package:damta/presentation/login/view_model/auth_view_model.dart';
@@ -33,11 +32,15 @@ class LoginPage extends HookConsumerWidget {
         Scaffold(
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 50,
             children: [
-              Image.asset("assets/images/damta.png", height: 250),
+              const SizedBox(height: 120),
+              Image.asset("assets/images/damta_logo.png", width: 300),
+              const SizedBox(height: 120),
+
               // const SocialLoginLarge(), // 사각형 버튼 스타일
               const SocialLoginSmall(), // 원형 버튼 스타일
+
+              const SizedBox(height: 50),
               const TermsAgreementText(),
             ],
           ),
