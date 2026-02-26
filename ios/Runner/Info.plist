@@ -36,7 +36,6 @@
 				<key>CFBundleURLSchemes</key>
 				<array>
 					<string>com.googleusercontent.apps.436072449092-fkstkr05qrsup10f80b373kv0iecrstf</string>
-					<string>EdesQvmeQjtvE_PXeZSK</string>
 				</array>
 			</dict>
 		</array>
@@ -56,6 +55,8 @@
 		<true/>
 		<key>NSLocationWhenInUseUsageDescription</key>
 		<string>날씨 정보를 가져오기 위해 위치권한을 허용해주세요.</string>
+		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+		<string>앱에서 위치 기반 기능을 제공하기 위해 항상 위치 접근 권한이 필요합니다.</string>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true/>
 		<key>UIBackgroundModes</key>
