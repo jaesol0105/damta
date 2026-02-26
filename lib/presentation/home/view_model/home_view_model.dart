@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:damta/presentation/home/domain/module_item.dart';
+import 'package:damta/presentation/home/view_model/module_item.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';

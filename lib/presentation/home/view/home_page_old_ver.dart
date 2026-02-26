@@ -1,5 +1,4 @@
 import 'package:damta/core/theme/app_theme.dart';
-import 'package:damta/presentation/home/domain/module_item.dart';
 import 'package:damta/presentation/home/provider/user_profile_provider.dart';
 import 'package:damta/presentation/home/view/edit_animated_card.dart';
 import 'package:damta/presentation/home/view/home_app_bar.dart';

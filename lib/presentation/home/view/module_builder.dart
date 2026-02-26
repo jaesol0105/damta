@@ -1,4 +1,3 @@
-import 'package:damta/presentation/home/domain/module_item.dart';
 import 'package:damta/presentation/home/view/widgets/modules/anon_board_module.dart';
 import 'package:damta/presentation/home/view/widgets/modules/lunch_module.dart';
 import 'package:damta/presentation/home/view/widgets/modules/memo_module.dart';
@@ -6,6 +5,7 @@ import 'package:damta/presentation/home/view/widgets/modules/photo_module.dart';
 import 'package:damta/presentation/home/view/widgets/modules/schedule_module.dart';
 import 'package:damta/presentation/home/view/widgets/modules/timetable_module.dart';
 import 'package:damta/presentation/home/view/widgets/modules/weather_module.dart';
+import 'package:damta/presentation/home/view_model/module_item.dart';
 import 'package:flutter/material.dart';
 
 class ModuleBuilder {
