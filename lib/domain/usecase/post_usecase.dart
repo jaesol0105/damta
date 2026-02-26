@@ -5,17 +5,16 @@ class PostUsecase {
   const PostUsecase(this.postRepository); // 의존성 주입
   final PostRepository postRepository;
 
-  // todo 리스트 처음 불러오기
-  Future<List<PostEntity>> getAllPosts() async {
-    return postRepository.getAllPosts();
+  Future<List<PostEntity>> getAllPosts({String? schoolCode}) async {
+    return postRepository.getAllPosts(schoolCode: schoolCode);
   }
 
-  Future<void> addPost(PostEntity postEntity) async {
-    await postRepository.addPost(postEntity);
+  Future<void> addPost(PostEntity postEntity, {String? schoolCode}) async {
+    await postRepository.addPost(postEntity, schoolCode: schoolCode);
   }
 
-  Future<void> updatePost(PostEntity postEntity) async {
-    await postRepository.updatePost(postEntity);
+  Future<void> updatePost(PostEntity postEntity, {String? schoolCode}) async {
+    await postRepository.updatePost(postEntity, schoolCode: schoolCode);
   }
 
   Future<void> deletePost(String pId) async {

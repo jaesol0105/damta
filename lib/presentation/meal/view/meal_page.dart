@@ -3,7 +3,7 @@ import 'package:damta/domain/enum/meal_type_enum.dart';
 import 'package:damta/presentation/meal/view/widgets/date_selector.dart';
 import 'package:damta/presentation/meal/view/widgets/meal_card.dart';
 import 'package:damta/presentation/meal/view/widgets/meal_shimmer.dart';
-import 'package:damta/presentation/meal/%20view_model/meal_view_model.dart';
+import 'package:damta/presentation/meal/view_model/meal_view_model.dart';
 import 'package:damta/presentation/ui_provider/users_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

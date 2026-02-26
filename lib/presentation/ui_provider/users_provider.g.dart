@@ -46,7 +46,7 @@ final class UserProvider
   }
 }
 
-String _$userHash() => r'688dfabfaecfcb822c4118fac645daf3d2a75190';
+String _$userHash() => r'f464ddd6f6a448def443eed9d0bf7b6275b299e2';
 
 @ProviderFor(authState)
 const authStateProvider = AuthStateProvider._();

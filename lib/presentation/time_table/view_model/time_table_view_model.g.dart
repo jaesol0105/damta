@@ -51,7 +51,7 @@ final class TimeTableViewModelProvider
 }
 
 String _$timeTableViewModelHash() =>
-    r'43a5911f1bd71769a5cfde6933208a6608229ef0';
+    r'241287f3e350c93a4cca4ebb8613355c859de961';
 
 final class TimeTableViewModelFamily extends $Family
     with

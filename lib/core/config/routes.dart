@@ -3,6 +3,7 @@ import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/presentation/home/view/home_page.dart';
 import 'package:damta/presentation/login/view/login_page.dart';
 import 'package:damta/presentation/meal/view/meal_page.dart';
+import 'package:damta/presentation/memo/view/memo_page.dart';
 import 'package:damta/presentation/notification/view/notification_page.dart';
 import 'package:damta/presentation/post/view/post_page.dart';
 import 'package:damta/presentation/post_detail/view/post_detail_page.dart';
@@ -32,6 +33,8 @@ class AppRoutePath {
   static const meal = '/meal';
   static const schedule = '/schedule';
   static const melon = '/melon';
+  // 메모
+  static const memo = '/memo';
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -83,7 +86,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutePath.home,
         name: AppRoutePath.home,
-        builder: (context, state) => const HomePage(),
+        builder: (context, state) => HomePage(),
       ),
 
       GoRoute(
@@ -138,16 +141,25 @@ final routerProvider = Provider<GoRouter>((ref) {
         name: AppRoutePath.timetable,
         builder: (context, state) => TimeTablePage(),
       ),
+
       GoRoute(
         path: AppRoutePath.meal,
         name: AppRoutePath.meal,
         builder: (context, state) => MealPage(),
       ),
+
       GoRoute(
         path: AppRoutePath.schedule,
         name: AppRoutePath.schedule,
         builder: (context, state) => SchedulePage(),
       ),
+
+      GoRoute(
+        path: AppRoutePath.memo,
+        name: AppRoutePath.memo,
+        builder: (context, state) => const MemoPage(),
+      ),
+
       // GoRoute(
       //   path: AppRoutePath.melon,
       //   name: AppRoutePath.melon,

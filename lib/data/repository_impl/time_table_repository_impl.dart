@@ -58,4 +58,11 @@ class TimeTableRepositoryImpl implements TimeTableRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<String> getSelectedClass() => _localDataSource.getSelectedClass();
+
+  @override
+  Future<void> saveSelectedClass(String value) =>
+      _localDataSource.saveSelectedClass(value);
 }

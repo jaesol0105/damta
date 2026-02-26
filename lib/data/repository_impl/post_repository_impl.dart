@@ -11,12 +11,11 @@ class PostRepositoryImpl implements PostRepository {
   final PostDataSource postDataSource;
 
   @override
-  Future<PostEntity> addPost(PostEntity entity) async {
+  Future<PostEntity> addPost(PostEntity entity, {String? schoolCode}) async {
     try {
       final dto = postEntityToPostDto(entity);
-      final added = await postDataSource.addPost(dto);
+      final added = await postDataSource.addPost(dto, schoolCode: schoolCode);
       return postDtoToPostEntity(added);
-      // 예외 전파
     } catch (e, s) {
       log('Repository addPost 실패: $e', error: e, stackTrace: s);
       rethrow;
@@ -24,15 +23,14 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<void> updatePost(PostEntity entity) async {
+  Future<void> updatePost(PostEntity entity, {String? schoolCode}) async {
     try {
       final dto = postEntityToPostDto(entity);
       if (entity.pId.isNullOrEmpty) {
-        await postDataSource.addPost(dto);
+        await postDataSource.addPost(dto, schoolCode: schoolCode);
       } else {
         await postDataSource.updatePost(dto);
       }
-      // 예외 전파
     } catch (e, s) {
       log('Repository updatePost 실패: $e', error: e, stackTrace: s);
       rethrow;
@@ -43,7 +41,6 @@ class PostRepositoryImpl implements PostRepository {
   Future<void> deletePost(String id) async {
     try {
       await postDataSource.deletePost(id);
-      // 예외 전파
     } catch (e, s) {
       log('Repository deletePost 실패: $e', error: e, stackTrace: s);
       rethrow;
@@ -51,8 +48,8 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<List<PostEntity>> getAllPosts() async {
-    final dtos = await postDataSource.getAllPosts();
+  Future<List<PostEntity>> getAllPosts({String? schoolCode}) async {
+    final dtos = await postDataSource.getAllPosts(schoolCode: schoolCode);
     return dtos.map(postDtoToPostEntity).toList();
   }
 }

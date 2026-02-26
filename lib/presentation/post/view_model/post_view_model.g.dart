@@ -41,7 +41,7 @@ final class PostViewModelProvider
   }
 }
 
-String _$postViewModelHash() => r'49c12ff7ba18cbc06ccce72d795a66f6a24d3b1a';
+String _$postViewModelHash() => r'ad96750753e7bc1001880754696b232fea14c276';
 
 abstract class _$PostViewModel extends $Notifier<List<PostEntity>> {
   List<PostEntity> build();
