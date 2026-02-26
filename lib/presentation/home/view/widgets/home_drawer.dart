@@ -20,11 +20,10 @@ class HomeDrawer extends HookConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(top: 30),
             child: drawerItem(
-              onTap:
-                  // () {},
-                  () => context.push('/melon'),
+              onTap: () {},
+              // () => context.push('/melon'),
               context: context,
-              leading: Image.asset("assets/images/logo.png"),
+              leading: Image.asset("assets/images/damta_icon.png"),
             ),
           ),
 
