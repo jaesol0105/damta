@@ -174,11 +174,28 @@ class AuthDataSourceImpl implements AuthDataSource {
   @override
   Future<void> signOut() async {
     try {
-      // Apple 로그아웃 필요 X
-      await GoogleSignIn().signOut(); // Google
-      await UserApi.instance.logout(); // Kakao
-      await FlutterNaverLogin.logOut(); // Naver
+      final user = auth.currentUser;
+      if (user == null) return;
 
+      for (final provider in user.providerData) {
+        switch (provider.providerId) {
+          // Apple 로그아웃 필요 X
+          case 'apple.com':
+            break;
+          // Google
+          case 'google.com':
+            await GoogleSignIn().signOut();
+            break;
+          // Kakao
+          case 'oidc.kakao': // 커스텀일 경우
+            await UserApi.instance.logout();
+            break;
+          // Naver
+          case 'oidc.naver':
+            await FlutterNaverLogin.logOut();
+            break;
+        }
+      }
       // auth 로그아웃
       await auth.signOut();
 
@@ -201,9 +218,18 @@ class AuthDataSourceImpl implements AuthDataSource {
       await firestore.collection("users").doc(user.uid).delete();
 
       // Provider unlink
-      // await UserApi.instance.unlink(); // Kakao
-      // await FlutterNaverLogin.logOutAndDeleteToken(); // Naver
-
+      for (final provider in user.providerData) {
+        switch (provider.providerId) {
+          // Kakao
+          case 'oidc.kakao':
+            await UserApi.instance.unlink();
+            break;
+          // Naver
+          case 'oidc.naver':
+            await FlutterNaverLogin.logOutAndDeleteToken();
+            break;
+        }
+      }
       // auth 삭제
       await user.delete();
 
