@@ -19,8 +19,15 @@ class TimeTablePage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        title: Transform.translate(
+          offset: const Offset(0, 2),
+          child: Text(
+            '시간표',
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+          ),
+        ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: darkgrey),
+          icon: Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
         ),
       ),
@@ -82,13 +89,6 @@ class TimeTablePage extends ConsumerWidget {
                   children: [
                     Row(
                       children: [
-                        const Text(
-                          "시간표",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
                         const Spacer(),
                         ChooseWeek(
                           officeCode: officeCode,

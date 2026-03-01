@@ -20,6 +20,13 @@ class MealPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        title: Transform.translate(
+          offset: const Offset(0, 2),
+          child: Text(
+            '오늘의 급식',
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+          ),
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
@@ -65,14 +72,7 @@ Widget _mealContent(
   return Column(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Text(
-          '오늘의 급식',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
-        ),
-      ),
-      const SizedBox(height: 18),
+      const SizedBox(height: 10),
       if (!state.hasAnyMeal)
         Expanded(
           child: Center(
