@@ -1,3 +1,4 @@
+import 'package:damta/core/theme/app_colors.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/core/util/debouncer.dart';
 import 'package:damta/presentation/memo/view_model/memo_view_model.dart';
@@ -72,27 +73,33 @@ class MemoPage extends HookConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          centerTitle: false,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios, size: 20),
+            icon: Icon(Icons.arrow_back),
             onPressed: showExitDialog,
           ),
           titleSpacing: 0,
-          title: const Text(
-            '메모',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          centerTitle: true,
+          title: Transform.translate(
+            offset: const Offset(0, 2),
+            child: Text(
+              '메모',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+            ),
           ),
           actions: [
             TextButton(
               onPressed: isEdited.value ? onSave : null,
-              child: Text(
-                '저장',
-                style: TextStyle(
-                  fontWeight: FontWeight.w800,
-                  fontSize: 15,
-                  color: isEdited.value
-                      ? vrc(context).labelText
-                      : Colors.grey.withOpacity(0.5),
+              child: Transform.translate(
+                offset: const Offset(0, 2),
+                child: Text(
+                  '저장',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 15,
+                    color: isEdited.value
+                        ? AppColors.secondaryHeavy
+                        : Colors.grey.withOpacity(0.5),
+                  ),
                 ),
               ),
             ),

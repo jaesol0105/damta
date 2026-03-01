@@ -1,5 +1,5 @@
-import 'package:damta/presentation/home/view/widgets/shared/card_header.dart';
-import 'package:damta/presentation/home/view/widgets/shared/card_shell.dart';
+import 'package:damta/presentation/home/view/widgets/modules/shared/card_header.dart';
+import 'package:damta/presentation/home/view/widgets/modules/shared/card_shell.dart';
 import 'package:flutter/material.dart';
 
 class BigCard extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/domain/enum/meal_type_enum.dart';
-import 'package:damta/presentation/home/view/widgets/shared/mini_card.dart';
-import 'package:damta/presentation/home/view/widgets/shared/more_button.dart';
+import 'package:damta/presentation/home/view/widgets/modules/shared/mini_card.dart';
+import 'package:damta/presentation/home/view/widgets/modules/shared/more_button.dart';
 import 'package:damta/presentation/home/view_model/home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

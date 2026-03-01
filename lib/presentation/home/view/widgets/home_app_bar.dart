@@ -51,6 +51,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 schoolName,
                 maxLines: 1,
                 style: TextStyle(
+                  letterSpacing: -0.3,
                   fontWeight: FontWeight.bold,
                   color: vrc(context).labelText,
                   fontSize: 22,

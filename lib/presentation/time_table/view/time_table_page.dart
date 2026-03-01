@@ -19,6 +19,7 @@ class TimeTablePage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Transform.translate(
           offset: const Offset(0, 2),
           child: Text(

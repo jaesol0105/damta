@@ -19,6 +19,7 @@ class SchedulePage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        centerTitle: true,
         title: Transform.translate(
           offset: const Offset(0, 2),
           child: Text(

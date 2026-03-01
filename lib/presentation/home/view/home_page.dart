@@ -1,5 +1,5 @@
-import 'package:damta/presentation/home/view/edit_animated_card.dart';
-import 'package:damta/presentation/home/view/home_app_bar.dart';
+import 'package:damta/presentation/home/view/widgets/edit_animated_card.dart';
+import 'package:damta/presentation/home/view/widgets/home_app_bar.dart';
 import 'package:damta/presentation/home/view/module_builder.dart';
 import 'package:damta/presentation/home/view/widgets/home_drawer.dart';
 import 'package:damta/presentation/home/view_model/home_view_model.dart';
