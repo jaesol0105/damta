@@ -22,6 +22,7 @@ class PostEditorPage extends HookConsumerWidget {
     final viewModel = ref.read(postEditorViewModelProvider(post).notifier);
 
     final isEditMode = post.pId?.isNotEmpty == true;
+    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
 
     final titleController = useTextEditingController();
     final contentController = useTextEditingController();
@@ -150,181 +151,181 @@ class PostEditorPage extends HookConsumerWidget {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              // SizedBox(height: 2),
-              // Text('도장중학교', style: TextStyle(fontSize: 12, color: Colors.grey)),
             ],
           ),
-          // bottom: PreferredSize(
-          //   preferredSize: const Size.fromHeight(1),
-          //   child: Container(height: 1, color: vrc(context).border),
-          // ),
         ),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: [
-                const SizedBox(height: 24),
-                // 제목
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            child: Builder(
+              builder: (context) {
+                return Column(
                   children: [
-                    TextField(
-                      controller: titleController,
-                      onChanged: (text) {
-                        titleDebouncer.run();
-                      },
-                      decoration: InputDecoration(
-                        hintText: '제목을 입력하세요',
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        border: InputBorder.none,
-                        isDense: true,
-                        contentPadding: EdgeInsets.zero,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Container(height: 1, color: vrc(context).border),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                // 내용 + 글자수
-                Expanded(
-                  child: Stack(
-                    children: [
-                      TextField(
-                        controller: contentController,
-                        onChanged: (text) {
-                          contentDebouncer.run();
-                        },
-                        maxLines: null,
-                        keyboardType: TextInputType.multiline,
-                        decoration: const InputDecoration(
-                          hintText: '내용을 입력하세요',
-                          hintStyle: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
-                          ),
-                          border: InputBorder.none,
-                          isCollapsed: true,
-                        ),
-                      ),
-
-                      // 글자수 표시: 텍스트필드의 오른쪽 아래에 고정
-                      Positioned(
-                        right: 0,
-                        bottom: 0,
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 200),
-                          transitionBuilder: (child, animation) {
-                            return FadeTransition(
-                              opacity: animation,
-                              child: SizeTransition(
-                                sizeFactor: animation,
-                                axis: Axis.vertical,
-                                child: child,
-                              ),
-                            );
+                    const SizedBox(height: 24),
+                    // 제목
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextField(
+                          controller: titleController,
+                          onChanged: (text) {
+                            titleDebouncer.run();
                           },
-                          child: state.content.isEmpty
-                              ? const SizedBox.shrink(
-                                  key: ValueKey('counter-empty'),
-                                )
-                              : Container(
-                                  key: const ValueKey('counter-visible'),
-                                  margin: const EdgeInsets.only(bottom: 4),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: vrc(context).background,
-                                    border: Border.all(
-                                      color: vrc(context).border!,
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.05),
-                                        blurRadius: 4,
-                                        offset: const Offset(0, 2),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Text(
-                                    '${state.content.length} / 8,000',
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-
-                _PostImagePreview(
-                  hasImage: state.hasImage,
-                  localImageFile: state.localImageFile,
-                  imageUrl: state.imageUrl,
-                  onTapRemoveImage: viewModel.removeImage,
-                ),
-
-                const SizedBox(height: 16),
-
-                // 하단 이미지 + 완료 버튼
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                      onTap: viewModel.pickImages,
-                      child: Row(
-                        children: const [
-                          SizedBox(width: 6),
-                          Icon(
-                            Icons.image_outlined,
-                            size: 28,
-                            color: Color(0xFFBDBDBD),
+                          decoration: InputDecoration(
+                            hintText: '제목을 입력하세요',
+                            hintStyle: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            border: InputBorder.none,
+                            isDense: true,
+                            contentPadding: EdgeInsets.zero,
                           ),
-                          // SizedBox(width: 6),
-                          // Text('이미지', style: TextStyle(fontSize: 14, color: Color(0xFFBDBDBD))),
+                        ),
+                        const SizedBox(height: 12),
+                        Container(height: 1, color: vrc(context).border),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    // 내용 + 글자수
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          TextField(
+                            controller: contentController,
+                            onChanged: (text) {
+                              contentDebouncer.run();
+                            },
+                            maxLines: null,
+                            keyboardType: TextInputType.multiline,
+                            decoration: const InputDecoration(
+                              hintText: '내용을 입력하세요',
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 16,
+                              ),
+                              border: InputBorder.none,
+                              isCollapsed: true,
+                            ),
+                          ),
+
+                          // 글자수 표시: 텍스트필드의 오른쪽 아래에 고정
+                          Positioned(
+                            right: 0,
+                            bottom: 0,
+                            child: AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 200),
+                              transitionBuilder: (child, animation) {
+                                return FadeTransition(
+                                  opacity: animation,
+                                  child: SizeTransition(
+                                    sizeFactor: animation,
+                                    axis: Axis.vertical,
+                                    child: child,
+                                  ),
+                                );
+                              },
+                              child: state.content.isEmpty
+                                  ? const SizedBox.shrink(
+                                      key: ValueKey('counter-empty'),
+                                    )
+                                  : Container(
+                                      key: const ValueKey('counter-visible'),
+                                      margin: const EdgeInsets.only(bottom: 4),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 4,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: vrc(context).background,
+                                        border: Border.all(
+                                          color: vrc(context).border!,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(
+                                              0.05,
+                                            ),
+                                            blurRadius: 4,
+                                            offset: const Offset(0, 2),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Text(
+                                        '${state.content.length} / 8,000',
+                                        style: const TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: state.canSubmit ? onTapSave : null,
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        backgroundColor: state.canSubmit
-                            ? const Color(0xFFE0F2FF)
-                            : const Color(0xFFEDEDED),
-                        foregroundColor: Colors.black87,
-                        shape: const StadiumBorder(),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 40,
-                          vertical: 12,
-                        ),
+
+                    // 키보드가 올라와 있을 때 이미지 미리보기 숨김 (overflow 방지)
+                    if (!isKeyboardVisible)
+                      _PostImagePreview(
+                        hasImage: state.hasImage,
+                        localImageFile: state.localImageFile,
+                        imageUrl: state.imageUrl,
+                        onTapRemoveImage: viewModel.removeImage,
                       ),
-                      child: const Text(
-                        '완료',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
-                        ),
-                      ),
+
+                    SizedBox(
+                      height: (!isKeyboardVisible && state.hasImage) ? 16 : 8,
                     ),
+
+                    // 하단 이미지 + 완료 버튼
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          onTap: viewModel.pickImages,
+                          child: Row(
+                            children: const [
+                              SizedBox(width: 6),
+                              Icon(
+                                Icons.image_outlined,
+                                size: 28,
+                                color: Color(0xFFBDBDBD),
+                              ),
+                            ],
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: state.canSubmit ? onTapSave : null,
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            backgroundColor: state.canSubmit
+                                ? const Color(0xFFE0F2FF)
+                                : const Color(0xFFEDEDED),
+                            foregroundColor: Colors.black87,
+                            shape: const StadiumBorder(),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 40,
+                              vertical: 12,
+                            ),
+                          ),
+                          child: const Text(
+                            '완료',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
                   ],
-                ),
-                const SizedBox(height: 24),
-              ],
+                );
+              },
             ),
           ),
         ),
