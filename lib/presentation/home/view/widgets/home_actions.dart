@@ -44,7 +44,7 @@ class HomeActions extends HookConsumerWidget {
     bool? hasUpdate,
   }) {
     return Padding(
-      padding: const EdgeInsets.only(right: 16),
+      padding: const EdgeInsets.only(right: 20),
       child: GestureDetector(
         onTap: onTap,
         child: Stack(
@@ -60,9 +60,20 @@ class HomeActions extends HookConsumerWidget {
             hasUpdate == null
                 ? SizedBox.shrink()
                 : hasUpdate
-                ? const Align(
-                    alignment: Alignment(0.3, -0.4),
-                    child: Icon(Icons.circle, size: 10, color: Colors.red),
+                ? Align(
+                    alignment: Alignment.topRight,
+                    child: Transform.translate(
+                      offset: const Offset(15, 13),
+                      child: Container(
+                        width: 11.5,
+                        height: 11.5,
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 1.5),
+                        ),
+                      ),
+                    ),
                   )
                 : const SizedBox.shrink(),
           ],
