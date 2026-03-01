@@ -2,6 +2,7 @@ import 'package:damta/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class MoreButton extends StatelessWidget {
+  /// 더보기 버튼
   const MoreButton({super.key, required this.onTap});
 
   final VoidCallback onTap;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MinusButton extends StatelessWidget {
+  /// 모듈 제거 버튼
   const MinusButton({super.key, required this.onTap});
 
   final VoidCallback onTap;

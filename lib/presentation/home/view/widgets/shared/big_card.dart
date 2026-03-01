@@ -3,6 +3,7 @@ import 'package:damta/presentation/home/view/widgets/shared/card_shell.dart';
 import 'package:flutter/material.dart';
 
 class BigCard extends StatelessWidget {
+  /// 큰 모듈
   const BigCard({
     super.key,
     required this.icon,
@@ -23,13 +24,10 @@ class BigCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CardHeader(
-            icon: icon,
-            iconColor: const Color(0xFF1A1A1A),
-            title: title,
-            trailing: trailing,
-          ),
+          // 헤더
+          CardHeader(icon: icon, title: title, trailing: trailing),
           const SizedBox(height: 10),
+          // 내용
           child,
         ],
       ),
