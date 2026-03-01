@@ -36,6 +36,11 @@ Future<void> main() async {
       // 위젯 바인딩 초기화
       WidgetsFlutterBinding.ensureInitialized();
 
+      // 상태바 투명 처리 (AppBar 없는 화면에서도 배경색과 일치하도록)
+      SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+      );
+
       await dotenv.load(fileName: ".env");
       debugPrint("damta 릴리즈 키 해시: ${await KakaoSdk.origin}");
 

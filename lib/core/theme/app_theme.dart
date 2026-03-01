@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:damta/core/theme/variable_colors.dart';
 import 'package:damta/core/theme/fixed_colors.dart';
 
@@ -13,15 +14,18 @@ class AppTheme {
       brightness: Brightness.light,
       seedColor: blue,
     ),
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       backgroundColor: Colors.white,
       scrolledUnderElevation: 0,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+      ),
     ),
     drawerTheme: DrawerThemeData(backgroundColor: Colors.white),
     scaffoldBackgroundColor: Colors.white,
     extensions: const [VariableColors.light, FixedColors.constant],
-    // textTheme: GoogleFonts.notoSansKrTextTheme(),
-    // fontFamily: GoogleFonts.notoSansKr().fontFamily,
   );
 
   static ThemeData dark = ThemeData(
@@ -29,15 +33,18 @@ class AppTheme {
       brightness: Brightness.dark,
       seedColor: blue,
     ),
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       backgroundColor: Color(0xFF121416),
       scrolledUnderElevation: 0,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
     ),
     drawerTheme: DrawerThemeData(backgroundColor: Color(0xFF121416)),
     scaffoldBackgroundColor: Color(0xFF121416),
     extensions: const [VariableColors.dark, FixedColors.constant],
-    // textTheme: GoogleFonts.notoSansKrTextTheme(ThemeData.dark().textTheme),
-    // fontFamily: GoogleFonts.notoSansKr().fontFamily,
   );
 }
 
