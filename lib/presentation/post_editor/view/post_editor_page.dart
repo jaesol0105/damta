@@ -6,6 +6,7 @@ import 'package:damta/core/util/debouncer.dart';
 import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/presentation/post_editor/view_model/post_editor_view_model.dart';
 import 'package:damta/presentation/post/view_model/post_view_model.dart';
+import 'package:damta/presentation/util/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -81,51 +82,32 @@ class PostEditorPage extends HookConsumerWidget {
     }
 
     /// 뒤로가기 시 나가기 여부 확인
-    Future<bool> showExitDialog() async {
+    void showExitDialog() {
       // 수정 사항 없으면 바로 나가기 허용
       if (!state.isEdited) {
-        return true;
+        context.pop();
+        return;
       }
 
       // 수정 사항 있을 때 경고 다이얼로그
-      final result = await showDialog<bool>(
+      showCustomDialog(
         context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('작성 중인 내용이 있습니다'),
-            content: const Text('변경사항이 저장되지 않습니다.\n정말 나가시겠어요?'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false); // 머무르기
-                },
-                child: const Text('계속 작성'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true); // 나가기
-                },
-                child: const Text('나가기', style: TextStyle(color: Colors.red)),
-              ),
-            ],
-          );
+        title: '작성 중인 내용이 있습니다',
+        confirmText: '나가기',
+        cancelText: '계속 작성',
+        reverseButtons: false,
+        onConfirm: () {
+          Navigator.of(context).pop();
+          context.pop();
         },
       );
-
-      // 다이얼로그 밖을 탭 하거나 하면 null 반환
-      // 이때 나가지는거 방지할라고 false 처리
-      return result ?? false;
     }
 
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (didPop, result) async {
-        if (didPop) return; // 이미 pop 된 상황 방지
-
-        final shouldExit = await showExitDialog();
-        if (shouldExit && context.mounted) {
-          context.pop();
-        }
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        showExitDialog();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -133,12 +115,7 @@ class PostEditorPage extends HookConsumerWidget {
           centerTitle: false,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios, size: 20),
-            onPressed: () async {
-              final shouldPop = await showExitDialog();
-              if (shouldPop && context.mounted) {
-                context.pop();
-              }
-            },
+            onPressed: showExitDialog,
           ),
           titleSpacing: 0,
           title: Column(
