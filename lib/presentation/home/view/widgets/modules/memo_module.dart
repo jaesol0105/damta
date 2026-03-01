@@ -16,7 +16,7 @@ class MemoModule extends ConsumerWidget {
 
     return MiniCard(
       icon: 'assets/icons/icon_memo.png',
-      iconColor: const Color(0xFF1A1A1A),
+      bottomLabelColor: const Color(0xFF1A1A1A),
       title: ' 메모',
       trailing: MoreButton(onTap: () => context.push('/memo')),
       child: memoAsync.when(

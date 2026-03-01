@@ -54,7 +54,7 @@ class MealModule extends ConsumerWidget {
     return Builder(
       builder: (ctx) => MiniCard(
         icon: 'assets/icons/icon_meal.png',
-        iconColor: const Color(0xFF3B6FD8),
+        bottomLabelColor: const Color(0xFF3B6FD8),
         title: '  급식',
         trailing: MoreButton(onTap: () => ctx.push('/meal')),
         bottomLabel: bottomLabel,
