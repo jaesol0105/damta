@@ -18,7 +18,7 @@ class WeatherModule extends ConsumerWidget {
       decoration: BoxDecoration(
         color: const Color(0xFFD8ECFF),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color.fromARGB(255, 203, 227, 250)),
+        border: Border.all(color: const Color(0xFFCBE3FA)),
       ),
       child: weatherAsync.when(
         loading: () => const Center(
@@ -39,7 +39,7 @@ class WeatherModule extends ConsumerWidget {
         ),
         data: (weather) => Stack(
           children: [
-            // 날짜
+            // 오늘 날짜
             Positioned(
               top: 20,
               left: 16,
@@ -56,8 +56,8 @@ class WeatherModule extends ConsumerWidget {
 
             // 온도, 강수량
             Positioned(
-              top: 40,
-              left: 16,
+              top: 38,
+              left: 12,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -98,37 +98,44 @@ class WeatherModule extends ConsumerWidget {
               ),
             ),
 
-            // 날씨 코멘트
+            // 날씨에 따른 코멘트
             Positioned(
-              top: 23,
+              top: 22,
               right: 108,
               child: Text(
                 weather.weatherComment,
                 textAlign: TextAlign.right,
                 style: const TextStyle(
+                  fontFamily: "Komacon",
                   height: 1,
                   fontSize: 12,
+                  letterSpacing: -0.3,
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF5B7A99),
                 ),
               ),
             ),
-            const Positioned(
-              top: 48,
-              right: 99,
-              child: Text(
-                '..',
-                textAlign: TextAlign.right,
-                style: TextStyle(
-                  height: 1,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textNormal,
+
+            // 코멘트 3줄 이상일 때 .. 붙이기
+            if (weather.weatherComment.split('\n').length == 3)
+              const Positioned(
+                top: 46,
+                right: 99,
+                child: Text(
+                  '..',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    fontFamily: "Komacon",
+                    height: 1,
+                    fontSize: 12,
+                    letterSpacing: -0.3,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textNormal,
+                  ),
                 ),
               ),
-            ),
 
-            // 이미지
+            // 날씨에 따른 캐릭터 이미지
             Positioned(
               top: 0,
               right: 10,
