@@ -1,6 +1,6 @@
 import 'package:damta/core/theme/app_theme.dart';
-import 'package:damta/presentation/home/view/widgets/shared/mini_card.dart';
-import 'package:damta/presentation/home/view/widgets/shared/more_button.dart';
+import 'package:damta/presentation/home/view/widgets/modules/shared/mini_card.dart';
+import 'package:damta/presentation/home/view/widgets/modules/shared/more_button.dart';
 import 'package:damta/presentation/home/view_model/home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,7 +16,7 @@ class ScheduleModule extends ConsumerWidget {
 
     return MiniCard(
       icon: 'assets/icons/icon_schedule.png',
-      iconColor: const Color(0xFF1A1A1A),
+      bottomLabelColor: const Color(0xFF1A1A1A),
       title: '  학사일정',
       trailing: MoreButton(onTap: () => context.push('/schedule')),
       child: scheduleAsync.when(

@@ -35,10 +35,23 @@ abstract class MealState with _$MealState {
     }
   }
 
-  /// 현재 시각 기준으로 홈 화면에 표시할 식사와 식사 타입을 반환.
+  /// 현재 시간 기준으로 홈 화면에 표시할 식사와 식사 타입을 반환. 홈 화면 모듈용.
   (MealEntity?, MealType?) get currentMeal {
     final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
     final minute = now.hour * 60 + now.minute;
+
+    // 오늘 날짜 기준으로 필터링
+    final todayMeals = allMeals
+        .where(
+          (m) =>
+              m.date.year == today.year &&
+              m.date.month == today.month &&
+              m.date.day == today.day,
+        )
+        .toList();
+
+    // 시간에 따라 출력할 식사 타입을 필터링
     final List<MealType> priority;
     if (minute < 9 * 60 + 30) {
       priority = [MealType.breakfast, MealType.lunch, MealType.dinner];
@@ -48,10 +61,13 @@ abstract class MealState with _$MealState {
       priority = [MealType.dinner, MealType.lunch, MealType.breakfast];
     }
     for (final type in priority) {
-      final meal = getMealByType(type);
-      if (meal != null && meal.dishes.isNotEmpty) return (meal, type);
+      try {
+        final meal = todayMeals.firstWhere((m) => m.type == type);
+        if (meal.dishes.isNotEmpty) return (meal, type);
+      } catch (_) {}
     }
-    return (null, null); // 데이터가 없을 경우
+    // 오늘 급식 데이터가 없을 경우
+    return (null, null);
   }
 
   /// 해당 날짜에 급식이 있는지 여부

@@ -19,6 +19,14 @@ class SchedulePage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        centerTitle: true,
+        title: Transform.translate(
+          offset: const Offset(0, 2),
+          child: Text(
+            '학사 일정',
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+          ),
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
@@ -64,14 +72,7 @@ class SchedulePage extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Text(
-            '학사 일정',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
-          ),
-        ),
-        const SizedBox(height: 18),
+        const SizedBox(height: 10),
         MonthSelector(
           availableMonths: state.displayableMonths,
           selectedYear: state.selectedYear,

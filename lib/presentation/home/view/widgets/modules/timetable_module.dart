@@ -1,6 +1,6 @@
 import 'package:damta/core/theme/app_theme.dart';
-import 'package:damta/presentation/home/view/widgets/shared/mini_card.dart';
-import 'package:damta/presentation/home/view/widgets/shared/more_button.dart';
+import 'package:damta/presentation/home/view/widgets/modules/shared/mini_card.dart';
+import 'package:damta/presentation/home/view/widgets/modules/shared/more_button.dart';
 import 'package:damta/presentation/home/view_model/home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,8 +41,10 @@ class TimetableModule extends ConsumerWidget {
           body = Padding(
             padding: const EdgeInsets.only(left: 4),
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // 두 줄로 출력
                 _TimetableText(items: cols.col1),
                 const SizedBox(width: 12),
                 _TimetableText(items: cols.col2),
@@ -68,7 +70,7 @@ class TimetableModule extends ConsumerWidget {
     return Builder(
       builder: (ctx) => MiniCard(
         icon: 'assets/icons/icon_timetable.png',
-        iconColor: const Color(0xFFE74C3C),
+        bottomLabelColor: const Color(0xFFFFA726),
         title: '시간표',
         trailing: MoreButton(onTap: () => ctx.push('/timetable')),
         bottomLabel: bottomLabel,

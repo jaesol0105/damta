@@ -6,6 +6,7 @@ import 'package:damta/core/util/debouncer.dart';
 import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/presentation/post/view_model/post_view_model.dart';
 import 'package:damta/presentation/post_editor/view_model/post_editor_view_model.dart';
+import 'package:damta/presentation/util/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -22,6 +23,7 @@ class PostEditorPage extends HookConsumerWidget {
     final viewModel = ref.read(postEditorViewModelProvider(post).notifier);
 
     final isEditMode = post.pId?.isNotEmpty == true;
+    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
 
     final titleController = useTextEditingController();
     final contentController = useTextEditingController();
@@ -81,51 +83,32 @@ class PostEditorPage extends HookConsumerWidget {
     }
 
     /// 뒤로가기 시 나가기 여부 확인
-    Future<bool> showExitDialog() async {
+    void showExitDialog() {
       // 수정 사항 없으면 바로 나가기 허용
       if (!state.isEdited) {
-        return true;
+        context.pop();
+        return;
       }
 
       // 수정 사항 있을 때 경고 다이얼로그
-      final result = await showDialog<bool>(
+      showCustomDialog(
         context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('작성 중인 내용이 있습니다'),
-            content: const Text('변경사항이 저장되지 않습니다.\n정말 나가시겠어요?'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false); // 머무르기
-                },
-                child: const Text('계속 작성'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true); // 나가기
-                },
-                child: const Text('나가기', style: TextStyle(color: Colors.red)),
-              ),
-            ],
-          );
+        title: '작성 중인 내용이 있습니다',
+        confirmText: '나가기',
+        cancelText: '계속 작성',
+        reverseButtons: false,
+        onConfirm: () {
+          Navigator.of(context).pop();
+          context.pop();
         },
       );
-
-      // 다이얼로그 밖을 탭 하거나 하면 null 반환
-      // 이때 나가지는거 방지할라고 false 처리
-      return result ?? false;
     }
 
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (didPop, result) async {
-        if (didPop) return; // 이미 pop 된 상황 방지
-
-        final shouldExit = await showExitDialog();
-        if (shouldExit && context.mounted) {
-          context.pop();
-        }
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        showExitDialog();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -133,12 +116,7 @@ class PostEditorPage extends HookConsumerWidget {
           centerTitle: false,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios, size: 20),
-            onPressed: () async {
-              final shouldPop = await showExitDialog();
-              if (shouldPop && context.mounted) {
-                context.pop();
-              }
-            },
+            onPressed: showExitDialog,
           ),
           titleSpacing: 0,
           title: Column(
@@ -157,167 +135,175 @@ class PostEditorPage extends HookConsumerWidget {
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: [
-                const SizedBox(height: 24),
-                // 제목
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            child: Builder(
+              builder: (context) {
+                return Column(
                   children: [
-                    TextField(
-                      controller: titleController,
-                      onChanged: (text) {
-                        titleDebouncer.run();
-                      },
-                      decoration: InputDecoration(
-                        hintText: '제목을 입력하세요',
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        border: InputBorder.none,
-                        isDense: true,
-                        contentPadding: EdgeInsets.zero,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Container(height: 1, color: vrc(context).border),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                // 내용 + 글자수
-                Expanded(
-                  child: Stack(
-                    children: [
-                      TextField(
-                        controller: contentController,
-                        onChanged: (text) {
-                          contentDebouncer.run();
-                        },
-                        maxLines: null,
-                        keyboardType: TextInputType.multiline,
-                        decoration: const InputDecoration(
-                          hintText: '내용을 입력하세요',
-                          hintStyle: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
-                          ),
-                          border: InputBorder.none,
-                          isCollapsed: true,
-                        ),
-                      ),
-
-                      // 글자수 표시: 텍스트필드의 오른쪽 아래에 고정
-                      Positioned(
-                        right: 0,
-                        bottom: 0,
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 200),
-                          transitionBuilder: (child, animation) {
-                            return FadeTransition(
-                              opacity: animation,
-                              child: SizeTransition(
-                                sizeFactor: animation,
-                                axis: Axis.vertical,
-                                child: child,
-                              ),
-                            );
+                    const SizedBox(height: 24),
+                    // 제목
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextField(
+                          controller: titleController,
+                          onChanged: (text) {
+                            titleDebouncer.run();
                           },
-                          child: state.content.isEmpty
-                              ? const SizedBox.shrink(
-                                  key: ValueKey('counter-empty'),
-                                )
-                              : Container(
-                                  key: const ValueKey('counter-visible'),
-                                  margin: const EdgeInsets.only(bottom: 4),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: vrc(context).background,
-                                    border: Border.all(
-                                      color: vrc(context).border!,
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.05),
-                                        blurRadius: 4,
-                                        offset: const Offset(0, 2),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Text(
-                                    '${state.content.length} / 8,000',
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ),
+                          decoration: InputDecoration(
+                            hintText: '제목을 입력하세요',
+                            hintStyle: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            border: InputBorder.none,
+                            isDense: true,
+                            contentPadding: EdgeInsets.zero,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
+                        const SizedBox(height: 12),
+                        Container(height: 1, color: vrc(context).border),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    // 내용 + 글자수
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          TextField(
+                            controller: contentController,
+                            onChanged: (text) {
+                              contentDebouncer.run();
+                            },
+                            maxLines: null,
+                            keyboardType: TextInputType.multiline,
+                            decoration: const InputDecoration(
+                              hintText: '내용을 입력하세요',
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 16,
+                              ),
+                              border: InputBorder.none,
+                              isCollapsed: true,
+                            ),
+                          ),
 
-                const SizedBox(height: 16),
-
-                _PostImagePreview(
-                  hasImage: state.hasImage,
-                  localImageFile: state.localImageFile,
-                  imageUrl: state.imageUrl,
-                  onTapRemoveImage: viewModel.removeImage,
-                ),
-
-                const SizedBox(height: 16),
-
-                // 하단 이미지 버튼 + 완료 버튼
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                      onTap: viewModel.pickImages,
-                      child: Row(
-                        children: const [
-                          SizedBox(width: 6),
-                          Icon(
-                            Icons.image_outlined,
-                            size: 28,
-                            color: Color(0xFFBDBDBD),
+                          // 글자수 표시: 텍스트필드의 오른쪽 아래에 고정
+                          Positioned(
+                            right: 0,
+                            bottom: 0,
+                            child: AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 200),
+                              transitionBuilder: (child, animation) {
+                                return FadeTransition(
+                                  opacity: animation,
+                                  child: SizeTransition(
+                                    sizeFactor: animation,
+                                    axis: Axis.vertical,
+                                    child: child,
+                                  ),
+                                );
+                              },
+                              child: state.content.isEmpty
+                                  ? const SizedBox.shrink(
+                                      key: ValueKey('counter-empty'),
+                                    )
+                                  : Container(
+                                      key: const ValueKey('counter-visible'),
+                                      margin: const EdgeInsets.only(bottom: 4),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 4,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: vrc(context).background,
+                                        border: Border.all(
+                                          color: vrc(context).border!,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(
+                                              0.05,
+                                            ),
+                                            blurRadius: 4,
+                                            offset: const Offset(0, 2),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Text(
+                                        '${state.content.length} / 8,000',
+                                        style: const TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: state.canSubmit ? onTapSave : null,
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        backgroundColor: state.canSubmit
-                            ? const Color(0xFFE0F2FF)
-                            : const Color(0xFFEDEDED),
-                        foregroundColor: Colors.black87,
-                        shape: const StadiumBorder(),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 40,
-                          vertical: 12,
-                        ),
+
+                    // 키보드가 올라와 있을 때 이미지 미리보기 숨김 (overflow 방지)
+                    if (!isKeyboardVisible)
+                      _PostImagePreview(
+                        hasImage: state.hasImage,
+                        localImageFile: state.localImageFile,
+                        imageUrl: state.imageUrl,
+                        onTapRemoveImage: viewModel.removeImage,
                       ),
-                      child: const Text(
-                        '완료',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
-                        ),
-                      ),
+
+                    SizedBox(
+                      height: (!isKeyboardVisible && state.hasImage) ? 16 : 8,
                     ),
+
+                    // 하단 이미지 + 완료 버튼
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          onTap: viewModel.pickImages,
+                          child: Row(
+                            children: const [
+                              SizedBox(width: 6),
+                              Icon(
+                                Icons.image_outlined,
+                                size: 28,
+                                color: Color(0xFFBDBDBD),
+                              ),
+                            ],
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: state.canSubmit ? onTapSave : null,
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            backgroundColor: state.canSubmit
+                                ? const Color(0xFFE0F2FF)
+                                : const Color(0xFFEDEDED),
+                            foregroundColor: Colors.black87,
+                            shape: const StadiumBorder(),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 40,
+                              vertical: 12,
+                            ),
+                          ),
+                          child: const Text(
+                            '완료',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
                   ],
-                ),
-                const SizedBox(height: 24),
-              ],
+                );
+              },
             ),
           ),
         ),

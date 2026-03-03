@@ -103,7 +103,7 @@ class TimeTable extends ConsumerWidget {
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               color: blue,
-                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(color: grey),
                             ),
                             child: Text(
                               subject,

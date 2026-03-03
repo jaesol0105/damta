@@ -1,7 +1,7 @@
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/domain/enum/meal_type_enum.dart';
-import 'package:damta/presentation/home/view/widgets/shared/mini_card.dart';
-import 'package:damta/presentation/home/view/widgets/shared/more_button.dart';
+import 'package:damta/presentation/home/view/widgets/modules/shared/mini_card.dart';
+import 'package:damta/presentation/home/view/widgets/modules/shared/more_button.dart';
 import 'package:damta/presentation/home/view_model/home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -54,7 +54,7 @@ class MealModule extends ConsumerWidget {
     return Builder(
       builder: (ctx) => MiniCard(
         icon: 'assets/icons/icon_meal.png',
-        iconColor: const Color(0xFF3B6FD8),
+        bottomLabelColor: const Color(0xFF3B6FD8),
         title: '  급식',
         trailing: MoreButton(onTap: () => ctx.push('/meal')),
         bottomLabel: bottomLabel,

@@ -19,7 +19,6 @@ class ModuleBuilder {
         return const WeatherModule();
 
       case ModuleType.photo:
-        // 편집모드일 때만
         return PhotoModule(
           path: module.photoPath!,
           showDelete: isEditMode,

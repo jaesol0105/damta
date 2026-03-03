@@ -11,8 +11,8 @@ class TimeTableShimmer extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Shimmer.fromColors(
-          baseColor: Colors.grey[300]!,
-          highlightColor: Colors.grey[100]!,
+          baseColor: vrc(context).border!,
+          highlightColor: vrc(context).border!,
           child: Container(
             width: double.infinity,
             height: 650,
