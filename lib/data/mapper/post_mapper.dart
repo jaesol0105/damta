@@ -11,8 +11,9 @@ PostEntity postDtoToPostEntity(PostDto postDto) {
     pWriter: postDto.pWriter,
     pCreatedAt: postDto.pCreatedAt,
     pImageUrl: postDto.pImageUrl,
-    emojis: postDto.emojis,
-    uIdForView: postDto.uIdForView,
+    viewCount: postDto.viewCount,
+    commentCount: postDto.commentCount,
+    reactions: postDto.reactions,
   );
 }
 
@@ -25,8 +26,9 @@ PostDto postEntityToPostDto(PostEntity postEntity) {
     pContent: postEntity.pContent,
     pWriter: postEntity.pWriter,
     pCreatedAt: postEntity.pCreatedAt,
-    emojis: postEntity.emojis,
+    viewCount: postEntity.viewCount,
+    commentCount: postEntity.commentCount,
     pImageUrl: postEntity.pImageUrl,
-    uIdForView: postEntity.uIdForView,
+    reactions: postEntity.reactions,
   );
 }

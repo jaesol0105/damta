@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:damta/core/config/routes.dart';
 import 'package:damta/core/services/analytics_service.dart';
 import 'package:damta/core/services/firebase_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
+import 'package:damta/domain/enum/report_target_type_enum.dart';
+import 'package:damta/presentation/post_detail/view/widgets/report_bottom_sheet.dart';
+import 'package:damta/presentation/ui_provider/users_provider.dart';
 import 'package:damta/presentation/util/time_ago.dart';
 import 'package:damta/presentation/post_detail/view/full_image_page.dart';
 import 'package:damta/presentation/post_detail/view/widgets/comment_input_bottom_sheet.dart';
@@ -24,31 +29,31 @@ class PostDetailPage extends HookConsumerWidget {
     final showEmojiPicker = useState(false);
     final overlayEntryRef = useRef<OverlayEntry?>(null);
 
-    final post = ref
-        .watch(postViewModelProvider)
-        .firstWhere(
-          (p) => p.pId == pId,
-          orElse: () => throw Exception("Post not found"),
-        );
+    final currentUId = FirebaseService.getUId;
+    final schoolCode = ref.watch(userProvider).value?.schoolCode ?? '';
+
+    final postList = ref.watch(postViewModelProvider);
+    final post = postList.firstWhere(
+      (p) => p.pId == pId,
+      orElse: () => throw Exception("Post not found"),
+    );
+    final isOwner = post.uId == currentUId;
+
     final comments = ref.watch(commentViewModelProvider);
     final commentList = comments.where((c) => c.pId == pId).toList()
-      ..sort((a, b) => a.cCreatedAt.compareTo(b.cCreatedAt));
+      ..sort(
+        (a, b) => (a.cCreatedAt ?? DateTime(0)).compareTo(
+          b.cCreatedAt ?? DateTime(0),
+        ),
+      );
 
+    // 페이지 진입 시 댓글 로드 + 조회수 증가
     useEffect(() {
-      print('😡$post');
-      ref.read(commentViewModelProvider.notifier).getComments();
-      ref
-          .read(postViewModelProvider.notifier)
-          .updatePost(
-            post.copyWith(
-              uIdForView: {
-                ...(post.uIdForView ?? {}),
-                FirebaseService.getUId.toString(),
-              },
-            ),
-          );
+      ref.read(commentViewModelProvider.notifier).getComments(pId);
+      ref.read(postViewModelProvider.notifier).incrementViewCount(pId);
       return null;
     }, []);
+
     void removePopup() {
       overlayEntryRef.value?.remove();
       overlayEntryRef.value = null;
@@ -57,14 +62,12 @@ class PostDetailPage extends HookConsumerWidget {
 
     void showPopup() {
       if (overlayEntryRef.value != null) return;
-
       overlayEntryRef.value = EmojiPickerWidget.createEmojiPickerOverlay(
         context: context,
         post: post,
         ref: ref,
         onClose: removePopup,
       );
-
       Overlay.of(context).insert(overlayEntryRef.value!);
       showEmojiPicker.value = true;
     }
@@ -98,59 +101,77 @@ class PostDetailPage extends HookConsumerWidget {
           ),
         ),
         actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 10),
-            child: PopupMenuButton<String>(
-              icon: const Icon(Icons.more_vert, size: 28),
-
-              onSelected: (value) {
-                if (value == 'edit') {
-                  context.push(AppRoutePath.postEditor, extra: post);
-                } else if (value == 'delete') {
-                  showDialog(
+          // 게시글 작성자만 수정/삭제 메뉴 표시
+          if (isOwner)
+            Padding(
+              padding: EdgeInsets.only(right: 10),
+              child: PopupMenuButton<String>(
+                icon: const Icon(Icons.more_vert, size: 28),
+                onSelected: (value) {
+                  if (value == 'edit') {
+                    context.push(AppRoutePath.postEditor, extra: post);
+                  } else if (value == 'delete') {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text("삭제"),
+                          content: Text("정말로 삭제하시겠습니까?"),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                context.pop();
+                              },
+                              child: Text("취소"),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                if (context.mounted) {
+                                  context.pop();
+                                  context.pop();
+                                }
+                                await ref
+                                    .read(postViewModelProvider.notifier)
+                                    .deletePost(pId);
+                                // 📝
+                                AnalyticsService.event(
+                                  'post_action',
+                                  p: {'action': 'delete'},
+                                );
+                              },
+                              child: const Text("삭제"),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                },
+                itemBuilder: (context) => [
+                  const PopupMenuItem(value: 'edit', child: Text('수정')),
+                  const PopupMenuItem(value: 'delete', child: Text('삭제')),
+                ],
+              ),
+            )
+          else if (currentUId != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: IconButton(
+                icon: const Icon(Icons.more_vert, size: 28),
+                onPressed: () {
+                  showModalBottomSheet(
                     context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text("삭제"),
-                        content: Text("정말로 삭제하시겠습니까?"),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              context.pop();
-                            },
-                            child: Text("취소"),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              if (context.mounted) {
-                                context.pop(); // 다이얼로그 닫기
-                                context.pop(); // 상세 페이지 닫기
-                              }
-                              await ref
-                                  .read(postViewModelProvider.notifier)
-                                  .deletePost(pId);
-
-                              // 📝
-                              AnalyticsService.event(
-                                'post_action',
-                                p: {'action': 'delete'},
-                              );
-                            },
-                            child: const Text("삭제"),
-                          ),
-                        ],
-                      );
-                    },
+                    builder: (_) => ReportBottomSheet(
+                      reporterUid: currentUId,
+                      targetType: ReportTargetType.post,
+                      targetId: pId,
+                      targetUid: post.uId,
+                      schoolCode: schoolCode,
+                    ),
                   );
-                }
-              },
-
-              itemBuilder: (context) => [
-                const PopupMenuItem(value: 'edit', child: Text('수정')),
-                const PopupMenuItem(value: 'delete', child: Text('삭제')),
-              ],
+                },
+              ),
             ),
-          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -188,7 +209,7 @@ class PostDetailPage extends HookConsumerWidget {
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        '조회수 ${(post.uIdForView?.length ?? 0).toString()}',
+                        '조회수 ${post.viewCount ?? 0}',
                         style: TextStyle(color: vrc(context).detailText),
                       ),
                     ],
@@ -210,65 +231,98 @@ class PostDetailPage extends HookConsumerWidget {
               ),
               SizedBox(height: 20),
 
-              // 이미지 출력 추가
               if (post.pImageUrl != null && post.pImageUrl!.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: buildPostImage(context, post.pImageUrl!),
                 ),
 
-              Row(
-                spacing: 5,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      if (showEmojiPicker.value) {
-                        removePopup();
-                      } else {
-                        showPopup();
-                      }
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: vrc(context).background,
-                        border: Border.all(
-                          color: vrc(context).border!,
-                          width: 1,
-                        ),
+              // 이모지 반응 (슬랙처럼 그룹화 + 카운트 표시)
+              Builder(
+                builder: (context) {
+                  // 같은 이모지끼리 묶고 카운트 집계
+                  final grouped = <String, int>{};
+                  for (final emoji in post.reactions?.values ?? <String>[]) {
+                    grouped[emoji] = (grouped[emoji] ?? 0) + 1;
+                  }
+
+                  return Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      // 이모지 추가 버튼
+                      InkWell(
+                        onTap: () {
+                          if (showEmojiPicker.value) {
+                            removePopup();
+                          } else {
+                            showPopup();
+                          }
+                        },
                         borderRadius: BorderRadius.circular(30),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: vrc(context).background,
+                            border: Border.all(
+                              color: vrc(context).border!,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: HugeIcon(
+                            icon: HugeIcons.strokeRoundedHeartAdd,
+                            size: 24,
+                            color: vrc(context).detailText,
+                            strokeWidth: 2,
+                          ),
+                        ),
                       ),
-                      child: HugeIcon(
-                        icon: HugeIcons.strokeRoundedHeartAdd,
-                        size: 24,
-                        color: vrc(context).detailText,
-                        strokeWidth: 2,
+                      // 그룹화된 이모지 버블
+                      ...grouped.entries.map(
+                        (entry) => Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: vrc(context).background,
+                            border: Border.all(
+                              color: vrc(context).border!,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                entry.key,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: Platform.isAndroid
+                                      ? 'NotoColorEmoji'
+                                      : null,
+                                ),
+                              ),
+                              if (entry.value >= 1) ...[
+                                const SizedBox(width: 4),
+                                Text(
+                                  '${entry.value}',
+                                  style: const TextStyle(fontSize: 13),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                    // child: Icon(Icons.add_circle_outline),
-                  ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        spacing: 5,
-                        children:
-                            post.emojis?.reversed
-                                .map(
-                                  (e) => Text(
-                                    e,
-                                    style: const TextStyle(fontSize: 24),
-                                  ),
-                                )
-                                .toList() ??
-                            [],
-                      ),
-                    ),
-                  ),
-                ],
+                    ],
+                  );
+                },
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -281,7 +335,6 @@ class PostDetailPage extends HookConsumerWidget {
                         color: vrc(context).detailText,
                         strokeWidth: 2,
                       ),
-                      //const Icon(Icons.chat_bubble_outline),
                       SizedBox(width: 8),
                       Text(
                         commentList.length.toString(),
@@ -307,7 +360,10 @@ class PostDetailPage extends HookConsumerWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: commentList.length,
                 itemBuilder: (context, index) {
-                  return CommentItemWidget(comment: commentList[index]);
+                  return CommentItemWidget(
+                    comment: commentList[index],
+                    schoolCode: schoolCode,
+                  );
                 },
                 separatorBuilder: (BuildContext context, int index) {
                   return Divider(
@@ -328,7 +384,6 @@ class PostDetailPage extends HookConsumerWidget {
 Widget buildPostImage(BuildContext context, String url) {
   return GestureDetector(
     onTap: () {
-      // 확대 이미지 페이지로 이동
       Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => FullImagePage(imageUrl: url)),

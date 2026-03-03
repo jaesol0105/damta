@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:damta/core/di/provider.dart';
 import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/presentation/ui_provider/users_provider.dart';
@@ -9,37 +11,53 @@ part 'post_view_model.g.dart';
 class PostViewModel extends _$PostViewModel {
   @override
   List<PostEntity> build() {
-    // Provider 첫 생성 시 자동으로 게시글 로드
-    Future.microtask(loadPosts);
+    Future.microtask(getPosts);
     return [];
   }
 
-  Future<void> loadPosts() async {
+  /// 게시글 목록 fetch
+  Future<void> getPosts() async {
     final postUsecase = ref.read(postUsecaseProvider);
-    // 현재 사용자의 schoolCode를 가져와 학교별 글만 조회
     final user = await ref.read(userProvider.future);
-    final posts = await postUsecase.getAllPosts(schoolCode: user.schoolCode);
-    // 시간순으로 정렬 (최신순)
-    posts.sort((a, b) => b.pCreatedAt.compareTo(a.pCreatedAt));
-    state = posts;
+    final posts = await postUsecase.getPosts(schoolCode: user.schoolCode);
+    if (ref.mounted) state = posts;
   }
 
+  /// 게시글 추가
   Future<void> addPost(PostEntity postEntity) async {
     final postUsecase = ref.read(postUsecaseProvider);
     final user = await ref.read(userProvider.future);
     await postUsecase.addPost(postEntity, schoolCode: user.schoolCode);
-    await loadPosts();
+    await getPosts();
   }
 
-  Future<void> updatePost(PostEntity postEntity) async {
+  /// 게시글 내용 수정
+  Future<void> updatePostContent(PostEntity postEntity) async {
     final postUsecase = ref.read(postUsecaseProvider);
-    await postUsecase.updatePost(postEntity);
-    await loadPosts();
+    await postUsecase.updatePostContent(postEntity);
+    await getPosts();
   }
 
+  /// 게시글 삭제
   Future<void> deletePost(String pId) async {
     final postUsecase = ref.read(postUsecaseProvider);
     await postUsecase.deletePost(pId);
-    await loadPosts();
+    await getPosts();
+  }
+
+  /// 조회수 증가
+  Future<void> incrementViewCount(String pId) async {
+    final postUsecase = ref.read(postUsecaseProvider);
+    await postUsecase.incrementViewCount(pId);
+  }
+
+  /// 이모지 반응 추가/변경
+  Future<void> addReaction(String pId, String userId, String emoji) async {
+    final postUsecase = ref.read(postUsecaseProvider);
+    await postUsecase.addReaction(pId, userId, emoji);
+    final updatedPost = await postUsecase.getPost(pId);
+    if (updatedPost != null && ref.mounted) {
+      state = state.map((p) => p.pId == pId ? updatedPost : p).toList();
+    }
   }
 }

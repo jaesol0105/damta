@@ -9,7 +9,7 @@ abstract class CommentEntity with _$CommentEntity {
     required String uId,
     required String cContent,
     required String cWriter,
-    required DateTime cCreatedAt,
+    DateTime? cCreatedAt,
     required String pId,
   }) = _CommentEntity;
 }

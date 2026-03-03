@@ -14,7 +14,16 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PostEntity {
 
- String? get pId; String get uId; String get pTitle; String get pContent; String get pWriter; DateTime get pCreatedAt; String? get pImageUrl; List<String>? get emojis; Set<String>? get uIdForView;
+ String? get pId;// 게시글 id
+ String get uId;// 작성자 id
+ String get pTitle;// 제목
+ String get pContent;// 내용
+ String get pWriter;// 작성자 이름
+ DateTime? get pCreatedAt;// 생성 시간
+ String? get pImageUrl;// 이미지 url
+ int? get viewCount;// 조회수
+ int? get commentCount;// 댓글 수
+ Map<String, String>? get reactions;
 /// Create a copy of PostEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +34,16 @@ $PostEntityCopyWith<PostEntity> get copyWith => _$PostEntityCopyWithImpl<PostEnt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PostEntity&&(identical(other.pId, pId) || other.pId == pId)&&(identical(other.uId, uId) || other.uId == uId)&&(identical(other.pTitle, pTitle) || other.pTitle == pTitle)&&(identical(other.pContent, pContent) || other.pContent == pContent)&&(identical(other.pWriter, pWriter) || other.pWriter == pWriter)&&(identical(other.pCreatedAt, pCreatedAt) || other.pCreatedAt == pCreatedAt)&&(identical(other.pImageUrl, pImageUrl) || other.pImageUrl == pImageUrl)&&const DeepCollectionEquality().equals(other.emojis, emojis)&&const DeepCollectionEquality().equals(other.uIdForView, uIdForView));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PostEntity&&(identical(other.pId, pId) || other.pId == pId)&&(identical(other.uId, uId) || other.uId == uId)&&(identical(other.pTitle, pTitle) || other.pTitle == pTitle)&&(identical(other.pContent, pContent) || other.pContent == pContent)&&(identical(other.pWriter, pWriter) || other.pWriter == pWriter)&&(identical(other.pCreatedAt, pCreatedAt) || other.pCreatedAt == pCreatedAt)&&(identical(other.pImageUrl, pImageUrl) || other.pImageUrl == pImageUrl)&&(identical(other.viewCount, viewCount) || other.viewCount == viewCount)&&(identical(other.commentCount, commentCount) || other.commentCount == commentCount)&&const DeepCollectionEquality().equals(other.reactions, reactions));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,pId,uId,pTitle,pContent,pWriter,pCreatedAt,pImageUrl,const DeepCollectionEquality().hash(emojis),const DeepCollectionEquality().hash(uIdForView));
+int get hashCode => Object.hash(runtimeType,pId,uId,pTitle,pContent,pWriter,pCreatedAt,pImageUrl,viewCount,commentCount,const DeepCollectionEquality().hash(reactions));
 
 @override
 String toString() {
-  return 'PostEntity(pId: $pId, uId: $uId, pTitle: $pTitle, pContent: $pContent, pWriter: $pWriter, pCreatedAt: $pCreatedAt, pImageUrl: $pImageUrl, emojis: $emojis, uIdForView: $uIdForView)';
+  return 'PostEntity(pId: $pId, uId: $uId, pTitle: $pTitle, pContent: $pContent, pWriter: $pWriter, pCreatedAt: $pCreatedAt, pImageUrl: $pImageUrl, viewCount: $viewCount, commentCount: $commentCount, reactions: $reactions)';
 }
 
 
@@ -45,7 +54,7 @@ abstract mixin class $PostEntityCopyWith<$Res>  {
   factory $PostEntityCopyWith(PostEntity value, $Res Function(PostEntity) _then) = _$PostEntityCopyWithImpl;
 @useResult
 $Res call({
- String? pId, String uId, String pTitle, String pContent, String pWriter, DateTime pCreatedAt, String? pImageUrl, List<String>? emojis, Set<String>? uIdForView
+ String? pId, String uId, String pTitle, String pContent, String pWriter, DateTime? pCreatedAt, String? pImageUrl, int? viewCount, int? commentCount, Map<String, String>? reactions
 });
 
 
@@ -62,18 +71,19 @@ class _$PostEntityCopyWithImpl<$Res>
 
 /// Create a copy of PostEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? pId = freezed,Object? uId = null,Object? pTitle = null,Object? pContent = null,Object? pWriter = null,Object? pCreatedAt = null,Object? pImageUrl = freezed,Object? emojis = freezed,Object? uIdForView = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? pId = freezed,Object? uId = null,Object? pTitle = null,Object? pContent = null,Object? pWriter = null,Object? pCreatedAt = freezed,Object? pImageUrl = freezed,Object? viewCount = freezed,Object? commentCount = freezed,Object? reactions = freezed,}) {
   return _then(_self.copyWith(
 pId: freezed == pId ? _self.pId : pId // ignore: cast_nullable_to_non_nullable
 as String?,uId: null == uId ? _self.uId : uId // ignore: cast_nullable_to_non_nullable
 as String,pTitle: null == pTitle ? _self.pTitle : pTitle // ignore: cast_nullable_to_non_nullable
 as String,pContent: null == pContent ? _self.pContent : pContent // ignore: cast_nullable_to_non_nullable
 as String,pWriter: null == pWriter ? _self.pWriter : pWriter // ignore: cast_nullable_to_non_nullable
-as String,pCreatedAt: null == pCreatedAt ? _self.pCreatedAt : pCreatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime,pImageUrl: freezed == pImageUrl ? _self.pImageUrl : pImageUrl // ignore: cast_nullable_to_non_nullable
-as String?,emojis: freezed == emojis ? _self.emojis : emojis // ignore: cast_nullable_to_non_nullable
-as List<String>?,uIdForView: freezed == uIdForView ? _self.uIdForView : uIdForView // ignore: cast_nullable_to_non_nullable
-as Set<String>?,
+as String,pCreatedAt: freezed == pCreatedAt ? _self.pCreatedAt : pCreatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,pImageUrl: freezed == pImageUrl ? _self.pImageUrl : pImageUrl // ignore: cast_nullable_to_non_nullable
+as String?,viewCount: freezed == viewCount ? _self.viewCount : viewCount // ignore: cast_nullable_to_non_nullable
+as int?,commentCount: freezed == commentCount ? _self.commentCount : commentCount // ignore: cast_nullable_to_non_nullable
+as int?,reactions: freezed == reactions ? _self.reactions : reactions // ignore: cast_nullable_to_non_nullable
+as Map<String, String>?,
   ));
 }
 
@@ -158,10 +168,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? pId,  String uId,  String pTitle,  String pContent,  String pWriter,  DateTime pCreatedAt,  String? pImageUrl,  List<String>? emojis,  Set<String>? uIdForView)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? pId,  String uId,  String pTitle,  String pContent,  String pWriter,  DateTime? pCreatedAt,  String? pImageUrl,  int? viewCount,  int? commentCount,  Map<String, String>? reactions)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PostEntity() when $default != null:
-return $default(_that.pId,_that.uId,_that.pTitle,_that.pContent,_that.pWriter,_that.pCreatedAt,_that.pImageUrl,_that.emojis,_that.uIdForView);case _:
+return $default(_that.pId,_that.uId,_that.pTitle,_that.pContent,_that.pWriter,_that.pCreatedAt,_that.pImageUrl,_that.viewCount,_that.commentCount,_that.reactions);case _:
   return orElse();
 
 }
@@ -179,10 +189,10 @@ return $default(_that.pId,_that.uId,_that.pTitle,_that.pContent,_that.pWriter,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? pId,  String uId,  String pTitle,  String pContent,  String pWriter,  DateTime pCreatedAt,  String? pImageUrl,  List<String>? emojis,  Set<String>? uIdForView)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? pId,  String uId,  String pTitle,  String pContent,  String pWriter,  DateTime? pCreatedAt,  String? pImageUrl,  int? viewCount,  int? commentCount,  Map<String, String>? reactions)  $default,) {final _that = this;
 switch (_that) {
 case _PostEntity():
-return $default(_that.pId,_that.uId,_that.pTitle,_that.pContent,_that.pWriter,_that.pCreatedAt,_that.pImageUrl,_that.emojis,_that.uIdForView);case _:
+return $default(_that.pId,_that.uId,_that.pTitle,_that.pContent,_that.pWriter,_that.pCreatedAt,_that.pImageUrl,_that.viewCount,_that.commentCount,_that.reactions);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -199,10 +209,10 @@ return $default(_that.pId,_that.uId,_that.pTitle,_that.pContent,_that.pWriter,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? pId,  String uId,  String pTitle,  String pContent,  String pWriter,  DateTime pCreatedAt,  String? pImageUrl,  List<String>? emojis,  Set<String>? uIdForView)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? pId,  String uId,  String pTitle,  String pContent,  String pWriter,  DateTime? pCreatedAt,  String? pImageUrl,  int? viewCount,  int? commentCount,  Map<String, String>? reactions)?  $default,) {final _that = this;
 switch (_that) {
 case _PostEntity() when $default != null:
-return $default(_that.pId,_that.uId,_that.pTitle,_that.pContent,_that.pWriter,_that.pCreatedAt,_that.pImageUrl,_that.emojis,_that.uIdForView);case _:
+return $default(_that.pId,_that.uId,_that.pTitle,_that.pContent,_that.pWriter,_that.pCreatedAt,_that.pImageUrl,_that.viewCount,_that.commentCount,_that.reactions);case _:
   return null;
 
 }
@@ -214,32 +224,35 @@ return $default(_that.pId,_that.uId,_that.pTitle,_that.pContent,_that.pWriter,_t
 
 
 class _PostEntity implements PostEntity {
-  const _PostEntity({this.pId, required this.uId, required this.pTitle, required this.pContent, required this.pWriter, required this.pCreatedAt, this.pImageUrl, final  List<String>? emojis, final  Set<String>? uIdForView}): _emojis = emojis,_uIdForView = uIdForView;
+  const _PostEntity({this.pId, required this.uId, required this.pTitle, required this.pContent, required this.pWriter, this.pCreatedAt, this.pImageUrl, this.viewCount, this.commentCount, final  Map<String, String>? reactions}): _reactions = reactions;
   
 
 @override final  String? pId;
+// 게시글 id
 @override final  String uId;
+// 작성자 id
 @override final  String pTitle;
+// 제목
 @override final  String pContent;
+// 내용
 @override final  String pWriter;
-@override final  DateTime pCreatedAt;
+// 작성자 이름
+@override final  DateTime? pCreatedAt;
+// 생성 시간
 @override final  String? pImageUrl;
- final  List<String>? _emojis;
-@override List<String>? get emojis {
-  final value = _emojis;
+// 이미지 url
+@override final  int? viewCount;
+// 조회수
+@override final  int? commentCount;
+// 댓글 수
+ final  Map<String, String>? _reactions;
+// 댓글 수
+@override Map<String, String>? get reactions {
+  final value = _reactions;
   if (value == null) return null;
-  if (_emojis is EqualUnmodifiableListView) return _emojis;
+  if (_reactions is EqualUnmodifiableMapView) return _reactions;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(value);
-}
-
- final  Set<String>? _uIdForView;
-@override Set<String>? get uIdForView {
-  final value = _uIdForView;
-  if (value == null) return null;
-  if (_uIdForView is EqualUnmodifiableSetView) return _uIdForView;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableSetView(value);
+  return EqualUnmodifiableMapView(value);
 }
 
 
@@ -253,16 +266,16 @@ _$PostEntityCopyWith<_PostEntity> get copyWith => __$PostEntityCopyWithImpl<_Pos
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PostEntity&&(identical(other.pId, pId) || other.pId == pId)&&(identical(other.uId, uId) || other.uId == uId)&&(identical(other.pTitle, pTitle) || other.pTitle == pTitle)&&(identical(other.pContent, pContent) || other.pContent == pContent)&&(identical(other.pWriter, pWriter) || other.pWriter == pWriter)&&(identical(other.pCreatedAt, pCreatedAt) || other.pCreatedAt == pCreatedAt)&&(identical(other.pImageUrl, pImageUrl) || other.pImageUrl == pImageUrl)&&const DeepCollectionEquality().equals(other._emojis, _emojis)&&const DeepCollectionEquality().equals(other._uIdForView, _uIdForView));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PostEntity&&(identical(other.pId, pId) || other.pId == pId)&&(identical(other.uId, uId) || other.uId == uId)&&(identical(other.pTitle, pTitle) || other.pTitle == pTitle)&&(identical(other.pContent, pContent) || other.pContent == pContent)&&(identical(other.pWriter, pWriter) || other.pWriter == pWriter)&&(identical(other.pCreatedAt, pCreatedAt) || other.pCreatedAt == pCreatedAt)&&(identical(other.pImageUrl, pImageUrl) || other.pImageUrl == pImageUrl)&&(identical(other.viewCount, viewCount) || other.viewCount == viewCount)&&(identical(other.commentCount, commentCount) || other.commentCount == commentCount)&&const DeepCollectionEquality().equals(other._reactions, _reactions));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,pId,uId,pTitle,pContent,pWriter,pCreatedAt,pImageUrl,const DeepCollectionEquality().hash(_emojis),const DeepCollectionEquality().hash(_uIdForView));
+int get hashCode => Object.hash(runtimeType,pId,uId,pTitle,pContent,pWriter,pCreatedAt,pImageUrl,viewCount,commentCount,const DeepCollectionEquality().hash(_reactions));
 
 @override
 String toString() {
-  return 'PostEntity(pId: $pId, uId: $uId, pTitle: $pTitle, pContent: $pContent, pWriter: $pWriter, pCreatedAt: $pCreatedAt, pImageUrl: $pImageUrl, emojis: $emojis, uIdForView: $uIdForView)';
+  return 'PostEntity(pId: $pId, uId: $uId, pTitle: $pTitle, pContent: $pContent, pWriter: $pWriter, pCreatedAt: $pCreatedAt, pImageUrl: $pImageUrl, viewCount: $viewCount, commentCount: $commentCount, reactions: $reactions)';
 }
 
 
@@ -273,7 +286,7 @@ abstract mixin class _$PostEntityCopyWith<$Res> implements $PostEntityCopyWith<$
   factory _$PostEntityCopyWith(_PostEntity value, $Res Function(_PostEntity) _then) = __$PostEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String? pId, String uId, String pTitle, String pContent, String pWriter, DateTime pCreatedAt, String? pImageUrl, List<String>? emojis, Set<String>? uIdForView
+ String? pId, String uId, String pTitle, String pContent, String pWriter, DateTime? pCreatedAt, String? pImageUrl, int? viewCount, int? commentCount, Map<String, String>? reactions
 });
 
 
@@ -290,18 +303,19 @@ class __$PostEntityCopyWithImpl<$Res>
 
 /// Create a copy of PostEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? pId = freezed,Object? uId = null,Object? pTitle = null,Object? pContent = null,Object? pWriter = null,Object? pCreatedAt = null,Object? pImageUrl = freezed,Object? emojis = freezed,Object? uIdForView = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? pId = freezed,Object? uId = null,Object? pTitle = null,Object? pContent = null,Object? pWriter = null,Object? pCreatedAt = freezed,Object? pImageUrl = freezed,Object? viewCount = freezed,Object? commentCount = freezed,Object? reactions = freezed,}) {
   return _then(_PostEntity(
 pId: freezed == pId ? _self.pId : pId // ignore: cast_nullable_to_non_nullable
 as String?,uId: null == uId ? _self.uId : uId // ignore: cast_nullable_to_non_nullable
 as String,pTitle: null == pTitle ? _self.pTitle : pTitle // ignore: cast_nullable_to_non_nullable
 as String,pContent: null == pContent ? _self.pContent : pContent // ignore: cast_nullable_to_non_nullable
 as String,pWriter: null == pWriter ? _self.pWriter : pWriter // ignore: cast_nullable_to_non_nullable
-as String,pCreatedAt: null == pCreatedAt ? _self.pCreatedAt : pCreatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime,pImageUrl: freezed == pImageUrl ? _self.pImageUrl : pImageUrl // ignore: cast_nullable_to_non_nullable
-as String?,emojis: freezed == emojis ? _self._emojis : emojis // ignore: cast_nullable_to_non_nullable
-as List<String>?,uIdForView: freezed == uIdForView ? _self._uIdForView : uIdForView // ignore: cast_nullable_to_non_nullable
-as Set<String>?,
+as String,pCreatedAt: freezed == pCreatedAt ? _self.pCreatedAt : pCreatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,pImageUrl: freezed == pImageUrl ? _self.pImageUrl : pImageUrl // ignore: cast_nullable_to_non_nullable
+as String?,viewCount: freezed == viewCount ? _self.viewCount : viewCount // ignore: cast_nullable_to_non_nullable
+as int?,commentCount: freezed == commentCount ? _self.commentCount : commentCount // ignore: cast_nullable_to_non_nullable
+as int?,reactions: freezed == reactions ? _self._reactions : reactions // ignore: cast_nullable_to_non_nullable
+as Map<String, String>?,
   ));
 }
 

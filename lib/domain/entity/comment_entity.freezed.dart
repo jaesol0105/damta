@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CommentEntity {
 
- String? get cId; String get uId; String get cContent; String get cWriter; DateTime get cCreatedAt; String get pId;
+ String? get cId; String get uId; String get cContent; String get cWriter; DateTime? get cCreatedAt; String get pId;
 /// Create a copy of CommentEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $CommentEntityCopyWith<$Res>  {
   factory $CommentEntityCopyWith(CommentEntity value, $Res Function(CommentEntity) _then) = _$CommentEntityCopyWithImpl;
 @useResult
 $Res call({
- String? cId, String uId, String cContent, String cWriter, DateTime cCreatedAt, String pId
+ String? cId, String uId, String cContent, String cWriter, DateTime? cCreatedAt, String pId
 });
 
 
@@ -62,14 +62,14 @@ class _$CommentEntityCopyWithImpl<$Res>
 
 /// Create a copy of CommentEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? cId = freezed,Object? uId = null,Object? cContent = null,Object? cWriter = null,Object? cCreatedAt = null,Object? pId = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? cId = freezed,Object? uId = null,Object? cContent = null,Object? cWriter = null,Object? cCreatedAt = freezed,Object? pId = null,}) {
   return _then(_self.copyWith(
 cId: freezed == cId ? _self.cId : cId // ignore: cast_nullable_to_non_nullable
 as String?,uId: null == uId ? _self.uId : uId // ignore: cast_nullable_to_non_nullable
 as String,cContent: null == cContent ? _self.cContent : cContent // ignore: cast_nullable_to_non_nullable
 as String,cWriter: null == cWriter ? _self.cWriter : cWriter // ignore: cast_nullable_to_non_nullable
-as String,cCreatedAt: null == cCreatedAt ? _self.cCreatedAt : cCreatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime,pId: null == pId ? _self.pId : pId // ignore: cast_nullable_to_non_nullable
+as String,cCreatedAt: freezed == cCreatedAt ? _self.cCreatedAt : cCreatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,pId: null == pId ? _self.pId : pId // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -155,7 +155,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? cId,  String uId,  String cContent,  String cWriter,  DateTime cCreatedAt,  String pId)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? cId,  String uId,  String cContent,  String cWriter,  DateTime? cCreatedAt,  String pId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CommentEntity() when $default != null:
 return $default(_that.cId,_that.uId,_that.cContent,_that.cWriter,_that.cCreatedAt,_that.pId);case _:
@@ -176,7 +176,7 @@ return $default(_that.cId,_that.uId,_that.cContent,_that.cWriter,_that.cCreatedA
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? cId,  String uId,  String cContent,  String cWriter,  DateTime cCreatedAt,  String pId)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? cId,  String uId,  String cContent,  String cWriter,  DateTime? cCreatedAt,  String pId)  $default,) {final _that = this;
 switch (_that) {
 case _CommentEntity():
 return $default(_that.cId,_that.uId,_that.cContent,_that.cWriter,_that.cCreatedAt,_that.pId);case _:
@@ -196,7 +196,7 @@ return $default(_that.cId,_that.uId,_that.cContent,_that.cWriter,_that.cCreatedA
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? cId,  String uId,  String cContent,  String cWriter,  DateTime cCreatedAt,  String pId)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? cId,  String uId,  String cContent,  String cWriter,  DateTime? cCreatedAt,  String pId)?  $default,) {final _that = this;
 switch (_that) {
 case _CommentEntity() when $default != null:
 return $default(_that.cId,_that.uId,_that.cContent,_that.cWriter,_that.cCreatedAt,_that.pId);case _:
@@ -211,14 +211,14 @@ return $default(_that.cId,_that.uId,_that.cContent,_that.cWriter,_that.cCreatedA
 
 
 class _CommentEntity implements CommentEntity {
-  const _CommentEntity({this.cId, required this.uId, required this.cContent, required this.cWriter, required this.cCreatedAt, required this.pId});
+  const _CommentEntity({this.cId, required this.uId, required this.cContent, required this.cWriter, this.cCreatedAt, required this.pId});
   
 
 @override final  String? cId;
 @override final  String uId;
 @override final  String cContent;
 @override final  String cWriter;
-@override final  DateTime cCreatedAt;
+@override final  DateTime? cCreatedAt;
 @override final  String pId;
 
 /// Create a copy of CommentEntity
@@ -251,7 +251,7 @@ abstract mixin class _$CommentEntityCopyWith<$Res> implements $CommentEntityCopy
   factory _$CommentEntityCopyWith(_CommentEntity value, $Res Function(_CommentEntity) _then) = __$CommentEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String? cId, String uId, String cContent, String cWriter, DateTime cCreatedAt, String pId
+ String? cId, String uId, String cContent, String cWriter, DateTime? cCreatedAt, String pId
 });
 
 
@@ -268,14 +268,14 @@ class __$CommentEntityCopyWithImpl<$Res>
 
 /// Create a copy of CommentEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? cId = freezed,Object? uId = null,Object? cContent = null,Object? cWriter = null,Object? cCreatedAt = null,Object? pId = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? cId = freezed,Object? uId = null,Object? cContent = null,Object? cWriter = null,Object? cCreatedAt = freezed,Object? pId = null,}) {
   return _then(_CommentEntity(
 cId: freezed == cId ? _self.cId : cId // ignore: cast_nullable_to_non_nullable
 as String?,uId: null == uId ? _self.uId : uId // ignore: cast_nullable_to_non_nullable
 as String,cContent: null == cContent ? _self.cContent : cContent // ignore: cast_nullable_to_non_nullable
 as String,cWriter: null == cWriter ? _self.cWriter : cWriter // ignore: cast_nullable_to_non_nullable
-as String,cCreatedAt: null == cCreatedAt ? _self.cCreatedAt : cCreatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime,pId: null == pId ? _self.pId : pId // ignore: cast_nullable_to_non_nullable
+as String,cCreatedAt: freezed == cCreatedAt ? _self.cCreatedAt : cCreatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,pId: null == pId ? _self.pId : pId // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

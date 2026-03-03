@@ -5,8 +5,8 @@ class CommentUsecase {
   const CommentUsecase(this.commentRepository);
   final CommentRepository commentRepository;
 
-  Future<List<CommentEntity>> getAllComments() {
-    return commentRepository.getAllComments();
+  Future<List<CommentEntity>> getCommentsByPostId(String pId) {
+    return commentRepository.getCommentsByPostId(pId);
   }
 
   Future<void> updateComment(CommentEntity commentEntity) async {
@@ -17,7 +17,7 @@ class CommentUsecase {
     await commentRepository.addComment(commentEntity);
   }
 
-  Future<void> deleteComment(String cId) async {
-    await commentRepository.deleteComment(cId);
+  Future<void> deleteComment(String cId, String pId) async {
+    await commentRepository.deleteComment(cId, pId);
   }
 }

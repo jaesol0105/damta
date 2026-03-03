@@ -12,7 +12,7 @@ _CommentDto _$CommentDtoFromJson(Map<String, dynamic> json) => _CommentDto(
   pId: json['p_id'] as String,
   cContent: json['c_content'] as String,
   cWriter: json['c_writer'] as String,
-  cCreatedAt: DateTime.parse(json['c_created_at'] as String),
+  cCreatedAt: TimestampConverter.toDateTime(json['c_created_at']),
 );
 
 Map<String, dynamic> _$CommentDtoToJson(_CommentDto instance) =>
@@ -22,5 +22,5 @@ Map<String, dynamic> _$CommentDtoToJson(_CommentDto instance) =>
       'p_id': instance.pId,
       'c_content': instance.cContent,
       'c_writer': instance.cWriter,
-      'c_created_at': instance.cCreatedAt.toIso8601String(),
+      'c_created_at': TimestampConverter.toTimestamp(instance.cCreatedAt),
     };

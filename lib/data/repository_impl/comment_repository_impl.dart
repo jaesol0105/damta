@@ -1,11 +1,10 @@
-// Dto - Entity
 import 'package:damta/data/data_source/remote/comment_data_source.dart';
 import 'package:damta/data/mapper/comment_mapper.dart';
 import 'package:damta/domain/entity/comment_entity.dart';
 import 'package:damta/domain/repository/comment_repository.dart';
 
 class CommentRepositoryImpl implements CommentRepository {
-  const CommentRepositoryImpl(this.commentDataSource); // 의존성 주입
+  const CommentRepositoryImpl(this.commentDataSource);
   final CommentDataSource commentDataSource;
 
   @override
@@ -15,13 +14,13 @@ class CommentRepositoryImpl implements CommentRepository {
   }
 
   @override
-  Future<void> deleteComment(String cId) {
-    return commentDataSource.deleteComment(cId);
+  Future<void> deleteComment(String cId, String pId) {
+    return commentDataSource.deleteComment(cId, pId);
   }
 
   @override
-  Future<List<CommentEntity>> getAllComments() async {
-    final dtos = await commentDataSource.getAllComments();
+  Future<List<CommentEntity>> getCommentsByPostId(String pId) async {
+    final dtos = await commentDataSource.getCommentsByPostId(pId);
     return dtos.map(commentDtoToCommentEntity).toList();
   }
 

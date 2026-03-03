@@ -1,4 +1,4 @@
-import 'package:damta/data/util/Timestamp_converter.dart';
+import 'package:damta/data/util/timestamp_converter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'post_dto.freezed.dart';
@@ -17,10 +17,11 @@ abstract class PostDto with _$PostDto {
       fromJson: TimestampConverter.toDateTime,
       toJson: TimestampConverter.toTimestamp,
     )
-    required DateTime pCreatedAt,
+    required DateTime? pCreatedAt,
     @JsonKey(name: "p_image_url") String? pImageUrl,
-    required List<String>? emojis,
-    @JsonKey(name: "u_id_for_view") Set<String>? uIdForView,
+    @JsonKey(name: "view_count") int? viewCount,
+    @JsonKey(name: "comment_count") int? commentCount,
+    @JsonKey(name: "reactions") Map<String, String>? reactions,
   }) = _PostDto;
 
   factory PostDto.fromJson(Map<String, dynamic> json) =>

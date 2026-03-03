@@ -670,6 +670,52 @@ final class AuthDataSourceProvider
 
 String _$authDataSourceHash() => r'b2920f2ea89acfb779ab041b747efb1af814cca0';
 
+@ProviderFor(reportDataSource)
+const reportDataSourceProvider = ReportDataSourceProvider._();
+
+final class ReportDataSourceProvider
+    extends
+        $FunctionalProvider<
+          ReportDataSource,
+          ReportDataSource,
+          ReportDataSource
+        >
+    with $Provider<ReportDataSource> {
+  const ReportDataSourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'reportDataSourceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$reportDataSourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<ReportDataSource> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ReportDataSource create(Ref ref) {
+    return reportDataSource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ReportDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ReportDataSource>(value),
+    );
+  }
+}
+
+String _$reportDataSourceHash() => r'52fa1595583ea0581768c78101e2a51f442b5b65';
+
 @ProviderFor(mealLocalDataSource)
 const mealLocalDataSourceProvider = MealLocalDataSourceProvider._();
 
@@ -1321,6 +1367,52 @@ final class AuthRepositoryProvider
 
 String _$authRepositoryHash() => r'ec654f5fa69e7facde94d755bb72d46efdc77a1b';
 
+@ProviderFor(reportRepository)
+const reportRepositoryProvider = ReportRepositoryProvider._();
+
+final class ReportRepositoryProvider
+    extends
+        $FunctionalProvider<
+          ReportRepository,
+          ReportRepository,
+          ReportRepository
+        >
+    with $Provider<ReportRepository> {
+  const ReportRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'reportRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$reportRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<ReportRepository> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ReportRepository create(Ref ref) {
+    return reportRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ReportRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ReportRepository>(value),
+    );
+  }
+}
+
+String _$reportRepositoryHash() => r'1f36d0e59a319e830ac0b2be42799c8d821ba4ac';
+
 @ProviderFor(postUsecase)
 const postUsecaseProvider = PostUsecaseProvider._();
 
@@ -1402,3 +1494,44 @@ final class CommentUsecaseProvider
 }
 
 String _$commentUsecaseHash() => r'aca2489def285413f16928b373f956efd0e9598e';
+
+@ProviderFor(reportUsecase)
+const reportUsecaseProvider = ReportUsecaseProvider._();
+
+final class ReportUsecaseProvider
+    extends $FunctionalProvider<ReportUsecase, ReportUsecase, ReportUsecase>
+    with $Provider<ReportUsecase> {
+  const ReportUsecaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'reportUsecaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$reportUsecaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<ReportUsecase> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ReportUsecase create(Ref ref) {
+    return reportUsecase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ReportUsecase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ReportUsecase>(value),
+    );
+  }
+}
+
+String _$reportUsecaseHash() => r'1a79888fcfb14f5add54c8f77515ca4745af2d9c';

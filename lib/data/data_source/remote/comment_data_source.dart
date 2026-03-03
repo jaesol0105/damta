@@ -3,45 +3,64 @@ import 'package:damta/core/util/nick_name_generator.dart';
 import 'package:damta/data/dto/comment_dto.dart';
 
 abstract interface class CommentDataSource {
-  Future<List<CommentDto>> getAllComments();
+  /// 특정 게시글의 댓글 조회
+  Future<List<CommentDto>> getCommentsByPostId(String pId);
+
+  /// 댓글 추가
   Future<void> addComment(CommentDto commentDto);
+
+  /// 댓글 수정
   Future<void> updateComment(CommentDto commentDto);
-  Future<void> deleteComment(String cId);
+
+  /// 댓글 삭제
+  Future<void> deleteComment(String cId, String pId);
 }
 
 class CommentDataSourceImpl implements CommentDataSource {
   CommentDataSourceImpl(this.firestore);
   final FirebaseFirestore firestore;
 
+  /// Firestore document을 DTO로 변환
+  CommentDto _parseDoc(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+    final data = Map<String, dynamic>.from(doc.data());
+    data['c_id'] = doc.id;
+    return CommentDto.fromJson(data);
+  }
+
+  @override
+  Future<List<CommentDto>> getCommentsByPostId(String pId) async {
+    final snapshot = await firestore
+        .collection('comment')
+        .where('p_id', isEqualTo: pId)
+        .orderBy('c_created_at')
+        .get();
+    return snapshot.docs.map(_parseDoc).toList();
+  }
+
   @override
   Future<void> addComment(CommentDto commentDto) async {
-    final docRef = firestore.collection("comment").doc();
+    final docRef = firestore.collection('comment').doc();
     final json = commentDto
         .copyWith(cId: docRef.id, cWriter: NicknameGenerator.generate())
         .toJson();
-    await docRef.set(json);
+    json['c_created_at'] = FieldValue.serverTimestamp();
+    // post, comment 배치로 묶어서 실행. 쓰기 원자성 확보
+    final batch = firestore.batch();
+    batch.set(docRef, json);
+    batch.update(firestore.collection('post').doc(commentDto.pId), {
+      'comment_count': FieldValue.increment(1), // 원자적 증가
+    });
+    await batch.commit();
   }
 
   @override
-  Future<void> deleteComment(String cId) async {
-    await firestore.collection("comment").doc(cId).delete();
-  }
-
-  @override
-  Future<List<CommentDto>> getAllComments() async {
-    final snapshot = await firestore.collection("comment").get();
-    return snapshot.docs.map((doc) {
-      final data = doc.data();
-      // 문서 ID를 c_id로 추가
-      data['c_id'] = doc.id;
-      // Firestore Timestamp를 DateTime으로 변환
-      if (data['c_created_at'] is Timestamp) {
-        data['c_created_at'] = (data['c_created_at'] as Timestamp)
-            .toDate()
-            .toIso8601String();
-      }
-      return CommentDto.fromJson(data);
-    }).toList();
+  Future<void> deleteComment(String cId, String pId) async {
+    final batch = firestore.batch();
+    batch.delete(firestore.collection('comment').doc(cId));
+    batch.update(firestore.collection('post').doc(pId), {
+      'comment_count': FieldValue.increment(-1),
+    });
+    await batch.commit();
   }
 
   @override
@@ -49,13 +68,10 @@ class CommentDataSourceImpl implements CommentDataSource {
     if (commentDto.cId == null) {
       throw ArgumentError('cId cannot be null for update');
     }
-
     final json = commentDto.toJson();
-    // 불변 필드 제거 (문서 ID, 생성 시간, 사용자 ID는 업데이트하지 않음)
     json.remove('c_id');
     json.remove('c_created_at');
     json.remove('u_id');
-
-    return firestore.collection("comment").doc(commentDto.cId).update(json);
+    return firestore.collection('comment').doc(commentDto.cId).update(json);
   }
 }

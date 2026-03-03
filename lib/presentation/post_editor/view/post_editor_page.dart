@@ -4,8 +4,8 @@ import 'package:damta/core/services/analytics_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/core/util/debouncer.dart';
 import 'package:damta/domain/entity/post_entity.dart';
-import 'package:damta/presentation/post_editor/view_model/post_editor_view_model.dart';
 import 'package:damta/presentation/post/view_model/post_view_model.dart';
+import 'package:damta/presentation/post_editor/view_model/post_editor_view_model.dart';
 import 'package:damta/presentation/util/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -72,8 +72,9 @@ class PostEditorPage extends HookConsumerWidget {
         }
         return;
       }
+      // 저장 성공 후 게시글 목록 갱신
+      await ref.read(postViewModelProvider.notifier).getPosts();
       if (context.mounted) {
-        ref.read(postViewModelProvider.notifier).loadPosts();
         context.pop();
       }
 
@@ -312,6 +313,7 @@ class PostEditorPage extends HookConsumerWidget {
 }
 
 class _PostImagePreview extends StatelessWidget {
+  /// 게시글 이미지 미리보기
   const _PostImagePreview({
     required this.hasImage,
     required this.localImageFile,
@@ -327,11 +329,10 @@ class _PostImagePreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!hasImage) {
-      // 이미지가 없을 때: 자리 + 추가 유도
       return const SizedBox.shrink();
     }
 
-    // 이미지가 있을 때: 썸네일 + 삭제 버튼
+    // 이미지가 있을 때 썸네일 + 삭제 버튼
     Widget imageWidget;
     if (localImageFile != null) {
       imageWidget = ClipRRect(

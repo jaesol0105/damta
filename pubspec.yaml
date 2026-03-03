@@ -74,6 +74,10 @@ flutter:
     - assets/icons/
 
   fonts:
+    - family: NotoColorEmoji
+      fonts:
+        - asset: assets/fonts/NotoColorEmoji.ttf
+
     - family: Komacon
       fonts:
         - asset: assets/fonts/KOMACON.ttf
