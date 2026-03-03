@@ -1,7 +1,7 @@
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/core/util/string_util.dart';
-import 'package:damta/presentation/home/view/widgets/shared/big_card.dart';
-import 'package:damta/presentation/home/view/widgets/shared/more_button.dart';
+import 'package:damta/presentation/home/view/widgets/modules/shared/big_card.dart';
+import 'package:damta/presentation/home/view/widgets/modules/shared/more_button.dart';
 import 'package:damta/presentation/post/view_model/post_view_model.dart';
 import 'package:damta/presentation/ui_provider/users_provider.dart';
 import 'package:flutter/material.dart';

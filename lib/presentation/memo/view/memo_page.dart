@@ -1,6 +1,8 @@
+import 'package:damta/core/theme/app_colors.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/core/util/debouncer.dart';
 import 'package:damta/presentation/memo/view_model/memo_view_model.dart';
+import 'package:damta/presentation/util/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -38,26 +40,22 @@ class MemoPage extends HookConsumerWidget {
     );
     useEffect(() => debouncer.dispose, const []);
 
-    Future<bool> showExitDialog() async {
-      if (!isEdited.value) return true;
-      final result = await showDialog<bool>(
+    void showExitDialog() {
+      if (!isEdited.value) {
+        context.pop();
+        return;
+      }
+      showCustomDialog(
         context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('저장하지 않고 나가시겠어요?'),
-          content: const Text('변경사항이 저장되지 않습니다.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(false),
-              child: const Text('계속 작성'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(true),
-              child: const Text('나가기', style: TextStyle(color: Colors.red)),
-            ),
-          ],
-        ),
+        title: '저장하지 않고 나가시겠어요?',
+        confirmText: '나가기',
+        cancelText: '계속 작성',
+        reverseButtons: false,
+        onConfirm: () {
+          Navigator.of(context).pop();
+          context.pop();
+        },
       );
-      return result ?? false;
     }
 
     Future<void> onSave() async {
@@ -68,38 +66,40 @@ class MemoPage extends HookConsumerWidget {
 
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (didPop, _) async {
+      onPopInvokedWithResult: (didPop, _) {
         if (didPop) return;
-        final shouldExit = await showExitDialog();
-        if (shouldExit && context.mounted) context.pop();
+        showExitDialog();
       },
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          centerTitle: false,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios, size: 20),
-            onPressed: () async {
-              final shouldPop = await showExitDialog();
-              if (shouldPop && context.mounted) context.pop();
-            },
+            icon: Icon(Icons.arrow_back),
+            onPressed: showExitDialog,
           ),
           titleSpacing: 0,
-          title: const Text(
-            '메모',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          centerTitle: true,
+          title: Transform.translate(
+            offset: const Offset(0, 2),
+            child: Text(
+              '메모',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+            ),
           ),
           actions: [
             TextButton(
               onPressed: isEdited.value ? onSave : null,
-              child: Text(
-                '저장',
-                style: TextStyle(
-                  fontWeight: FontWeight.w800,
-                  fontSize: 15,
-                  color: isEdited.value
-                      ? vrc(context).labelText
-                      : Colors.grey.withOpacity(0.5),
+              child: Transform.translate(
+                offset: const Offset(0, 2),
+                child: Text(
+                  '저장',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 15,
+                    color: isEdited.value
+                        ? AppColors.secondaryHeavy
+                        : Colors.grey.withOpacity(0.5),
+                  ),
                 ),
               ),
             ),

@@ -82,3 +82,7 @@ lib/generated_plugin_registrant.dart
 
 # Android key.properties
 android/key.properties
+
+# DS Store
+.DS_Store
+**/.DS_Store

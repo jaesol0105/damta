@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:damta/presentation/home/view/widgets/shared/minus_button.dart';
+import 'package:damta/presentation/home/view/widgets/modules/shared/minus_button.dart';
 import 'package:flutter/material.dart';
 
 class PhotoModule extends StatelessWidget {

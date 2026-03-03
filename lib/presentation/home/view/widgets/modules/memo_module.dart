@@ -1,6 +1,6 @@
 import 'package:damta/core/theme/app_theme.dart';
-import 'package:damta/presentation/home/view/widgets/shared/mini_card.dart';
-import 'package:damta/presentation/home/view/widgets/shared/more_button.dart';
+import 'package:damta/presentation/home/view/widgets/modules/shared/mini_card.dart';
+import 'package:damta/presentation/home/view/widgets/modules/shared/more_button.dart';
 import 'package:damta/presentation/memo/view_model/memo_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -16,7 +16,7 @@ class MemoModule extends ConsumerWidget {
 
     return MiniCard(
       icon: 'assets/icons/icon_memo.png',
-      iconColor: const Color(0xFF1A1A1A),
+      bottomLabelColor: const Color(0xFF1A1A1A),
       title: ' 메모',
       trailing: MoreButton(onTap: () => context.push('/memo')),
       child: memoAsync.when(

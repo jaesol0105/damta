@@ -72,3 +72,9 @@ flutter:
     - assets/images/
     - assets/lottie/
     - assets/icons/
+
+  fonts:
+    - family: Komacon
+      fonts:
+        - asset: assets/fonts/KOMACON.ttf
+          weight: 500
