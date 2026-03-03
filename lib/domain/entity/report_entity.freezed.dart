@@ -14,7 +14,13 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ReportEntity {
 
- String? get rId; String get reporterUid; ReportTargetType get targetType; String get targetId; String get targetUid; ReportReason get reason; String get schoolCode; DateTime get rCreatedAt;
+ String? get rId; String get reporterUid;// 신고한 유저
+ ReportTargetType get targetType;// 신고 타입 (게시글, 댓글)
+ String get targetId;// 게시글, 댓글 id
+ String get targetUid;// 그걸 쓴 유저 id
+ ReportReason get reason;// 신고 이유
+ String get schoolCode;// 학교 코드
+ DateTime get rCreatedAt;
 /// Create a copy of ReportEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -218,11 +224,17 @@ class _ReportEntity implements ReportEntity {
 
 @override final  String? rId;
 @override final  String reporterUid;
+// 신고한 유저
 @override final  ReportTargetType targetType;
+// 신고 타입 (게시글, 댓글)
 @override final  String targetId;
+// 게시글, 댓글 id
 @override final  String targetUid;
+// 그걸 쓴 유저 id
 @override final  ReportReason reason;
+// 신고 이유
 @override final  String schoolCode;
+// 학교 코드
 @override final  DateTime rCreatedAt;
 
 /// Create a copy of ReportEntity

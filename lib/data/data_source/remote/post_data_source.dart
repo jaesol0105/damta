@@ -5,32 +5,97 @@ import 'package:damta/data/dto/post_dto.dart';
 
 abstract interface class PostDataSource {
   /// 해당 학교의 post 목록 조회
-  Future<List<PostDto>> getAllPosts({String? schoolCode});
+  Future<List<PostDto>> getPosts({String? schoolCode});
+
+  /// 특정 post 1개 조회
+  Future<PostDto?> getPost(String pId);
 
   /// 해당 학교에 post 추가
   Future<PostDto> addPost(PostDto post, {String? schoolCode});
 
-  /// post 수정
-  Future<void> updatePost(PostDto post);
+  /// post 내용 수정
+  Future<void> updatePostContent(PostDto post);
 
   /// post 삭제
   Future<void> deletePost(String id);
+
+  /// 조회수 증가
+  Future<void> incrementViewCount(String pId);
+
+  /// 이모지 반응 추가/변경
+  Future<void> addReaction(String pId, String userId, String emoji);
 }
 
 class PostDataSourceImpl implements PostDataSource {
   PostDataSourceImpl(this.firestore);
   final FirebaseFirestore firestore;
 
+  // Firestore 스냅샷을 PostDTO list로 변환
+  List<PostDto> _parseDocs(
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
+  ) {
+    return docs.map((doc) {
+      final data = Map<String, dynamic>.from(doc.data());
+      data['p_id'] = doc.id;
+
+      // DTO에 맞게 Map<String, String>으로 변환
+      if (data['reactions'] is Map) {
+        data['reactions'] = (data['reactions'] as Map<String, dynamic>).map(
+          (k, v) => MapEntry(k, v.toString()),
+        );
+      }
+      return PostDto.fromJson(data);
+    }).toList();
+  }
+
+  // Firestore 스냅샷을 PostDTO로 변환
+  PostDto? _parseDocSnapshot(DocumentSnapshot<Map<String, dynamic>> doc) {
+    // 존재하지 않을 경우 null-safe 처리
+    if (!doc.exists || doc.data() == null) return null;
+    final data = Map<String, dynamic>.from(doc.data()!);
+    data['p_id'] = doc.id;
+    if (data['reactions'] is Map) {
+      data['reactions'] = (data['reactions'] as Map<String, dynamic>).map(
+        (k, v) => MapEntry(k, v.toString()),
+      );
+    }
+    return PostDto.fromJson(data);
+  }
+
+  @override
+  Future<List<PostDto>> getPosts({String? schoolCode}) async {
+    Query<Map<String, dynamic>> query = firestore.collection('post');
+    if (schoolCode != null) {
+      query = query.where('school_code', isEqualTo: schoolCode);
+    }
+    final snapshot = await query
+        .orderBy('p_created_at', descending: true)
+        .get();
+    return _parseDocs(snapshot.docs);
+  }
+
+  @override
+  Future<PostDto?> getPost(String pId) async {
+    final doc = await firestore.collection('post').doc(pId).get();
+    return _parseDocSnapshot(doc);
+  }
+
   @override
   Future<PostDto> addPost(PostDto post, {String? schoolCode}) async {
     try {
       final ref = await firestore.collection('post').add({
-        ...post.toJson(),
+        'u_id': post.uId,
+        'p_title': post.pTitle,
+        'p_content': post.pContent,
+        'p_image_url': post.pImageUrl ?? '',
         if (schoolCode != null) 'school_code': schoolCode,
-        'p_created_at': FieldValue.serverTimestamp(), // 파이어베이스 서버 시간 사용
-        'p_writer': NicknameGenerator.generate(),
+        'p_created_at': FieldValue.serverTimestamp(),
+        'p_writer': NicknameGenerator.generate(), // 랜덤 닉네임
+        'view_count': 0,
+        'comment_count': 0,
+        'reactions': <String, String>{},
       });
-      return post.copyWith(pId: ref.id); // 문서 id, 낙관적 업데이트를 위해 포스트 객체 반환
+      return post.copyWith(pId: ref.id);
     } on FirebaseException catch (e, s) {
       log('Firebase addPost 실패: ${e.message}', error: e, stackTrace: s);
       rethrow;
@@ -41,15 +106,23 @@ class PostDataSourceImpl implements PostDataSource {
   }
 
   @override
-  Future<void> updatePost(PostDto post) async {
+  Future<void> updatePostContent(PostDto post) async {
     try {
-      print('😡호출');
-      await firestore.collection('post').doc(post.pId).update(post.toJson());
+      // 내용만 수정. 조회수,이모지 등 메타 데이터는 건드리지 않음
+      await firestore.collection('post').doc(post.pId).update({
+        'p_title': post.pTitle,
+        'p_content': post.pContent,
+        'p_image_url': post.pImageUrl ?? '',
+      });
     } on FirebaseException catch (e, s) {
-      log('Firebase updatePost 실패: ${e.message}', error: e, stackTrace: s);
+      log(
+        'Firebase updatePostContent 실패: ${e.message}',
+        error: e,
+        stackTrace: s,
+      );
       rethrow;
     } catch (e, s) {
-      log('알 수 없는 updatePost 실패: $e', error: e, stackTrace: s);
+      log('알 수 없는 updatePostContent 실패: $e', error: e, stackTrace: s);
       rethrow;
     }
   }
@@ -68,25 +141,37 @@ class PostDataSourceImpl implements PostDataSource {
   }
 
   @override
-  Future<List<PostDto>> getAllPosts({String? schoolCode}) async {
-    Query<Map<String, dynamic>> query = firestore.collection('post');
-
-    if (schoolCode != null) {
-      query = query.where('school_code', isEqualTo: schoolCode);
+  Future<void> incrementViewCount(String pId) async {
+    try {
+      await firestore.collection('post').doc(pId).update({
+        'view_count': FieldValue.increment(1),
+      });
+    } on FirebaseException catch (e, s) {
+      log(
+        'Firebase incrementViewCount 실패: ${e.message}',
+        error: e,
+        stackTrace: s,
+      );
+      rethrow;
+    } catch (e, s) {
+      log('알 수 없는 incrementViewCount 실패: $e', error: e, stackTrace: s);
+      rethrow;
     }
+  }
 
-    final snapshot = await query.get();
-    return snapshot.docs.map((doc) {
-      final data = doc.data() as Map<String, dynamic>;
-      // Firestore 문서 ID를 p_id로 설정
-      data['p_id'] = doc.id;
-      // Firestore Timestamp를 DateTime으로 변환
-      if (data['p_created_at'] is Timestamp) {
-        data['p_created_at'] = (data['p_created_at'] as Timestamp)
-            .toDate()
-            .toIso8601String();
-      }
-      return PostDto.fromJson(data);
-    }).toList();
+  @override
+  Future<void> addReaction(String pId, String userId, String emoji) async {
+    try {
+      // 게시글에 유저당 반응 한개만 가능하도록
+      await firestore.collection('post').doc(pId).update({
+        'reactions.$userId': emoji,
+      });
+    } on FirebaseException catch (e, s) {
+      log('Firebase addReaction 실패: ${e.message}', error: e, stackTrace: s);
+      rethrow;
+    } catch (e, s) {
+      log('알 수 없는 addReaction 실패: $e', error: e, stackTrace: s);
+      rethrow;
+    }
   }
 }

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:damta/core/services/analytics_service.dart';
+import 'package:damta/core/services/firebase_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/domain/entity/notification_entity.dart';
 import 'package:damta/domain/entity/post_entity.dart';
@@ -184,6 +187,7 @@ class EmojiPickerWidget {
     required VoidCallback onClose,
   }) {
     final screenSize = MediaQuery.of(context).size;
+    final currentUserId = FirebaseService.getUId;
 
     return OverlayEntry(
       builder: (context) => Stack(
@@ -222,31 +226,39 @@ class EmojiPickerWidget {
                         .map(
                           (emoji) => InkWell(
                             onTap: () {
+                              if (currentUserId == null) return;
+
+                              // 이미 같은 이모지를 선택했으면 무시
+                              if (post.reactions?[currentUserId] == emoji) {
+                                onClose();
+                                return;
+                              }
+
+                              // 이모지 반응 추가 사용자당 한개만 가능
                               ref
                                   .read(postViewModelProvider.notifier)
-                                  .updatePost(
-                                    post.copyWith(
-                                      emojis: [...(post.emojis ?? []), emoji],
-                                    ),
-                                  );
-                              // 반응 알림 추가
-                              ref
-                                  .read(
-                                    notificationViewModelProvider(
-                                      uId: post.uId,
-                                    ).notifier,
-                                  )
-                                  .addNoti(
-                                    NotificationEntity(
-                                      uId: post.uId,
-                                      pId: post.pId!,
-                                      pTitle: post.pTitle,
-                                      isComment: false,
-                                      content: emoji,
-                                      isNew: true,
-                                      isRead: false,
-                                    ),
-                                  );
+                                  .addReaction(post.pId!, currentUserId, emoji);
+
+                              // 자기 게시글에 반응 시 알림 발생 방지
+                              if (post.uId != currentUserId) {
+                                ref
+                                    .read(
+                                      notificationViewModelProvider(
+                                        uId: post.uId,
+                                      ).notifier,
+                                    )
+                                    .addNoti(
+                                      NotificationEntity(
+                                        uId: post.uId,
+                                        pId: post.pId!,
+                                        pTitle: post.pTitle,
+                                        isComment: false,
+                                        content: emoji,
+                                        isNew: true,
+                                        isRead: false,
+                                      ),
+                                    );
+                              }
                               onClose();
 
                               // 📝
@@ -261,7 +273,12 @@ class EmojiPickerWidget {
                               alignment: Alignment.center,
                               child: Text(
                                 emoji,
-                                style: const TextStyle(fontSize: 24),
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontFamily: Platform.isAndroid
+                                      ? 'NotoColorEmoji'
+                                      : null,
+                                ),
                               ),
                             ),
                           ),

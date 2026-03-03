@@ -1,3 +1,4 @@
+import 'package:damta/data/util/timestamp_converter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'comment_dto.freezed.dart';
@@ -11,7 +12,12 @@ abstract class CommentDto with _$CommentDto {
     @JsonKey(name: "p_id") required String pId,
     @JsonKey(name: "c_content") required String cContent,
     @JsonKey(name: "c_writer") required String cWriter,
-    @JsonKey(name: "c_created_at") required DateTime cCreatedAt,
+    @JsonKey(
+      name: "c_created_at",
+      fromJson: TimestampConverter.toDateTime,
+      toJson: TimestampConverter.toTimestamp,
+    )
+    required DateTime? cCreatedAt,
   }) = _CommentDto;
 
   factory CommentDto.fromJson(Map<String, dynamic> json) =>

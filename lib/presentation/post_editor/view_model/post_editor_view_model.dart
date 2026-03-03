@@ -160,16 +160,15 @@ class PostEditorViewModel extends _$PostEditorViewModel {
         pContent: state.content,
         pImageUrl: url,
       );
-      await repo.updatePost(
-        updated,
-        schoolCode: schoolCode,
-      ); // 새 포스트, 수정으로 분기 해야함.(아직 안함) 둘다 update쓸려면 uuid사용필요
-
-      return (
-        true,
-        null,
-        updated,
-      ); // 일단 반환은 하는데 낙관적업데이트 안하고, 그냥 refresh함. 나중에 수정 예정
+      if (updated.pId == null || updated.pId!.isEmpty) {
+        // pId 없으면 새 게시글 생성
+        await repo.addPost(updated, schoolCode: schoolCode);
+      } else {
+        // pId 있으면 내용 수정
+        await repo.updatePostContent(updated);
+      }
+      // 일단 반환은 하는데 현재 로직상 낙관적업데이트 안하고 그냥 refresh함. 나중에 수정 예정
+      return (true, null, updated);
       // 예외 전파
     } catch (e, s) {
       log('PostEditorViewModel save 실패: $e', error: e, stackTrace: s);

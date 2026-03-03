@@ -4,6 +4,7 @@ import 'package:damta/data/dto/neis_schedule_dto.dart';
 import 'package:dio/dio.dart';
 
 abstract class ScheduleRemoteDataSource {
+  /// from 날짜부터 to 날짜까지의 학사일정 정보 가져오기 (NEIS API)
   Future<List<NeisScheduleDTO>> getSchedules({
     required String officeCode,
     required String schoolCode,

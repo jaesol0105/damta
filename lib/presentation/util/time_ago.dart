@@ -1,6 +1,7 @@
 import 'package:damta/presentation/util/date_formatter.dart';
 
-String timeAgo(DateTime date) {
+String timeAgo(DateTime? date) {
+  if (date == null) return '방금 전';
   final Duration diff = DateTime.now().difference(date);
   if (diff.inSeconds < 60) {
     return '방금 전';

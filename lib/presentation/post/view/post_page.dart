@@ -1,31 +1,20 @@
 import 'package:damta/core/config/routes.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/post/view/widgets/post_list_item.dart';
-import 'package:damta/presentation/post_detail/view_model/comment_view_model.dart';
 import 'package:damta/presentation/post/view_model/post_view_model.dart';
 import 'package:damta/presentation/ui_provider/users_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hugeicons/hugeicons.dart';
 
-class PostPage extends HookConsumerWidget {
+class PostPage extends ConsumerWidget {
   const PostPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // user 불러오기
     final userAsync = ref.watch(userProvider);
-
     final posts = ref.watch(postViewModelProvider);
-    final comments = ref.watch(commentViewModelProvider);
-
-    useEffect(() {
-      ref.read(postViewModelProvider.notifier).loadPosts();
-      ref.read(commentViewModelProvider.notifier).getComments();
-      return null;
-    }, []);
 
     return Scaffold(
       appBar: AppBar(
@@ -68,7 +57,7 @@ class PostPage extends HookConsumerWidget {
           ListView.separated(
             itemCount: posts.length,
             itemBuilder: (context, index) {
-              return PostListItem(post: posts[index], comments: comments);
+              return PostListItem(post: posts[index]);
             },
             separatorBuilder: (BuildContext context, int index) {
               return Divider(
@@ -102,7 +91,6 @@ class PostPage extends HookConsumerWidget {
                         side: BorderSide(color: vrc(context).border!),
                       ),
                     ),
-
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: const [
@@ -130,17 +118,6 @@ class PostPage extends HookConsumerWidget {
           ),
         ],
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     context.push(AppRoutePath.postEditor);
-      //     // showModalBottomSheet(
-      //     //   isScrollControlled: true,
-      //     //   context: context,
-      //     //   builder: (context) => const PostInputBottomSheet(),
-      //     // );
-      //   },
-      //   child: const Icon(Icons.add),
-      // ),
     );
   }
 }

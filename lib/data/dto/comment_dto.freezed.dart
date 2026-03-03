@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CommentDto {
 
-@JsonKey(name: "c_id") String? get cId;@JsonKey(name: "u_id") String get uId;@JsonKey(name: "p_id") String get pId;@JsonKey(name: "c_content") String get cContent;@JsonKey(name: "c_writer") String get cWriter;@JsonKey(name: "c_created_at") DateTime get cCreatedAt;
+@JsonKey(name: "c_id") String? get cId;@JsonKey(name: "u_id") String get uId;@JsonKey(name: "p_id") String get pId;@JsonKey(name: "c_content") String get cContent;@JsonKey(name: "c_writer") String get cWriter;@JsonKey(name: "c_created_at", fromJson: TimestampConverter.toDateTime, toJson: TimestampConverter.toTimestamp) DateTime? get cCreatedAt;
 /// Create a copy of CommentDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $CommentDtoCopyWith<$Res>  {
   factory $CommentDtoCopyWith(CommentDto value, $Res Function(CommentDto) _then) = _$CommentDtoCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: "c_id") String? cId,@JsonKey(name: "u_id") String uId,@JsonKey(name: "p_id") String pId,@JsonKey(name: "c_content") String cContent,@JsonKey(name: "c_writer") String cWriter,@JsonKey(name: "c_created_at") DateTime cCreatedAt
+@JsonKey(name: "c_id") String? cId,@JsonKey(name: "u_id") String uId,@JsonKey(name: "p_id") String pId,@JsonKey(name: "c_content") String cContent,@JsonKey(name: "c_writer") String cWriter,@JsonKey(name: "c_created_at", fromJson: TimestampConverter.toDateTime, toJson: TimestampConverter.toTimestamp) DateTime? cCreatedAt
 });
 
 
@@ -65,15 +65,15 @@ class _$CommentDtoCopyWithImpl<$Res>
 
 /// Create a copy of CommentDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? cId = freezed,Object? uId = null,Object? pId = null,Object? cContent = null,Object? cWriter = null,Object? cCreatedAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? cId = freezed,Object? uId = null,Object? pId = null,Object? cContent = null,Object? cWriter = null,Object? cCreatedAt = freezed,}) {
   return _then(_self.copyWith(
 cId: freezed == cId ? _self.cId : cId // ignore: cast_nullable_to_non_nullable
 as String?,uId: null == uId ? _self.uId : uId // ignore: cast_nullable_to_non_nullable
 as String,pId: null == pId ? _self.pId : pId // ignore: cast_nullable_to_non_nullable
 as String,cContent: null == cContent ? _self.cContent : cContent // ignore: cast_nullable_to_non_nullable
 as String,cWriter: null == cWriter ? _self.cWriter : cWriter // ignore: cast_nullable_to_non_nullable
-as String,cCreatedAt: null == cCreatedAt ? _self.cCreatedAt : cCreatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as String,cCreatedAt: freezed == cCreatedAt ? _self.cCreatedAt : cCreatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 
@@ -158,7 +158,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: "c_id")  String? cId, @JsonKey(name: "u_id")  String uId, @JsonKey(name: "p_id")  String pId, @JsonKey(name: "c_content")  String cContent, @JsonKey(name: "c_writer")  String cWriter, @JsonKey(name: "c_created_at")  DateTime cCreatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: "c_id")  String? cId, @JsonKey(name: "u_id")  String uId, @JsonKey(name: "p_id")  String pId, @JsonKey(name: "c_content")  String cContent, @JsonKey(name: "c_writer")  String cWriter, @JsonKey(name: "c_created_at", fromJson: TimestampConverter.toDateTime, toJson: TimestampConverter.toTimestamp)  DateTime? cCreatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CommentDto() when $default != null:
 return $default(_that.cId,_that.uId,_that.pId,_that.cContent,_that.cWriter,_that.cCreatedAt);case _:
@@ -179,7 +179,7 @@ return $default(_that.cId,_that.uId,_that.pId,_that.cContent,_that.cWriter,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: "c_id")  String? cId, @JsonKey(name: "u_id")  String uId, @JsonKey(name: "p_id")  String pId, @JsonKey(name: "c_content")  String cContent, @JsonKey(name: "c_writer")  String cWriter, @JsonKey(name: "c_created_at")  DateTime cCreatedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: "c_id")  String? cId, @JsonKey(name: "u_id")  String uId, @JsonKey(name: "p_id")  String pId, @JsonKey(name: "c_content")  String cContent, @JsonKey(name: "c_writer")  String cWriter, @JsonKey(name: "c_created_at", fromJson: TimestampConverter.toDateTime, toJson: TimestampConverter.toTimestamp)  DateTime? cCreatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _CommentDto():
 return $default(_that.cId,_that.uId,_that.pId,_that.cContent,_that.cWriter,_that.cCreatedAt);case _:
@@ -199,7 +199,7 @@ return $default(_that.cId,_that.uId,_that.pId,_that.cContent,_that.cWriter,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: "c_id")  String? cId, @JsonKey(name: "u_id")  String uId, @JsonKey(name: "p_id")  String pId, @JsonKey(name: "c_content")  String cContent, @JsonKey(name: "c_writer")  String cWriter, @JsonKey(name: "c_created_at")  DateTime cCreatedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: "c_id")  String? cId, @JsonKey(name: "u_id")  String uId, @JsonKey(name: "p_id")  String pId, @JsonKey(name: "c_content")  String cContent, @JsonKey(name: "c_writer")  String cWriter, @JsonKey(name: "c_created_at", fromJson: TimestampConverter.toDateTime, toJson: TimestampConverter.toTimestamp)  DateTime? cCreatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _CommentDto() when $default != null:
 return $default(_that.cId,_that.uId,_that.pId,_that.cContent,_that.cWriter,_that.cCreatedAt);case _:
@@ -214,7 +214,7 @@ return $default(_that.cId,_that.uId,_that.pId,_that.cContent,_that.cWriter,_that
 @JsonSerializable()
 
 class _CommentDto implements CommentDto {
-  const _CommentDto({@JsonKey(name: "c_id") this.cId, @JsonKey(name: "u_id") required this.uId, @JsonKey(name: "p_id") required this.pId, @JsonKey(name: "c_content") required this.cContent, @JsonKey(name: "c_writer") required this.cWriter, @JsonKey(name: "c_created_at") required this.cCreatedAt});
+  const _CommentDto({@JsonKey(name: "c_id") this.cId, @JsonKey(name: "u_id") required this.uId, @JsonKey(name: "p_id") required this.pId, @JsonKey(name: "c_content") required this.cContent, @JsonKey(name: "c_writer") required this.cWriter, @JsonKey(name: "c_created_at", fromJson: TimestampConverter.toDateTime, toJson: TimestampConverter.toTimestamp) required this.cCreatedAt});
   factory _CommentDto.fromJson(Map<String, dynamic> json) => _$CommentDtoFromJson(json);
 
 @override@JsonKey(name: "c_id") final  String? cId;
@@ -222,7 +222,7 @@ class _CommentDto implements CommentDto {
 @override@JsonKey(name: "p_id") final  String pId;
 @override@JsonKey(name: "c_content") final  String cContent;
 @override@JsonKey(name: "c_writer") final  String cWriter;
-@override@JsonKey(name: "c_created_at") final  DateTime cCreatedAt;
+@override@JsonKey(name: "c_created_at", fromJson: TimestampConverter.toDateTime, toJson: TimestampConverter.toTimestamp) final  DateTime? cCreatedAt;
 
 /// Create a copy of CommentDto
 /// with the given fields replaced by the non-null parameter values.
@@ -257,7 +257,7 @@ abstract mixin class _$CommentDtoCopyWith<$Res> implements $CommentDtoCopyWith<$
   factory _$CommentDtoCopyWith(_CommentDto value, $Res Function(_CommentDto) _then) = __$CommentDtoCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: "c_id") String? cId,@JsonKey(name: "u_id") String uId,@JsonKey(name: "p_id") String pId,@JsonKey(name: "c_content") String cContent,@JsonKey(name: "c_writer") String cWriter,@JsonKey(name: "c_created_at") DateTime cCreatedAt
+@JsonKey(name: "c_id") String? cId,@JsonKey(name: "u_id") String uId,@JsonKey(name: "p_id") String pId,@JsonKey(name: "c_content") String cContent,@JsonKey(name: "c_writer") String cWriter,@JsonKey(name: "c_created_at", fromJson: TimestampConverter.toDateTime, toJson: TimestampConverter.toTimestamp) DateTime? cCreatedAt
 });
 
 
@@ -274,15 +274,15 @@ class __$CommentDtoCopyWithImpl<$Res>
 
 /// Create a copy of CommentDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? cId = freezed,Object? uId = null,Object? pId = null,Object? cContent = null,Object? cWriter = null,Object? cCreatedAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? cId = freezed,Object? uId = null,Object? pId = null,Object? cContent = null,Object? cWriter = null,Object? cCreatedAt = freezed,}) {
   return _then(_CommentDto(
 cId: freezed == cId ? _self.cId : cId // ignore: cast_nullable_to_non_nullable
 as String?,uId: null == uId ? _self.uId : uId // ignore: cast_nullable_to_non_nullable
 as String,pId: null == pId ? _self.pId : pId // ignore: cast_nullable_to_non_nullable
 as String,cContent: null == cContent ? _self.cContent : cContent // ignore: cast_nullable_to_non_nullable
 as String,cWriter: null == cWriter ? _self.cWriter : cWriter // ignore: cast_nullable_to_non_nullable
-as String,cCreatedAt: null == cCreatedAt ? _self.cCreatedAt : cCreatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as String,cCreatedAt: freezed == cCreatedAt ? _self.cCreatedAt : cCreatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 

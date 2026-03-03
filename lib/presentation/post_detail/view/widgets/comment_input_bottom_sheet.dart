@@ -24,8 +24,9 @@ class CommentInputBottomSheet extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // writerController 제거: 닉네임은 addComment 내부에서 NicknameGenerator로 자동 생성
     final commentController = useTextEditingController();
-    final writerController = useTextEditingController();
+    final currentUserId = FirebaseService.getUId;
 
     return Padding(
       padding: EdgeInsets.only(
@@ -52,46 +53,42 @@ class CommentInputBottomSheet extends HookConsumerWidget {
                   if (commentController.text.trim().isEmpty) {
                     return;
                   }
-                  // if (writerController.text.trim().isEmpty) {
-                  //   writerController.text = "익명";
-                  // }
-                  // TODO : 순서 변경
-                  // if (context.mounted) {
-                  //   context.pop();
-                  // }
+
                   final commentEntity = CommentEntity(
                     cId: null,
-                    uId: FirebaseService.getUId.toString(),
+                    uId: currentUserId.toString(),
                     cContent: commentController.text.trim(),
-                    cWriter: writerController.text,
+                    cWriter: '', // NicknameGenerator가 addComment 내부에서 덮어씀
                     cCreatedAt: DateTime.now(),
                     pId: pId,
                   );
+
                   await ref
                       .read(commentViewModelProvider.notifier)
                       .addComment(commentEntity);
-                  // 댓글 알림 추가
-                  await ref
-                      .read(
-                        notificationViewModelProvider(uId: post.uId).notifier,
-                      )
-                      .addNoti(
-                        NotificationEntity(
-                          uId: post.uId,
-                          pId: pId,
-                          pTitle: post.pTitle,
-                          isComment: true,
-                          content: commentController.text.trim(),
-                          isNew: true,
-                          isRead: false,
-                        ),
-                      );
-                  // TODO : 순서 변경
+
+                  // 자기 게시글에 댓글 시 알림 발생 방지
+                  if (currentUserId != null && post.uId != currentUserId) {
+                    await ref
+                        .read(
+                          notificationViewModelProvider(uId: post.uId).notifier,
+                        )
+                        .addNoti(
+                          NotificationEntity(
+                            uId: post.uId,
+                            pId: pId,
+                            pTitle: post.pTitle,
+                            isComment: true,
+                            content: commentController.text.trim(),
+                            isNew: true,
+                            isRead: false,
+                          ),
+                        );
+                  }
+
                   if (context.mounted) {
                     context.pop();
                   }
-                  commentController.clear();
-                  writerController.clear();
 
                   // 📝
                   AnalyticsService.event(
@@ -103,26 +100,6 @@ class CommentInputBottomSheet extends HookConsumerWidget {
               ),
             ],
           ),
-          // TextField(
-          //   autofocus: true,
-          //   controller: writerController,
-          //   maxLines: 1,
-          //   decoration: InputDecoration(
-          //     hintText: "닉네임을 입력해주세요",
-          //     enabledBorder: OutlineInputBorder(
-          //       borderRadius: BorderRadius.circular(8),
-          //       borderSide: const BorderSide(width: 0.5),
-          //     ),
-          //     focusedBorder: OutlineInputBorder(
-          //       borderRadius: BorderRadius.circular(8),
-          //       borderSide: const BorderSide(width: 0.5),
-          //     ),
-          //     border: OutlineInputBorder(
-          //       borderRadius: BorderRadius.circular(8),
-          //       borderSide: const BorderSide(width: 0.5),
-          //     ),
-          //   ),
-          // ),
           const SizedBox(height: 5),
           TextField(
             maxLines: 5,
@@ -130,9 +107,7 @@ class CommentInputBottomSheet extends HookConsumerWidget {
             controller: commentController,
             decoration: InputDecoration(
               hintText: "댓글을 입력해주세요",
-              hintStyle: TextStyle(
-                color: vrc(context).disabledText, // 힌트 색 변경
-              ),
+              hintStyle: TextStyle(color: vrc(context).disabledText),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(width: 1, color: vrc(context).border!),

@@ -84,7 +84,7 @@ class NotificationPage extends ConsumerWidget {
                           ? "'${n.pTitle}' 에 댓글이 달렸습니다."
                           : "'${n.pTitle}' 에 반응이 생겼습니다.",
                       content: n.content,
-                      time: timeAgo(n.nCreatedAt!),
+                      time: timeAgo(n.nCreatedAt),
                     );
                   },
                 ),
