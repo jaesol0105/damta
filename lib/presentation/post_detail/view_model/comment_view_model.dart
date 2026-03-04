@@ -18,6 +18,13 @@ class CommentViewModel extends _$CommentViewModel {
     state = comments;
   }
 
+  /// 댓글 추가
+  Future<void> addComment(CommentEntity commentEntity) async {
+    final commentUsecase = ref.read(commentUsecaseProvider);
+    await commentUsecase.addComment(commentEntity);
+    await getComments(commentEntity.pId);
+  }
+
   /// 댓글 수정
   Future<void> updateComment(CommentEntity commentEntity) async {
     final commentUsecase = ref.read(commentUsecaseProvider);
@@ -27,17 +34,21 @@ class CommentViewModel extends _$CommentViewModel {
     }
   }
 
-  // 댓글 추가
-  Future<void> addComment(CommentEntity commentEntity) async {
-    final commentUsecase = ref.read(commentUsecaseProvider);
-    await commentUsecase.addComment(commentEntity);
-    await getComments(commentEntity.pId);
-  }
-
-  // 댓글 삭제
+  /// 댓글 삭제
   Future<void> deleteComment(String cId, String pId) async {
-    final commentUsecase = ref.read(commentUsecaseProvider);
-    await commentUsecase.deleteComment(cId, pId);
-    await getComments(pId);
+    // 낙관적 업데이트 (UI 딜레이 해결)
+    final prevState = state;
+    state = state.where((c) => c.cId != cId).toList();
+
+    try {
+      final commentUsecase = ref.read(commentUsecaseProvider);
+      await commentUsecase.deleteComment(cId, pId);
+      // 데이터 fetch
+      await getComments(pId);
+    } catch (e) {
+      // 실패시 prevState로 fallback
+      if (ref.mounted) state = prevState;
+      rethrow;
+    }
   }
 }

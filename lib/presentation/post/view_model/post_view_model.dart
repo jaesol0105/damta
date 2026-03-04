@@ -53,11 +53,26 @@ class PostViewModel extends _$PostViewModel {
 
   /// 이모지 반응 추가/변경
   Future<void> addReaction(String pId, String userId, String emoji) async {
-    final postUsecase = ref.read(postUsecaseProvider);
-    await postUsecase.addReaction(pId, userId, emoji);
-    final updatedPost = await postUsecase.getPost(pId);
-    if (updatedPost != null && ref.mounted) {
-      state = state.map((p) => p.pId == pId ? updatedPost : p).toList();
+    final prevState = state;
+    // 낙관적 업데이트 먼저 적용 (UI 딜레이 해결)
+    state = state.map((p) {
+      if (p.pId != pId) return p;
+      final updated = Map<String, String>.from(p.reactions ?? {});
+      updated[userId] = emoji;
+      return p.copyWith(reactions: updated);
+    }).toList();
+    try {
+      final postUsecase = ref.read(postUsecaseProvider);
+      await postUsecase.addReaction(pId, userId, emoji);
+      // 반응 추가 후 데이터 fetch
+      final updatedPost = await postUsecase.getPost(pId);
+      if (updatedPost != null && ref.mounted) {
+        state = state.map((p) => p.pId == pId ? updatedPost : p).toList();
+      }
+    } catch (e) {
+      // 실패시 prevState로 fallback
+      if (ref.mounted) state = prevState;
+      rethrow;
     }
   }
 }
