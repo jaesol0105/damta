@@ -240,11 +240,41 @@ class PostDetailPage extends HookConsumerWidget {
               // 이모지 반응 (슬랙처럼 그룹화 + 카운트 표시)
               Builder(
                 builder: (context) {
-                  // 같은 이모지끼리 묶고 카운트 집계
+                  // 이모지별 카운트 + 첫 반응 시각 집계
+                  // key: userId_emoji 형태, value: timestamp 형식
                   final grouped = <String, int>{};
-                  for (final emoji in post.reactions?.values ?? <String>[]) {
+                  final firstTime = <String, int>{};
+                  for (final entry
+                      in post.reactions?.entries ??
+                          <MapEntry<String, String>>[]) {
+                    final sep = entry.key.indexOf('_');
+                    if (sep < 0) continue;
+                    final emoji = entry.key.substring(sep + 1);
+                    final ts = int.tryParse(entry.value) ?? 0;
                     grouped[emoji] = (grouped[emoji] ?? 0) + 1;
+                    if (!firstTime.containsKey(emoji) ||
+                        ts < firstTime[emoji]!) {
+                      firstTime[emoji] = ts;
+                    }
                   }
+
+                  // 첫 반응 시각 기준 오름차순 정렬
+                  final sortedEntries = grouped.entries.toList()
+                    ..sort(
+                      (a, b) => (firstTime[a.key] ?? 0).compareTo(
+                        firstTime[b.key] ?? 0,
+                      ),
+                    );
+
+                  // 현재 유저가 반응한 이모지 목록
+                  final myEmojis = (post.reactions ?? {}).entries
+                      .where(
+                        (e) =>
+                            currentUId != null &&
+                            e.key.startsWith('${currentUId}_'),
+                      )
+                      .map((e) => e.key.substring(e.key.indexOf('_') + 1))
+                      .toSet();
 
                   return Wrap(
                     spacing: 6,
@@ -283,43 +313,78 @@ class PostDetailPage extends HookConsumerWidget {
                         ),
                       ),
                       // 그룹화된 이모지 버블
-                      ...grouped.entries.map(
-                        (entry) => Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: vrc(context).background,
-                            border: Border.all(
-                              color: vrc(context).border!,
-                              width: 1,
+                      ...sortedEntries.map((entry) {
+                        final isHighlighted = myEmojis.contains(entry.key);
+                        return InkWell(
+                          borderRadius: BorderRadius.circular(30),
+                          onTap: () {
+                            if (currentUId == null) return;
+                            if (isHighlighted) {
+                              ref
+                                  .read(postViewModelProvider.notifier)
+                                  .removeReaction(
+                                    post.pId!,
+                                    currentUId,
+                                    entry.key,
+                                  );
+                            } else {
+                              ref
+                                  .read(postViewModelProvider.notifier)
+                                  .addReaction(
+                                    post.pId!,
+                                    currentUId,
+                                    entry.key,
+                                  );
+                            }
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
                             ),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                entry.key,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontFamily: Platform.isAndroid
-                                      ? 'NotoColorEmoji'
-                                      : null,
-                                ),
+                            decoration: BoxDecoration(
+                              color: isHighlighted
+                                  ? Theme.of(
+                                      context,
+                                    ).colorScheme.primary.withOpacity(0.12)
+                                  : vrc(context).background,
+                              border: Border.all(
+                                color: vrc(context).border!,
+                                width: 1,
                               ),
-                              if (entry.value >= 1) ...[
-                                const SizedBox(width: 4),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
                                 Text(
-                                  '${entry.value}',
-                                  style: const TextStyle(fontSize: 13),
+                                  entry.key,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontFamily: Platform.isAndroid
+                                        ? 'NotoColorEmoji'
+                                        : null,
+                                  ),
                                 ),
+                                if (entry.value >= 1) ...[
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '${entry.value}',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: isHighlighted
+                                          ? Theme.of(
+                                              context,
+                                            ).colorScheme.primary
+                                          : null,
+                                    ),
+                                  ),
+                                ],
                               ],
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
+                        );
+                      }),
                     ],
                   );
                 },

@@ -64,4 +64,9 @@ class PostRepositoryImpl implements PostRepository {
   Future<void> addReaction(String pId, String userId, String emoji) {
     return postDataSource.addReaction(pId, userId, emoji);
   }
+
+  @override
+  Future<void> removeReaction(String pId, String userId, String emoji) {
+    return postDataSource.removeReaction(pId, userId, emoji);
+  }
 }

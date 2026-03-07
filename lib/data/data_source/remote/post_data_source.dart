@@ -22,8 +22,11 @@ abstract interface class PostDataSource {
   /// 조회수 증가
   Future<void> incrementViewCount(String pId);
 
-  /// 이모지 반응 추가/변경
+  /// 이모지 반응 추가
   Future<void> addReaction(String pId, String userId, String emoji);
+
+  /// 이모지 반응 취소
+  Future<void> removeReaction(String pId, String userId, String emoji);
 }
 
 class PostDataSourceImpl implements PostDataSource {
@@ -162,15 +165,32 @@ class PostDataSourceImpl implements PostDataSource {
   @override
   Future<void> addReaction(String pId, String userId, String emoji) async {
     try {
-      // 게시글에 유저당 반응 한개만 가능하도록
+      // userId_emoji를 key로 사용해서 유저당 여러 반응 가능 & 같은 이모지 중복 방지
+      // 키: userId_emoji, 값: 생성 시간 (정렬에 사용)
       await firestore.collection('post').doc(pId).update({
-        'reactions.$userId': emoji,
+        'reactions.${userId}_$emoji': DateTime.now().millisecondsSinceEpoch
+            .toString(),
       });
     } on FirebaseException catch (e, s) {
       log('Firebase addReaction 실패: ${e.message}', error: e, stackTrace: s);
       rethrow;
     } catch (e, s) {
       log('알 수 없는 addReaction 실패: $e', error: e, stackTrace: s);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> removeReaction(String pId, String userId, String emoji) async {
+    try {
+      await firestore.collection('post').doc(pId).update({
+        'reactions.${userId}_$emoji': FieldValue.delete(),
+      });
+    } on FirebaseException catch (e, s) {
+      log('Firebase removeReaction 실패: ${e.message}', error: e, stackTrace: s);
+      rethrow;
+    } catch (e, s) {
+      log('알 수 없는 removeReaction 실패: $e', error: e, stackTrace: s);
       rethrow;
     }
   }

@@ -19,6 +19,9 @@ abstract interface class PostRepository {
   /// 조회수 증가
   Future<void> incrementViewCount(String pId);
 
-  /// 이모지 반응 추가/변경
+  /// 이모지 반응 추가
   Future<void> addReaction(String pId, String userId, String emoji);
+
+  /// 이모지 반응 취소
+  Future<void> removeReaction(String pId, String userId, String emoji);
 }
