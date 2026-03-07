@@ -32,4 +32,8 @@ class PostUsecase {
   Future<void> addReaction(String pId, String userId, String emoji) {
     return postRepository.addReaction(pId, userId, emoji);
   }
+
+  Future<void> removeReaction(String pId, String userId, String emoji) {
+    return postRepository.removeReaction(pId, userId, emoji);
+  }
 }
