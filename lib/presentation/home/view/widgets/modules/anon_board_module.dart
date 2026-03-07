@@ -1,5 +1,6 @@
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/core/util/string_util.dart';
+import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/presentation/home/view/widgets/modules/shared/big_card.dart';
 import 'package:damta/presentation/home/view/widgets/modules/shared/more_button.dart';
 import 'package:damta/presentation/post/view_model/post_view_model.dart';
@@ -24,28 +25,27 @@ class AnonBoardModule extends ConsumerWidget {
         );
 
     // 게시글 3개
-    final posts = ref.watch(postViewModelProvider);
-    final titles = posts.take(3).map((p) => p.pTitle).toList();
+    final posts = ref.watch(postViewModelProvider).take(3).toList();
 
     return BigCard(
       icon: 'assets/icons/icon_anon_board.png',
       title: ' $schoolShort 익명 게시판',
       trailing: MoreButton(onTap: () => context.push('/post')),
-      child: _AnonBoardBody(titles: titles),
+      child: _AnonBoardBody(posts: posts),
     );
   }
 }
 
 class _AnonBoardBody extends StatelessWidget {
   /// 익명게시판 모듈 바디
-  const _AnonBoardBody({required this.titles});
+  const _AnonBoardBody({required this.posts});
 
-  final List<String> titles;
+  final List<PostEntity> posts;
 
   @override
   Widget build(BuildContext context) {
     // 게시글 없음
-    if (titles.isEmpty) {
+    if (posts.isEmpty) {
       return Padding(
         padding: EdgeInsets.only(left: 4),
         child: Text(
@@ -61,9 +61,12 @@ class _AnonBoardBody extends StatelessWidget {
     // 게시글 있음
     return Column(
       children: [
-        for (int i = 0; i < titles.length; i++) ...[
-          _BoardPill(text: titles[i]),
-          if (i < titles.length - 1) const SizedBox(height: 8),
+        for (int i = 0; i < posts.length; i++) ...[
+          _BoardPill(
+            text: posts[i].pTitle,
+            onTap: () => context.push('/post/${posts[i].pId}'),
+          ),
+          if (i < posts.length - 1) const SizedBox(height: 8),
         ],
       ],
     );
@@ -72,28 +75,33 @@ class _AnonBoardBody extends StatelessWidget {
 
 class _BoardPill extends StatelessWidget {
   /// 익명게시판 색채우기
-  const _BoardPill({required this.text});
+  const _BoardPill({required this.text, required this.onTap});
 
   final String text;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF5F6F8), // TODO : 테마색
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE7E8EB)), // TODO : 테마색
-      ),
-      child: Text(
-        text,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(
-          fontSize: 12.5,
-          fontWeight: FontWeight.w700,
-          color: Color(0xFF1A1A1A),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF5F6F8), // TODO : 테마색
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0xFFE7E8EB)), // TODO : 테마색
+        ),
+        child: Text(
+          text,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            fontSize: 12.5,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF1A1A1A),
+          ),
         ),
       ),
     );
