@@ -86,7 +86,7 @@ class HomePage extends HookConsumerWidget {
                   sliver: SliverToBoxAdapter(
                     child: LayoutBuilder(
                       builder: (context, constraints) {
-                        const gap = 16.0;
+                        const gap = 12.0;
                         final maxWidth = constraints.maxWidth;
                         final halfWidth = (maxWidth - gap) / 2;
                         final miniHeight = halfWidth * 6 / 5;
