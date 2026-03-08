@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:damta/core/config/app_constants.dart';
 import 'package:damta/presentation/home/view_model/module_item.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,7 +10,7 @@ part 'home_view_model.g.dart';
 
 @riverpod
 class HomeViewModel extends _$HomeViewModel {
-  static const _kKey = 'home_modules';
+  static const _key = AppConstants.homeModulesKey;
 
   @override
   List<ModuleItem> build() {
@@ -20,7 +21,7 @@ class HomeViewModel extends _$HomeViewModel {
 
   Future<void> _restoreFromPrefs() async {
     final prefs = await SharedPreferences.getInstance();
-    final jsonStr = prefs.getString(_kKey);
+    final jsonStr = prefs.getString(_key);
     if (jsonStr == null) return;
 
     try {
@@ -78,7 +79,7 @@ class HomeViewModel extends _$HomeViewModel {
   /// 편집 모드 종료 시 현재 상태를 SharedPreferences에 저장.
   Future<void> save() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_kKey, jsonEncode(state.map(_toJson).toList()));
+    await prefs.setString(_key, jsonEncode(state.map(_toJson).toList()));
   }
 
   /// 드래그 완료 후 모듈 순서 업데이트.

@@ -1,5 +1,6 @@
 import 'package:damta/core/di/provider.dart';
 import 'package:damta/domain/entity/schedule_entity.dart';
+import 'package:damta/presentation/util/date_formatter.dart';
 import 'package:damta/presentation/util/schedule_filter_util.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -39,12 +40,9 @@ abstract class ScheduleState with _$ScheduleState {
 
   /// 선택된 월의 학사일정만 필터링
   List<ScheduleEntity> get schedulesForSelectedMonth {
+    final selected = DateTime(selectedYear, selectedMonth);
     return allSchedules
-        .where(
-          (schedule) =>
-              schedule.date.year == selectedYear &&
-              schedule.date.month == selectedMonth,
-        )
+        .where((schedule) => schedule.date.isSameMonth(selected))
         .toList();
   }
 
@@ -60,9 +58,8 @@ abstract class ScheduleState with _$ScheduleState {
 
   /// 해당 월에 학사일정이 있는지 여부
   bool hasScheduleForMonth(int year, int month) {
-    return allSchedules.any(
-      (schedule) => schedule.date.year == year && schedule.date.month == month,
-    );
+    final target = DateTime(year, month);
+    return allSchedules.any((schedule) => schedule.date.isSameMonth(target));
   }
 
   /// MonthSelector에 표시할 목록. 현재년도 1 ~ 12월.

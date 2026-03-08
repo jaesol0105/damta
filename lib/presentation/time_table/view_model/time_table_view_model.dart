@@ -1,12 +1,14 @@
+import 'package:damta/core/config/app_constants.dart';
 import 'package:damta/core/di/provider.dart';
 import 'package:damta/core/logger/log.dart';
 import 'package:damta/domain/entity/time_table_entity.dart';
+import 'package:damta/presentation/util/date_formatter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'time_table_view_model.g.dart';
 
-const _kSelectedClassKey = 'timetable_selected_class';
+const _selectedClassKey = AppConstants.timetableSelectedClassKey;
 
 class TimeTableState {
   final String selectedClass;
@@ -55,14 +57,7 @@ class TimeTableState {
   /// 오늘 날짜의 시간표. 홈 화면 모듈에서 사용.
   List<TimeTableEntity> get todayEntries {
     final today = DateTime.now();
-    return filtered
-        .where(
-          (e) =>
-              e.date.year == today.year &&
-              e.date.month == today.month &&
-              e.date.day == today.day,
-        )
-        .toList()
+    return filtered.where((e) => e.date.isSameDay(today)).toList()
       ..sort((a, b) => a.period.compareTo(b.period));
   }
 
@@ -108,7 +103,7 @@ class TimeTableViewModel extends _$TimeTableViewModel {
 
     // SharedPreferences에서 마지막으로 선택한 학년-반 불러오기
     final prefs = await SharedPreferences.getInstance();
-    final savedClass = prefs.getString(_kSelectedClassKey) ?? '1-1';
+    final savedClass = prefs.getString(_selectedClassKey) ?? '1-1';
 
     final initialState = TimeTableState(
       selectedClass: savedClass,
@@ -175,7 +170,7 @@ class TimeTableViewModel extends _$TimeTableViewModel {
 
     // SharedPreferences에 저장
     SharedPreferences.getInstance().then((prefs) {
-      prefs.setString(_kSelectedClassKey, value);
+      prefs.setString(_selectedClassKey, value);
     });
 
     final current = state.value!;

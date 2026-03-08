@@ -7,9 +7,20 @@ class UsersRepositoryImpl implements UsersRepository {
   const UsersRepositoryImpl(this.dataSource);
   final UsersDataSource dataSource;
 
-  @override // R
+  @override
   Future<UsersEntity> getUser(String uId) async {
     final dto = await dataSource.getUser(uId);
     return toEntity(dto);
   }
+
+  @override
+  Future<void> saveSchoolInfo({
+    required String schoolName,
+    required String officeCode,
+    required String schoolCode,
+  }) => dataSource.saveSchoolInfo(
+    schoolName: schoolName,
+    officeCode: officeCode,
+    schoolCode: schoolCode,
+  );
 }

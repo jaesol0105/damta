@@ -29,8 +29,9 @@ class PostDetailPage extends HookConsumerWidget {
     final showEmojiPicker = useState(false);
     final overlayEntryRef = useRef<OverlayEntry?>(null);
 
-    final currentUId = FirebaseService.getUId;
-    final schoolCode = ref.watch(userProvider).value?.schoolCode ?? '';
+    final userValue = ref.watch(userProvider).value;
+    final currentUId = userValue?.uId;
+    final schoolCode = userValue?.schoolCode ?? '';
 
     final postList = ref.watch(postViewModelProvider);
     final post = postList.firstWhere(

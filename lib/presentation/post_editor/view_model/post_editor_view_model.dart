@@ -147,15 +147,17 @@ class PostEditorViewModel extends _$PostEditorViewModel {
         url = state.originalPost.pImageUrl ?? '';
       }
 
-      // 유저 schoolCode 가져오기
+      // 유저 정보 가져오기
       String? schoolCode;
+      String? uId;
       try {
         final user = await ref.read(userProvider.future);
         schoolCode = user.schoolCode;
+        uId = user.uId;
       } catch (_) {}
 
       final updated = state.originalPost.copyWith(
-        uId: FirebaseService.getUId.toString(),
+        uId: uId ?? '',
         pTitle: state.title,
         pContent: state.content,
         pImageUrl: url,

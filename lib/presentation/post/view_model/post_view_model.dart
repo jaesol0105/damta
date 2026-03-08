@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:damta/core/di/provider.dart';
 import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/presentation/ui_provider/users_provider.dart';
@@ -55,20 +53,27 @@ class PostViewModel extends _$PostViewModel {
   Future<void> addReaction(String pId, String userId, String emoji) async {
     final prevState = state;
     // 낙관적 업데이트 먼저 적용 (UI 딜레이 해결)
-    state = state.map((p) {
-      if (p.pId != pId) return p;
-      final updated = Map<String, String>.from(p.reactions ?? {});
-      updated['${userId}_$emoji'] = DateTime.now().millisecondsSinceEpoch
+    final idx = state.indexWhere((p) => p.pId == pId);
+    if (idx != -1) {
+      final list = [...state];
+      final reactions = Map<String, String>.from(list[idx].reactions ?? {});
+      reactions['${userId}_$emoji'] = DateTime.now().millisecondsSinceEpoch
           .toString();
-      return p.copyWith(reactions: updated);
-    }).toList();
+      list[idx] = list[idx].copyWith(reactions: reactions);
+      state = list;
+    }
     try {
       final postUsecase = ref.read(postUsecaseProvider);
       await postUsecase.addReaction(pId, userId, emoji);
-      // 반응 추가 후 데이터 fetch
+      // 반응 추가 후 서버 데이터 동기화
       final updatedPost = await postUsecase.getPost(pId);
       if (updatedPost != null && ref.mounted) {
-        state = state.map((p) => p.pId == pId ? updatedPost : p).toList();
+        final i = state.indexWhere((p) => p.pId == pId);
+        if (i != -1) {
+          final synced = [...state];
+          synced[i] = updatedPost;
+          state = synced;
+        }
       }
     } catch (e) {
       // 실패시 prevState로 fallback
@@ -80,12 +85,14 @@ class PostViewModel extends _$PostViewModel {
   /// 이모지 반응 취소
   Future<void> removeReaction(String pId, String userId, String emoji) async {
     final prevState = state;
-    state = state.map((p) {
-      if (p.pId != pId) return p;
-      final updated = Map<String, String>.from(p.reactions ?? {});
-      updated.remove('${userId}_$emoji');
-      return p.copyWith(reactions: updated);
-    }).toList();
+    final idx = state.indexWhere((p) => p.pId == pId);
+    if (idx != -1) {
+      final list = [...state];
+      final reactions = Map<String, String>.from(list[idx].reactions ?? {});
+      reactions.remove('${userId}_$emoji');
+      list[idx] = list[idx].copyWith(reactions: reactions);
+      state = list;
+    }
     try {
       await ref.read(postUsecaseProvider).removeReaction(pId, userId, emoji);
     } catch (e) {
