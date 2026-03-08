@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:damta/core/services/analytics_service.dart';
+import 'package:damta/core/service/analytics_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/core/util/debouncer.dart';
 import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/presentation/post/view_model/post_view_model.dart';
 import 'package:damta/presentation/post_editor/view_model/post_editor_view_model.dart';
-import 'package:damta/presentation/util/custom_dialog.dart';
+import 'package:damta/presentation/widget/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -40,7 +40,7 @@ class PostEditorPage extends HookConsumerWidget {
 
     final contentDebouncer = useMemoized(
       () => Debouncer(
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 200),
         callback: () {
           viewModel.setContent(contentController.text);
         },

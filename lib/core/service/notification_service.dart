@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:damta/core/logger/log.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_app_badger/flutter_app_badger.dart';
@@ -44,7 +45,7 @@ class NotificationService {
       if (Platform.isAndroid) {
         await showLocalNotification(message);
       }
-      print("🩷 푸시 메세지 데이터 : ${message.data}");
+      Log.d("🩷 푸시 메세지 데이터 : ${message.data}");
     });
 
     // 4. Background (로컬 알림 X / 시스템 알림 O)

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:damta/core/logger/log.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -21,14 +22,14 @@ class FirebaseService {
       await Firebase.initializeApp();
       auth = FirebaseAuth.instance;
       firestore = FirebaseFirestore.instance;
-      print("Firebase Core 초기화 성공 (-_- b)");
+      Log.d("Firebase Core 초기화 성공 (-_- b)");
     } catch (e) {
       if (e.toString().contains('already been initialized')) {
-        print("Firebase Core는 이미 초기화되었습니다.");
+        Log.e("Firebase Core는 이미 초기화되었습니다.");
         auth = FirebaseAuth.instance;
         firestore = FirebaseFirestore.instance;
       } else {
-        print("!!! Firebase Core 초기화 실패 !!! : $e");
+        Log.e("!!! Firebase Core 초기화 실패 !!! : $e");
         rethrow;
       }
     }
@@ -44,28 +45,28 @@ class FirebaseService {
         // 인증되지 않은 경우, 익명 로그인 시도
         userCredential = await auth.signInAnonymously();
         user = userCredential.user;
-        print("Firebase 익명 로그인 성공 (-_- b) : UID ${user!.uid}");
+        Log.d("Firebase 익명 로그인 성공 (-_- b) : UID ${user!.uid}");
       } else {
         // 이미 로그인된 경우 (SplashPage에서 넘어옴)
-        print("Firebase 기존 세션 사용 (-_- b) : UID ${user.uid}");
+        Log.d("Firebase 기존 세션 사용 (-_- b) : UID ${user.uid}");
       }
+
       // Firestore에 사용자 문서 생성 or 업데이트
-      if (user != null) {
-        final userDocRef = firestore.collection('users').doc(user.uid);
-        await userDocRef.set({
-          'kakaoId': kakaoId, // 카카오 ID 저장
-          'createdAt': FieldValue.serverTimestamp(),
-          'lastSignInTime': FieldValue.serverTimestamp(),
-          // schoolName 필드는 saveSchoolInfo에서 추가!!
-        }, SetOptions(merge: true)); // 기존 필드는 유지하고 새로운 필드만 업데이트
-        print("Firestore 사용자 문서 업데이트/생성 성공 (-_- b) (UID: ${user.uid})");
-      }
+      final userDocRef = firestore.collection('users').doc(user.uid);
+      await userDocRef.set({
+        'kakaoId': kakaoId, // 카카오 ID 저장
+        'createdAt': FieldValue.serverTimestamp(),
+        'lastSignInTime': FieldValue.serverTimestamp(),
+        // schoolName 필드는 saveSchoolInfo에서 추가!!
+      }, SetOptions(merge: true)); // 기존 필드는 유지하고 새로운 필드만 업데이트
+      Log.d("Firestore 사용자 문서 업데이트/생성 성공 (-_- b) (UID: ${user.uid})");
+
       return user;
     } on FirebaseAuthException catch (e) {
-      print("!!! Firebase 인증 오류 !!! : ${e.code}");
+      Log.e("!!! Firebase 인증 오류 !!! : ${e.code}");
       return null;
     } catch (e) {
-      print("!!! Firebase 로그인 및 문서 생성 중 오류 발생 !!! : $e");
+      Log.e("!!! Firebase 로그인 및 문서 생성 중 오류 발생 !!! : $e");
       return null;
     }
   }
@@ -86,10 +87,8 @@ class FirebaseService {
       'schoolName': schoolName,
       'officeCode': officeCode,
       'schoolCode': schoolCode,
-      'schoolSetAt':
-          FieldValue.serverTimestamp(), // 학교 정보를 설정한 시간 기록 (흠 근데 굳이? 넣을 필요가 있었나... 진짜 정말 ㄹㅇ)
     });
-    print("학교 정보 Firestore 저장 성공 (-_- b) (학교명: $schoolName, UID: ${user.uid})");
+    Log.d("학교 정보 Firestore 저장 성공 (-_- b) (학교명: $schoolName, UID: ${user.uid})");
   }
 
   // FCM 토큰 Firestore에 저장
@@ -97,7 +96,7 @@ class FirebaseService {
     try {
       final token = await FirebaseMessaging.instance.getToken();
       if (token == null) {
-        print("FCM 토큰을 가져오지 못했습니다.");
+        Log.d("FCM 토큰을 가져오지 못했습니다.");
         return;
       }
 
@@ -106,9 +105,9 @@ class FirebaseService {
         'tokenUpdatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
-      print("🩷 FCM 토큰 Firestore 저장 성공 : $token");
+      Log.d("🩷 FCM 토큰 Firestore 저장 성공 : $token");
     } catch (e) {
-      print("FCM 토큰 저장 오류 : $e");
+      Log.e("FCM 토큰 저장 오류 : $e");
     }
   }
 
@@ -120,7 +119,7 @@ class FirebaseService {
         'tokenUpdatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
-      print("🔄 FCM 토큰 갱신됨: $newToken");
+      Log.d("🔄 FCM 토큰 갱신됨: $newToken");
     });
   }
 }

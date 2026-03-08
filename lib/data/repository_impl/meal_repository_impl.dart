@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+import 'package:damta/core/logger/log.dart';
 import 'package:damta/data/data_source/local/meal_local_data_source.dart';
 import 'package:damta/data/data_source/remote/meal_remote_data_source.dart';
 import 'package:damta/data/mapper/meal_mapper.dart';
@@ -7,7 +6,10 @@ import 'package:damta/domain/entity/meal_entity.dart';
 import 'package:damta/domain/repository/meal_repository.dart';
 
 class MealRepositoryImpl implements MealRepository {
-  MealRepositoryImpl({required this.remoteDataSource, required this.localDataSource});
+  MealRepositoryImpl({
+    required this.remoteDataSource,
+    required this.localDataSource,
+  });
 
   final MealRemoteDataSource remoteDataSource;
   final MealLocalDataSource localDataSource;
@@ -41,11 +43,14 @@ class MealRepositoryImpl implements MealRepository {
 
       // API 응답을 로컬 캐시에 저장
       if (entities.isNotEmpty) {
-        await localDataSource.saveMeals(schoolCode: schoolCode, meals: entities);
+        await localDataSource.saveMeals(
+          schoolCode: schoolCode,
+          meals: entities,
+        );
       }
       return entities;
     } catch (e, s) {
-      log('Repository getMeals 실패: $e', error: e, stackTrace: s);
+      Log.e('Repository getMeals 실패: $e', error: e, stackTrace: s);
       rethrow;
     }
   }

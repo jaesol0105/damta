@@ -1,13 +1,12 @@
-enum ModuleType { weather, lunch, timetable, schedule, memo, anonBoard, photo }
-
-enum ModuleWidth { half, full }
+import 'package:damta/domain/enum/module_type_enum.dart';
+import 'package:damta/domain/enum/module_width_enum.dart';
 
 class ModuleItem {
   final String id; // 아이디
   final ModuleType type; // 모듈 종류
-  final ModuleWidth width; // half, full
-  int order; // 순서 (1차원배열 정렬)
-  bool visible; // 표시 여부 (아직 기능없음)
+  final ModuleWidth width; // 모듈 너비
+  int order; // 순서 (1차원 배열로 정렬)
+  bool visible; // 표시 여부. 아직 기능없음
   final String? photoPath; // 사진 모듈용
 
   ModuleItem({

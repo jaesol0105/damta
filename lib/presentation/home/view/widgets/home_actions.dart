@@ -1,4 +1,4 @@
-import 'package:damta/core/services/firebase_service.dart';
+import 'package:damta/core/service/firebase_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/notification/view_model/notification_view_model.dart';
 import 'package:flutter/material.dart';

@@ -1,8 +1,8 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:damta/core/di/provider.dart';
-import 'package:damta/core/services/firebase_service.dart';
+import 'package:damta/core/logger/log.dart';
+
 import 'package:damta/core/util/string_extension.dart';
 import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/domain/repository/post_repository.dart';
@@ -147,7 +147,8 @@ class PostEditorViewModel extends _$PostEditorViewModel {
         url = state.originalPost.pImageUrl ?? '';
       }
 
-      // 유저 schoolCode 가져오기
+      // 유저 정보 가져오기
+      final uId = ref.read(currentUIdProvider);
       String? schoolCode;
       try {
         final user = await ref.read(userProvider.future);
@@ -155,7 +156,7 @@ class PostEditorViewModel extends _$PostEditorViewModel {
       } catch (_) {}
 
       final updated = state.originalPost.copyWith(
-        uId: FirebaseService.getUId.toString(),
+        uId: uId ?? '',
         pTitle: state.title,
         pContent: state.content,
         pImageUrl: url,
@@ -171,7 +172,7 @@ class PostEditorViewModel extends _$PostEditorViewModel {
       return (true, null, updated);
       // 예외 전파
     } catch (e, s) {
-      log('PostEditorViewModel save 실패: $e', error: e, stackTrace: s);
+      Log.e('PostEditorViewModel save 실패: $e', error: e, stackTrace: s);
       rethrow;
     } finally {
       state = state.copyWith(loading: false);

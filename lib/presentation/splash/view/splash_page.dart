@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:damta/core/services/firebase_service.dart';
+import 'package:damta/core/logger/log.dart';
+import 'package:damta/core/service/firebase_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:flutter/material.dart';
@@ -84,7 +85,7 @@ class _SplashPageState extends State<SplashPage>
         context.go('/school');
       }
     } catch (e, _) {
-      print("!!! 사용자 프로필 상태 확인 오류 !!! : $e");
+      Log.e("!!! 사용자 프로필 상태 확인 오류 !!! : $e");
       if (mounted) context.go('/'); // 오류 발생 시에도 안전하게 로그인 페이지로 이동!!
     } finally {
       if (mounted) {

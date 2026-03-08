@@ -33,7 +33,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       children: [
         // 로고 이미지
         Transform.translate(
-          offset: const Offset(0, 0.5),
+          offset: const Offset(0, 1),
           child: Image.asset(
             'assets/images/damta_icon_app_bar.png',
             height: 28,
@@ -65,14 +65,14 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           const SizedBox(width: 10),
           // 편집 중 표시 카드
           Transform.translate(
-            offset: const Offset(0, 1),
+            offset: const Offset(0, 1.3),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
-                color: vrc(context).contentText,
+                color: Color(0xFFD8ECFF),
                 borderRadius: BorderRadius.circular(999),
               ),
-              child: const Text(
+              child: Text(
                 '편집 중',
                 style: TextStyle(
                   fontSize: 12,
@@ -103,12 +103,15 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           padding: EdgeInsetsGeometry.only(right: 20),
           child: GestureDetector(
             onTap: onAddPhoto,
-            child: Text(
-              '사진추가',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-                color: AppColors.secondaryHeavy,
+            child: Transform.translate(
+              offset: const Offset(0, 1),
+              child: Text(
+                '사진추가',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.secondaryHeavy,
+                ),
               ),
             ),
           ),
@@ -118,12 +121,15 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           padding: EdgeInsetsGeometry.only(right: 20),
           child: GestureDetector(
             onTap: onExitEdit,
-            child: Text(
-              '완료',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-                color: vrc(context).contentText,
+            child: Transform.translate(
+              offset: const Offset(0, 1),
+              child: Text(
+                '완료',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                  color: vrc(context).contentText,
+                ),
               ),
             ),
           ),

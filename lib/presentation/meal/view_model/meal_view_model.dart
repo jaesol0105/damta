@@ -1,6 +1,8 @@
+import 'package:damta/core/config/app_constants.dart';
 import 'package:damta/core/di/provider.dart';
 import 'package:damta/domain/enum/meal_type_enum.dart';
 import 'package:damta/domain/entity/meal_entity.dart';
+import 'package:damta/presentation/util/date_formatter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -18,12 +20,7 @@ abstract class MealState with _$MealState {
 
   /// 선택된 날짜의 급식 목록만 필터링
   List<MealEntity> get mealsForSelectedDate {
-    return allMeals.where((meal) {
-      final d = selectedDate;
-      return meal.date.year == d.year &&
-          meal.date.month == d.month &&
-          meal.date.day == d.day;
-    }).toList();
+    return allMeals.where((meal) => meal.date.isSameDay(selectedDate)).toList();
   }
 
   /// 선택된 날짜의 시간대별 (아침/점심/저녁) 급식메뉴 가져오기
@@ -42,20 +39,13 @@ abstract class MealState with _$MealState {
     final minute = now.hour * 60 + now.minute;
 
     // 오늘 날짜 기준으로 필터링
-    final todayMeals = allMeals
-        .where(
-          (m) =>
-              m.date.year == today.year &&
-              m.date.month == today.month &&
-              m.date.day == today.day,
-        )
-        .toList();
+    final todayMeals = allMeals.where((m) => m.date.isSameDay(today)).toList();
 
     // 시간에 따라 출력할 식사 타입을 필터링
     final List<MealType> priority;
-    if (minute < 9 * 60 + 30) {
+    if (minute < AppConstants.breakfastCutOff) {
       priority = [MealType.breakfast, MealType.lunch, MealType.dinner];
-    } else if (minute < 14 * 60) {
+    } else if (minute < AppConstants.lunchCutOff) {
       priority = [MealType.lunch, MealType.dinner, MealType.breakfast];
     } else {
       priority = [MealType.dinner, MealType.lunch, MealType.breakfast];
@@ -108,12 +98,7 @@ class MealViewModel extends _$MealViewModel {
     DateTime selected = DateTime(today.year, today.month, today.day);
 
     // 오늘 급식 있는지 확인
-    final hasTodayMeal = meals.any(
-      (m) =>
-          m.date.year == selected.year &&
-          m.date.month == selected.month &&
-          m.date.day == selected.day,
-    );
+    final hasTodayMeal = meals.any((m) => m.date.isSameDay(selected));
 
     // 오늘 급식 없을 경우, 가장 가까운 미래 급식 날짜 선택
     if (!hasTodayMeal && meals.isNotEmpty) {

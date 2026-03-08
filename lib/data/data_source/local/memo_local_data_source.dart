@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 abstract interface class MemoLocalDataSource {
   /// 메모 불러오기
   Future<String> getMemo();
+
   /// 메모 저장
   Future<void> saveMemo(String content);
 }

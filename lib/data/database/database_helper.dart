@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:damta/core/logger/log.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -88,7 +89,7 @@ class DatabaseHelper {
       ON $timeTableCacheTable(school_code, date)
     ''');
 
-    log('모든 테이블 생성 완료');
+    Log.d('💾모든 테이블 생성 완료');
   }
 
   /// 데이터베이스 닫기
@@ -96,7 +97,7 @@ class DatabaseHelper {
     if (_database != null) {
       await _database!.close();
       _database = null;
-      log('데이터베이스 연결 종료');
+      Log.d('💾데이터베이스 연결 종료');
     }
   }
 
@@ -106,6 +107,6 @@ class DatabaseHelper {
     final path = join(dbPath, _databaseName);
     await databaseFactory.deleteDatabase(path);
     _database = null;
-    log('데이터베이스 삭제 완료');
+    Log.d('💾데이터베이스 삭제 완료');
   }
 }

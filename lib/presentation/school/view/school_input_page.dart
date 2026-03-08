@@ -1,7 +1,9 @@
-import 'package:damta/core/services/analytics_service.dart';
+import 'package:damta/core/logger/log.dart';
+import 'package:damta/core/service/analytics_service.dart';
+import 'package:damta/presentation/widget/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:damta/core/services/firebase_service.dart';
+import 'package:damta/core/service/firebase_service.dart';
 import 'package:damta/data/dto/school_dto.dart';
 import 'package:damta/data/data_source/remote/school_api_data_source.dart';
 import 'package:dio/dio.dart';
@@ -69,11 +71,11 @@ class _SchoolInputPageState extends State<SchoolInputPage> {
         _isLoading = false;
       });
     } catch (e) {
-      print('!!! 학교 검색 중 오류 발생 !!! : $e');
+      Log.e('!!! 학교 검색 중 오류 발생 !!! : $e');
       setState(() {
         _isLoading = false;
         // API 오류 발생 시 사용자에게 메시지 표시
-        _showErrorDialog("검색 오류", "학교 정보 조회 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+        _showErrorDialog("학교 정보 조회 중 오류가 발생했습니다");
         _searchResults = [];
       });
     }
@@ -107,28 +109,19 @@ class _SchoolInputPageState extends State<SchoolInputPage> {
         p: {'school_name': school.schoolName},
       );
     } catch (e) {
-      print('!!! 학교 정보 Firebase 저장 실패!!!: $e');
-      _showErrorDialog("저장 오류", "학교 정보 저장 중 오류가 발생했습니다. 다시 시도해 주세요.");
+      Log.e('!!! 학교 정보 Firebase 저장 실패!!!: $e');
+      _showErrorDialog("학교 정보 저장 중 오류가 발생했습니다");
     }
   }
 
-  void _showErrorDialog(String title, String content) {
-    showDialog(
+  void _showErrorDialog(String title) {
+    showCustomDialog(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(content),
-          actions: <Widget>[
-            TextButton(
-              child: const Text("확인"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+      title: title,
+      confirmText: '확인',
+      cancelText: '닫기',
+      reverseButtons: false,
+      onConfirm: () => Navigator.of(context).pop(),
     );
   }
 

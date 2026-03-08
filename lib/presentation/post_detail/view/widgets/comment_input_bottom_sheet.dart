@@ -1,18 +1,18 @@
-import 'package:damta/core/services/analytics_service.dart';
-import 'package:damta/core/services/firebase_service.dart';
+import 'package:damta/core/service/analytics_service.dart';
+import 'package:damta/core/service/firebase_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/domain/entity/comment_entity.dart';
 import 'package:damta/domain/entity/notification_entity.dart';
 import 'package:damta/domain/entity/post_entity.dart';
+import 'package:damta/presentation/notification/view_model/notification_view_model.dart';
 import 'package:damta/presentation/post_detail/view_model/comment_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../notification/view_model/notification_view_model.dart';
-
 class CommentInputBottomSheet extends HookConsumerWidget {
+  /// 댓글 입력 창 바텀 시트
   const CommentInputBottomSheet({
     super.key,
     required this.post,
@@ -24,7 +24,6 @@ class CommentInputBottomSheet extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // writerController 제거: 닉네임은 addComment 내부에서 NicknameGenerator로 자동 생성
     final commentController = useTextEditingController();
     final currentUserId = FirebaseService.getUId;
 
@@ -35,12 +34,14 @@ class CommentInputBottomSheet extends HookConsumerWidget {
         top: 20,
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
+
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              // 라벨 영역
               Padding(
                 padding: const EdgeInsets.only(left: 4),
                 child: const Text(
@@ -48,21 +49,21 @@ class CommentInputBottomSheet extends HookConsumerWidget {
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
               ),
+
+              // 버튼 영역
               TextButton(
                 onPressed: () async {
                   if (commentController.text.trim().isEmpty) {
                     return;
                   }
-
                   final commentEntity = CommentEntity(
                     cId: null,
                     uId: currentUserId.toString(),
                     cContent: commentController.text.trim(),
-                    cWriter: '', // NicknameGenerator가 addComment 내부에서 덮어씀
+                    cWriter: '', // NicknameGenerator로 addComment 내부에서 덮어씀
                     cCreatedAt: DateTime.now(),
                     pId: pId,
                   );
-
                   await ref
                       .read(commentViewModelProvider.notifier)
                       .addComment(commentEntity);
@@ -85,10 +86,7 @@ class CommentInputBottomSheet extends HookConsumerWidget {
                           ),
                         );
                   }
-
-                  if (context.mounted) {
-                    context.pop();
-                  }
+                  if (context.mounted) context.pop();
 
                   // 📝
                   AnalyticsService.event(
@@ -101,6 +99,8 @@ class CommentInputBottomSheet extends HookConsumerWidget {
             ],
           ),
           const SizedBox(height: 5),
+
+          // 텍스트 필드 영역
           TextField(
             maxLines: 5,
             autofocus: false,

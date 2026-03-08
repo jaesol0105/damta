@@ -1,7 +1,7 @@
 import 'package:damta/data/dto/users_dto.dart';
 import 'package:damta/domain/entity/users_entity.dart';
 
-// DTO > Entity
+/// DTO > Entity
 UsersEntity toEntity(UsersDto dto) {
   return UsersEntity(
     uId: dto.uId,
@@ -12,7 +12,7 @@ UsersEntity toEntity(UsersDto dto) {
   );
 }
 
-// Entity > DTO
+/// Entity > DTO
 UsersDto toDto(UsersEntity entity) {
   return UsersDto(
     uId: entity.uId,

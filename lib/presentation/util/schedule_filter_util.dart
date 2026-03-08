@@ -6,7 +6,10 @@ import 'package:damta/domain/entity/schedule_entity.dart';
 /// 30일 동안 방학일정 다 출력되는게 너무 지저분해서 정리.
 class ScheduleFilterUtil {
   /// minDays일 이상 반복되는 일정 집합 반환
-  static Set<String> findRepeatedSchedule(List<ScheduleEntity> schedules, {int minDays = 7}) {
+  static Set<String> findRepeatedSchedule(
+    List<ScheduleEntity> schedules, {
+    int minDays = 7,
+  }) {
     // Set을 써서 학사일정명 별로 날짜 그룹핑
     final Map<String, List<DateTime>> eventDates = {};
     for (final schedule in schedules) {
@@ -39,14 +42,15 @@ class ScheduleFilterUtil {
   }
 
   /// 학사일정을 필터링 (주말 제외, 7일 이상 반복 일정 제외)
-  static Map<DateTime, List<ScheduleEntity>> groupSchedulesExcludingWeekendsAndRepeated(
+  static Map<DateTime, List<ScheduleEntity>>
+  groupSchedulesExcludingWeekendsAndRepeated(
     List<ScheduleEntity> schedules, {
     List<ScheduleEntity>? allSchedulesForRepeatedDetection,
     int minRepeatedDays = 7,
   }) {
     // 7일 이상 반복되는 이벤트 찾기 (필터링은 전체 데이터 기준으로)
-    final schedulesForDetection = allSchedulesForRepeatedDetection ?? schedules;
-    final repeatedEvents = findRepeatedSchedule(schedulesForDetection, minDays: minRepeatedDays);
+    // final schedulesForDetection = allSchedulesForRepeatedDetection ?? schedules;
+    // final repeatedEvents = findRepeatedSchedule(schedulesForDetection, minDays: minRepeatedDays);
 
     // 필터링 및 그룹핑
     // 월별 데이터 출력용 : 필터링은 schedules(월별)에만 적용
@@ -56,7 +60,11 @@ class ScheduleFilterUtil {
       // if (repeatedEvents.contains(schedule.eventName)) {
       //   continue;
       // }
-      final date = DateTime(schedule.date.year, schedule.date.month, schedule.date.day);
+      final date = DateTime(
+        schedule.date.year,
+        schedule.date.month,
+        schedule.date.day,
+      );
       // 주말 제외
       // if (date.weekday == DateTime.saturday || date.weekday == DateTime.sunday) {
       //   continue;

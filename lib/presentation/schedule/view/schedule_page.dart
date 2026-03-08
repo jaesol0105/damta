@@ -1,3 +1,4 @@
+import 'package:damta/core/logger/log.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/ui_provider/users_provider.dart';
 import 'package:damta/presentation/schedule/view/widgets/month_selector.dart';
@@ -39,7 +40,7 @@ class SchedulePage extends ConsumerWidget {
           // user 에 저장된 officeCode, schoolCode 가져오기
           final officeCode = user.officeCode ?? 'J10';
           final schoolCode = user.schoolCode ?? '7642041';
-          print('🩷 학사 일정 : $officeCode, $schoolCode, ${user.schoolName}');
+          Log.d('🩷 학사 일정 : $officeCode, $schoolCode, ${user.schoolName}');
 
           final scheduleAsync = ref.watch(
             scheduleViewModelProvider(

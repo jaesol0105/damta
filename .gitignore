@@ -86,3 +86,8 @@ android/key.properties
 # DS Store
 .DS_Store
 **/.DS_Store
+
+# Android Studio
+.idea/
+android/.idea/
+*.iml

@@ -1,5 +1,5 @@
 import 'package:damta/core/theme/app_colors.dart';
-import 'package:damta/presentation/home/view_model/weather_extensions.dart';
+import 'package:damta/presentation/home/view_model/utils/weather_extensions.dart';
 import 'package:damta/presentation/home/view_model/weather_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -18,7 +18,7 @@ class WeatherModule extends ConsumerWidget {
       decoration: BoxDecoration(
         color: const Color(0xFFD8ECFF),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFCBE3FA)),
+        // border: Border.all(color: const Color(0xFFCBE3FA)),
       ),
       child: weatherAsync.when(
         loading: () => const Center(

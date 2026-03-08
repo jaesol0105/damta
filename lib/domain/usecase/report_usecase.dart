@@ -5,9 +5,6 @@ class ReportUsecase {
   const ReportUsecase(this._reportRepository);
   final ReportRepository _reportRepository;
 
-  /// 신고 제출
-  /// - 자기 게시글/댓글 신고 시 예외
-  /// - 중복 신고 시 예외
   Future<void> submitReport(ReportEntity reportEntity) async {
     if (reportEntity.reporterUid == reportEntity.targetUid) {
       throw Exception('본인의 게시글/댓글은 신고할 수 없습니다.');

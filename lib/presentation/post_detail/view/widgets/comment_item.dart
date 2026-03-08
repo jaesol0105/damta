@@ -1,17 +1,18 @@
-import 'package:damta/core/services/analytics_service.dart';
-import 'package:damta/core/services/firebase_service.dart';
+import 'package:damta/core/service/analytics_service.dart';
+import 'package:damta/core/service/firebase_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/domain/entity/comment_entity.dart';
 import 'package:damta/domain/enum/report_target_type_enum.dart';
 import 'package:damta/presentation/post_detail/view/widgets/report_bottom_sheet.dart';
+import 'package:damta/presentation/widget/custom_dialog.dart';
 import 'package:damta/presentation/util/time_ago.dart';
 import 'package:damta/presentation/post_detail/view_model/comment_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class CommentItemWidget extends StatelessWidget {
-  const CommentItemWidget({
+class CommentItem extends StatelessWidget {
+  /// 댓글 위젯
+  const CommentItem({
     super.key,
     required this.comment,
     required this.schoolCode,
@@ -28,38 +29,28 @@ class CommentItemWidget extends StatelessWidget {
     return Consumer(
       builder: (context, ref, child) {
         return InkWell(
+          // 롱 프레스
           onLongPress: () {
             if (isOwner) {
-              showDialog(
+              showCustomDialog(
                 context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: Text("삭제"),
-                    content: Text("이 댓글을 삭제하시겠습니까?"),
-                    actions: [
-                      TextButton(
-                        onPressed: () => context.pop(),
-                        child: Text("취소"),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          context.pop();
-                          final cId = comment.cId;
-                          if (cId != null) {
-                            ref
-                                .read(commentViewModelProvider.notifier)
-                                .deleteComment(cId, comment.pId);
-                            // 📝
-                            AnalyticsService.event(
-                              'post_action',
-                              p: {'action': 'cmt_delete'},
-                            );
-                          }
-                        },
-                        child: Text("삭제"),
-                      ),
-                    ],
-                  );
+                title: '댓글을 삭제하시겠습니까?',
+                confirmText: '삭제',
+                cancelText: '취소',
+                reverseButtons: false,
+                onConfirm: () {
+                  Navigator.pop(context);
+                  final cId = comment.cId;
+                  if (cId != null) {
+                    ref
+                        .read(commentViewModelProvider.notifier)
+                        .deleteComment(cId, comment.pId);
+                    // 📝
+                    AnalyticsService.event(
+                      'post_action',
+                      p: {'action': 'cmt_delete'},
+                    );
+                  }
                 },
               );
             } else if (currentUId != null) {
@@ -75,6 +66,7 @@ class CommentItemWidget extends StatelessWidget {
               );
             }
           },
+
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 14.0),
             child: Column(

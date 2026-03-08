@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'package:damta/core/logger/log.dart';
 import 'package:damta/data/util/extension/date_time_extension.dart';
 import 'package:damta/data/database/database_helper.dart';
 import 'package:damta/data/dto/local_cache_dto/meal_cache_dto.dart';
@@ -46,26 +46,28 @@ class MealLocalDataSourceImpl implements MealLocalDataSource {
       );
 
       if (maps.isEmpty) {
-        print('🥕로컬 캐시에 데이터 없음');
+        Log.d('🥕로컬 캐시에 데이터 없음');
         return [];
       }
 
       final cacheList = maps.map((map) => MealCacheDTO.fromMap(map)).toList();
 
-      // 만료된 캐시 필터링 (자정 기준, 하루 1회는 새로 API 호출)
+      // 만료된 캐시 필터링 (자정 기준, 하루 1회 새로 API 호출)
       final today = DateTime.now().dateOnly();
       final cachedDate = DateTime.fromMillisecondsSinceEpoch(
         cacheList.first.cachedAt,
       ).dateOnly();
+
       if (!cachedDate.isAtSameMomentAs(today)) {
-        await clearExpiredCache(); // 만료된 캐시 DB에서 삭제
+        // 만료된 캐시 DB에서 삭제
+        await clearExpiredCache();
         return [];
       }
 
-      print('🥕로컬 캐시에서 ${cacheList.length}개 급식 정보 로드');
+      Log.d('🥕로컬 캐시에서 ${cacheList.length}개 급식 정보 로드');
       return cacheList.map((cache) => cache.toDomain()).toList();
     } catch (e, s) {
-      log('로컬 캐시 조회 실패 : $e', error: e, stackTrace: s);
+      Log.e('로컬 캐시 조회 실패 : $e', error: e, stackTrace: s);
       return []; // Repository에서 네트워크 요청
     }
   }
@@ -90,9 +92,9 @@ class MealLocalDataSourceImpl implements MealLocalDataSource {
           );
         }
       });
-      print('🥕${meals.length}개 캐시 저장 완료 : $schoolCode');
+      Log.d('🥕${meals.length}개 캐시 저장 완료 : $schoolCode');
     } catch (e, s) {
-      log('캐시 저장 실패 : $e', error: e, stackTrace: s);
+      Log.e('캐시 저장 실패 : $e', error: e, stackTrace: s);
     }
   }
 
@@ -100,7 +102,7 @@ class MealLocalDataSourceImpl implements MealLocalDataSource {
   @override
   Future<void> clearExpiredCache() async {
     try {
-      // 오늘날짜 기준 자정 00시
+      // 오늘 날짜 기준 자정
       final todayMidnight = DateTime.now().dateOnly().millisecondsSinceEpoch;
       // 전날 캐시 삭제
       await database.delete(
@@ -109,7 +111,7 @@ class MealLocalDataSourceImpl implements MealLocalDataSource {
         whereArgs: [todayMidnight],
       );
     } catch (e, s) {
-      log('만료된 캐시 삭제 실패 : $e', error: e, stackTrace: s);
+      Log.e('만료된 캐시 삭제 실패 : $e', error: e, stackTrace: s);
     }
   }
 }

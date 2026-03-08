@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+import 'package:damta/core/logger/log.dart';
 import 'package:damta/data/data_source/remote/post_data_source.dart';
 import 'package:damta/data/mapper/post_mapper.dart';
 import 'package:damta/domain/entity/post_entity.dart';
@@ -29,7 +28,7 @@ class PostRepositoryImpl implements PostRepository {
       final added = await postDataSource.addPost(dto, schoolCode: schoolCode);
       return postDtoToPostEntity(added);
     } catch (e, s) {
-      log('Repository addPost 실패: $e', error: e, stackTrace: s);
+      Log.e('Repository addPost 실패: $e', error: e, stackTrace: s);
       rethrow;
     }
   }
@@ -40,7 +39,7 @@ class PostRepositoryImpl implements PostRepository {
       final dto = postEntityToPostDto(entity);
       await postDataSource.updatePostContent(dto);
     } catch (e, s) {
-      log('Repository updatePostContent 실패: $e', error: e, stackTrace: s);
+      Log.e('Repository updatePostContent 실패: $e', error: e, stackTrace: s);
       rethrow;
     }
   }
@@ -50,7 +49,7 @@ class PostRepositoryImpl implements PostRepository {
     try {
       await postDataSource.deletePost(id);
     } catch (e, s) {
-      log('Repository deletePost 실패: $e', error: e, stackTrace: s);
+      Log.e('Repository deletePost 실패: $e', error: e, stackTrace: s);
       rethrow;
     }
   }

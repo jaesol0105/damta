@@ -47,7 +47,11 @@ class ScheduleCacheDTO {
   // ScheduleCacheDTO을 ScheduleEntity로 변환
   ScheduleEntity toDomain() {
     final grades = (jsonDecode(gradesJson) as List).cast<int>();
-    return ScheduleEntity(date: DateTime.parse(date), eventName: eventName, grades: grades);
+    return ScheduleEntity(
+      date: DateTime.parse(date),
+      eventName: eventName,
+      grades: grades,
+    );
   }
 
   // ScheduleEntity를 ScheduleCacheDTO로 변환

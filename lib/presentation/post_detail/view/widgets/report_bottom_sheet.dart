@@ -5,7 +5,6 @@ import 'package:damta/domain/enum/report_target_type_enum.dart';
 import 'package:damta/presentation/post_detail/view_model/report_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ReportBottomSheet extends HookConsumerWidget {
@@ -29,24 +28,6 @@ class ReportBottomSheet extends HookConsumerWidget {
     final selectedReason = useState<ReportReason?>(null);
     final reportState = ref.watch(reportViewModelProvider);
     final isLoading = reportState is AsyncLoading;
-
-    ref.listen(reportViewModelProvider, (_, next) {
-      if (next is AsyncData && next.value == null) return;
-      if (next is AsyncData) {
-        if (context.mounted) {
-          context.pop();
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('신고가 접수되었습니다.')),
-          );
-        }
-      } else if (next is AsyncError) {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(next.error.toString().replaceAll('Exception: ', ''))),
-          );
-        }
-      }
-    });
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 20, 16, 36),
@@ -95,6 +76,26 @@ class ReportBottomSheet extends HookConsumerWidget {
                               rCreatedAt: DateTime.now(),
                             ),
                           );
+                      if (!context.mounted) return;
+                      final state = ref.read(reportViewModelProvider);
+                      Navigator.of(context).pop();
+                      if (!context.mounted) return;
+                      if (state is AsyncData) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('신고가 접수되었습니다.')),
+                        );
+                      } else if (state is AsyncError) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              state.error.toString().replaceAll(
+                                'Exception: ',
+                                '',
+                              ),
+                            ),
+                          ),
+                        );
+                      }
                     },
               child: isLoading
                   ? const SizedBox(

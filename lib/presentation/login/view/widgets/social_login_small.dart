@@ -1,6 +1,6 @@
-import 'package:damta/core/services/analytics_service.dart';
+import 'package:damta/core/service/analytics_service.dart';
 import 'package:damta/presentation/login/view_model/auth_view_model.dart';
-import 'package:damta/presentation/util/custom_snackbar.dart';
+import 'package:damta/presentation/widget/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
