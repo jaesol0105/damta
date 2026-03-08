@@ -1,3 +1,4 @@
+import 'package:damta/core/logger/log.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/time_table/view/widgets/choose_class.dart';
 import 'package:damta/presentation/time_table/view/widgets/choose_week.dart';
@@ -39,7 +40,7 @@ class TimeTablePage extends ConsumerWidget {
           // user 에 저장된 officeCode, schoolCode 가져오기
           final officeCode = user.officeCode ?? 'J10';
           final schoolCode = user.schoolCode ?? '7642041';
-          print('🩷 시간표 : $officeCode, $schoolCode, ${user.schoolName}');
+          Log.d('🩷 시간표 : $officeCode, $schoolCode, ${user.schoolName}');
 
           final state = ref.watch(
             timeTableViewModelProvider(

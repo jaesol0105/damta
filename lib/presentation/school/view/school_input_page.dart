@@ -1,3 +1,4 @@
+import 'package:damta/core/logger/log.dart';
 import 'package:damta/core/services/analytics_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -69,7 +70,7 @@ class _SchoolInputPageState extends State<SchoolInputPage> {
         _isLoading = false;
       });
     } catch (e) {
-      print('!!! 학교 검색 중 오류 발생 !!! : $e');
+      Log.e('!!! 학교 검색 중 오류 발생 !!! : $e');
       setState(() {
         _isLoading = false;
         // API 오류 발생 시 사용자에게 메시지 표시
@@ -107,7 +108,7 @@ class _SchoolInputPageState extends State<SchoolInputPage> {
         p: {'school_name': school.schoolName},
       );
     } catch (e) {
-      print('!!! 학교 정보 Firebase 저장 실패!!!: $e');
+      Log.e('!!! 학교 정보 Firebase 저장 실패!!!: $e');
       _showErrorDialog("저장 오류", "학교 정보 저장 중 오류가 발생했습니다. 다시 시도해 주세요.");
     }
   }

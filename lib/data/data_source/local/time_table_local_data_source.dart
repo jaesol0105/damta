@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'package:damta/core/logger/log.dart';
 import 'package:damta/data/util/extension/date_time_extension.dart';
 import 'package:damta/data/database/database_helper.dart';
 import 'package:damta/data/dto/local_cache_dto/time_table_cache_dto.dart';
@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 abstract interface class TimeTableLocalDataSource {
+  /// 로컬 저장소에 캐싱된 시간표 정보 불러오기
   Future<List<TimeTableEntity>> getTimeTables({
     required String schoolCode,
     required DateTime fromDate,
@@ -15,21 +16,26 @@ abstract interface class TimeTableLocalDataSource {
     required String classes,
   });
 
+  /// 로컬 저장소에 캐시 저장
   Future<void> saveTimeTables({
     required String schoolCode,
     required List<TimeTableEntity> tables,
   });
+
+  /// 마지막으로 조회한 학년반 불러오기
   Future<String> getSelectedClass();
+
+  /// 마지막으로 조회한 학년반 저장
   Future<void> saveSelectedClass(String value);
 }
 
 class TimeTableLocalDataSourceImpl implements TimeTableLocalDataSource {
   TimeTableLocalDataSourceImpl({required this.database});
-  final Database database;
 
+  static const _kSelectedClassKey = 'timetable_selected_class';
+  final Database database;
   String get _tableName => DatabaseHelper.timeTableCacheTable; // 테이블명
 
-  // 로컬 저장소에 캐싱 된 시간표 정보 불러오기
   @override
   Future<List<TimeTableEntity>> getTimeTables({
     required String schoolCode,
@@ -55,7 +61,7 @@ class TimeTableLocalDataSourceImpl implements TimeTableLocalDataSource {
       );
 
       if (maps.isEmpty) {
-        print('🥕로컬 캐시에 데이터 없음');
+        Log.d('🥕로컬 캐시에 데이터 없음');
         return [];
       }
 
@@ -64,19 +70,17 @@ class TimeTableLocalDataSourceImpl implements TimeTableLocalDataSource {
           .toList();
       return cacheModels.map((cache) => cache.toDomain()).toList();
     } catch (e, s) {
-      log('로컬 캐시 조회 실패 : $e', error: e, stackTrace: s);
+      Log.e('로컬 캐시 조회 실패 : $e', error: e, stackTrace: s);
       return []; // Repository에서 네트워크 요청
     }
   }
 
-  /// 로컬 저장소에 캐시 저장
   @override
   Future<void> saveTimeTables({
     required String schoolCode,
     required List<TimeTableEntity> tables,
   }) async {
-    final db = await database;
-    final batch = db.batch();
+    final batch = database.batch();
 
     for (final t in tables) {
       batch.insert('time_table_cache', {
@@ -91,10 +95,8 @@ class TimeTableLocalDataSourceImpl implements TimeTableLocalDataSource {
     }
 
     await batch.commit(noResult: true);
-    print('🥕캐시 저장 완료');
+    Log.d('🥕캐시 저장 완료');
   }
-  
-  static const _kSelectedClassKey = 'timetable_selected_class';
 
   @override
   Future<String> getSelectedClass() async {

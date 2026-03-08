@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'package:damta/core/logger/log.dart';
 import 'package:damta/data/util/extension/date_time_extension.dart';
 import 'package:damta/data/dto/neis_schedule_dto.dart';
 import 'package:dio/dio.dart';
@@ -27,7 +27,7 @@ class ScheduleRemoteDataSourceImpl implements ScheduleRemoteDataSource {
   }) async {
     try {
       final start = DateTime.now();
-      print('[REMOTE] getMeals 요청 시작: $start');
+      Log.d('🌈학사일정 요청 시작: $start');
 
       final response = await dio
           .get(
@@ -46,22 +46,21 @@ class ScheduleRemoteDataSourceImpl implements ScheduleRemoteDataSource {
 
       // 너무 오래걸리는데...
       final end = DateTime.now();
-      print(
-        '[REMOTE] 응답 수신: $end (소요: ${end.difference(start).inMilliseconds} ms)',
+      Log.d(
+        '🌈학사일정 응답 수신: $end (소요: ${end.difference(start).inMilliseconds} ms)',
       );
 
       if (response.statusCode == 200) {
         final data = response.data;
-        print('🌈NEIS 학사일정 응답: ${response.data}');
+        Log.d('🌈NEIS 학사일정 응답: ${response.data}');
 
         if (data['SchoolSchedule'] != null) {
-          final info = data['SchoolSchedule'] as List; // []안에 {}있는 구조
-          final rowField = info.firstWhere(
-            (e) => e is Map && e['row'] != null,
-          ); // 'row' 필드를 가진 Map
-          final row =
-              (rowField as Map<String, dynamic>)['row']
-                  as List; // 또 []안에 {}있는 구조
+          // []안에 {}있는 구조
+          final info = data['SchoolSchedule'] as List;
+          // 'row' 필드를 가진 Map
+          final rowField = info.firstWhere((e) => e is Map && e['row'] != null);
+          // 또 []안에 {}있는 구조
+          final row = (rowField as Map<String, dynamic>)['row'] as List;
           return row
               .map(
                 (json) =>
@@ -77,14 +76,14 @@ class ScheduleRemoteDataSourceImpl implements ScheduleRemoteDataSource {
       }
       // 예외 던지기
     } on DioException catch (e, s) {
-      log(
+      Log.e(
         'Network 오류로 인한 getSchedules 실패 : ${e.message}',
         error: e,
         stackTrace: s,
       );
       rethrow;
     } catch (e, s) {
-      log('알 수 없는 오류로 인한 getSchedules 실패 : $e', error: e, stackTrace: s);
+      Log.e('알 수 없는 오류로 인한 getSchedules 실패 : $e', error: e, stackTrace: s);
       rethrow;
     }
   }

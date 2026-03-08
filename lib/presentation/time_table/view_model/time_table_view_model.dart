@@ -1,4 +1,5 @@
 import 'package:damta/core/di/provider.dart';
+import 'package:damta/core/logger/log.dart';
 import 'package:damta/domain/entity/time_table_entity.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -169,7 +170,7 @@ class TimeTableViewModel extends _$TimeTableViewModel {
     required String officeCode,
     required String schoolCode,
   }) {
-    print("Changing class to: $value");
+    Log.d("Changing class to: $value");
     if (!state.hasValue) return;
 
     // SharedPreferences에 저장

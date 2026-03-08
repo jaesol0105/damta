@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'package:damta/core/logger/log.dart';
 import 'package:damta/data/util/extension/date_time_extension.dart';
 import 'package:damta/data/dto/neis_meal_dto.dart';
 import 'package:dio/dio.dart';
@@ -27,7 +27,7 @@ class MealRemoteDataSourceImpl implements MealRemoteDataSource {
   }) async {
     try {
       final start = DateTime.now();
-      print('[REMOTE] getMeals 요청 시작: $start');
+      Log.d('🌈급식 정보 요청 시작: $start');
 
       final response = await dio
           .get(
@@ -45,22 +45,21 @@ class MealRemoteDataSourceImpl implements MealRemoteDataSource {
 
       // 너무 오래걸리는데...
       final end = DateTime.now();
-      print(
-        '[REMOTE] 응답 수신: $end (소요: ${end.difference(start).inMilliseconds} ms)',
+      Log.d(
+        '🌈급식 정보 응답 수신: $end (소요: ${end.difference(start).inMilliseconds} ms)',
       );
 
       if (response.statusCode == 200) {
         final data = response.data;
-        print('🌈NEIS 급식정보 응답: ${response.data}');
+        Log.d('🌈NEIS 급식 정보 응답: ${response.data}');
 
         if (data['mealServiceDietInfo'] != null) {
-          final info = data['mealServiceDietInfo'] as List; // []안에 {}있는 구조
-          final rowField = info.firstWhere(
-            (e) => e is Map && e['row'] != null,
-          ); // 'row' 필드를 가진 Map
-          final row =
-              (rowField as Map<String, dynamic>)['row']
-                  as List; // 또 []안에 {}있는 구조
+          // []안에 {}있는 구조
+          final info = data['mealServiceDietInfo'] as List;
+          // 'row' 필드를 가진 Map
+          final rowField = info.firstWhere((e) => e is Map && e['row'] != null);
+          // 또 []안에 {}있는 구조
+          final row = (rowField as Map<String, dynamic>)['row'] as List;
           return row
               .map((json) => NeisMealDTO.fromJson(json as Map<String, dynamic>))
               .toList();
@@ -73,10 +72,14 @@ class MealRemoteDataSourceImpl implements MealRemoteDataSource {
       }
       // 예외 던지기
     } on DioException catch (e, s) {
-      log('Network 오류로 인한 getMeals 실패 : ${e.message}', error: e, stackTrace: s);
+      Log.e(
+        'Network 오류로 인한 getMeals 실패 : ${e.message}',
+        error: e,
+        stackTrace: s,
+      );
       rethrow;
     } catch (e, s) {
-      log('알 수 없는 오류로 인한 getMeals 실패 : $e', error: e, stackTrace: s);
+      Log.e('알 수 없는 오류로 인한 getMeals 실패 : $e', error: e, stackTrace: s);
       rethrow;
     }
   }

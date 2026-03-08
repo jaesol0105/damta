@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'package:damta/core/logger/log.dart';
 import 'package:damta/data/util/extension/date_time_extension.dart';
 import 'package:damta/data/database/database_helper.dart';
 import 'package:damta/data/dto/local_cache_dto/schedule_cache_dto.dart';
@@ -43,7 +43,7 @@ class ScheduleLocalDataSourceImpl implements ScheduleLocalDataSource {
       );
 
       if (maps.isEmpty) {
-        print('🥕로컬 캐시에 데이터 없음');
+        Log.d('🥕로컬 캐시에 데이터 없음');
         return [];
       }
 
@@ -53,7 +53,7 @@ class ScheduleLocalDataSourceImpl implements ScheduleLocalDataSource {
 
       return cacheList.map((cache) => cache.toDomain()).toList();
     } catch (e, s) {
-      log('로컬 캐시 조회 실패 : $e', error: e, stackTrace: s);
+      Log.e('로컬 캐시 조회 실패 : $e', error: e, stackTrace: s);
       return []; // Repository에서 네트워크 요청
     }
   }
@@ -80,9 +80,9 @@ class ScheduleLocalDataSourceImpl implements ScheduleLocalDataSource {
           );
         }
       });
-      print('🥕${schedules.length}개 캐시 저장 완료 : $schoolCode');
+      Log.d('🥕${schedules.length}개 캐시 저장 완료 : $schoolCode');
     } catch (e, s) {
-      log('🥕캐시 저장 실패 : $e', error: e, stackTrace: s);
+      Log.e('캐시 저장 실패 : $e', error: e, stackTrace: s);
     }
   }
 }

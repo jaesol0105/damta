@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:damta/core/logger/log.dart';
 import 'package:damta/domain/entity/users_entity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:flutter_naver_login/interface/types/naver_login_status.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -35,7 +35,7 @@ class AuthDataSourceImpl implements AuthDataSource {
     if (user == null) return null;
     final users = UsersEntity(uId: user.uid, email: user.email);
     await _createUserIfNotExists(users);
-    debugPrint("Firebase 로그인 성공 🩷 uId : ${users.uId}");
+    Log.d("Firebase 로그인 성공 🩷 uId : ${users.uId}");
     return users;
   }
 
@@ -47,7 +47,7 @@ class AuthDataSourceImpl implements AuthDataSource {
         "email": user.email,
         "createdAt": FieldValue.serverTimestamp(),
       });
-      debugPrint("신규 유저 Firestore 생성 완료");
+      Log.d("신규 유저 Firestore 생성 완료");
     }
   }
 
@@ -79,7 +79,7 @@ class AuthDataSourceImpl implements AuthDataSource {
       // 3. Firebase 로그인
       return _handleFirebaseUser(userCredential);
     } catch (e) {
-      debugPrint("Apple 로그인 실패: $e");
+      Log.e("Apple 로그인 실패: $e");
       rethrow;
     }
   }
@@ -92,7 +92,7 @@ class AuthDataSourceImpl implements AuthDataSource {
       // 1. Google 로그인 요청 > 인증 토큰 가져오기
       final account = await GoogleSignIn().signIn();
       if (account == null) {
-        debugPrint("Google 로그인 취소");
+        Log.d("Google 로그인 취소");
         return null;
       }
       final auth = await account.authentication;
@@ -105,7 +105,7 @@ class AuthDataSourceImpl implements AuthDataSource {
       // 3. Firebase 로그인
       return _handleFirebaseUser(userCredential);
     } catch (e) {
-      debugPrint("Google 로그인 실패: $e");
+      Log.e("Google 로그인 실패: $e");
       rethrow;
     }
   }
@@ -117,15 +117,15 @@ class AuthDataSourceImpl implements AuthDataSource {
       OAuthToken token;
       token = await UserApi.instance.loginWithKakaoAccount();
 
-      debugPrint("Kakao 로그인 성공");
+      Log.d("Kakao 로그인 성공");
       return token.accessToken;
     } on FirebaseFunctionsException catch (e) {
-      debugPrint('code: ${e.code}');
-      debugPrint('message: ${e.message}');
-      debugPrint('details: ${e.details}');
+      Log.d('code: ${e.code}');
+      Log.d('message: ${e.message}');
+      Log.d('details: ${e.details}');
       return null;
     } catch (e) {
-      debugPrint("Kakao 로그인 실패: $e");
+      Log.e("Kakao 로그인 실패: $e");
       return null;
     }
   }
@@ -134,14 +134,14 @@ class AuthDataSourceImpl implements AuthDataSource {
     try {
       final result = await FlutterNaverLogin.logIn();
       if (result.status == NaverLoginStatus.loggedIn) {
-        debugPrint("Naver 로그인 성공");
+        Log.d("Naver 로그인 성공");
         return result.accessToken?.accessToken;
       } else {
-        debugPrint("Naver 로그인 실패: ${result.status}");
+        Log.d("Naver 로그인 실패: ${result.status}");
         return null;
       }
     } catch (e) {
-      debugPrint("Naver 로그인 실패: $e");
+      Log.e("Naver 로그인 실패: $e");
       return null;
     }
   }
@@ -165,10 +165,11 @@ class AuthDataSourceImpl implements AuthDataSource {
       // 4. Firebase 로그인
       return _handleFirebaseUser(userCredential);
     } catch (e) {
-      debugPrint("$provider 로그인 실패: $e");
+      Log.e("$provider 로그인 실패: $e");
       rethrow;
     }
   }
+
   // 로그아웃
 
   @override
@@ -198,10 +199,9 @@ class AuthDataSourceImpl implements AuthDataSource {
       }
       // auth 로그아웃
       await auth.signOut();
-
-      debugPrint("로그아웃 완료");
+      Log.d("로그아웃 완료");
     } catch (e) {
-      debugPrint("로그아웃 실패: $e");
+      Log.e("로그아웃 실패: $e");
       rethrow;
     }
   }
@@ -233,16 +233,16 @@ class AuthDataSourceImpl implements AuthDataSource {
       // auth 삭제
       await user.delete();
 
-      debugPrint("회원탈퇴 완료");
+      Log.d("회원탈퇴 완료");
     } on FirebaseAuthException catch (e) {
       if (e.code == "requires-recent-login") {
-        debugPrint("재인증 필요");
+        Log.e("재인증 필요");
         throw Exception("재로그인 후 다시 시도해주세요.");
       }
-      debugPrint("회원탈퇴 실패: ${e.message}");
+      Log.e("회원탈퇴 실패: ${e.message}");
       rethrow;
     } catch (e) {
-      debugPrint("회원탈퇴 실패: $e");
+      Log.e("회원탈퇴 실패: $e");
       rethrow;
     }
   }

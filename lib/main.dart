@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:damta/core/config/routes.dart';
+import 'package:damta/core/logger/log.dart';
 import 'package:damta/core/services/analytics_service.dart';
 import 'package:damta/core/services/notification_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
@@ -23,9 +24,9 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> _getHashKey() async {
   try {
     final hash = await KakaoSdk.origin;
-    debugPrint('카카오 키 해시: $hash'); // 키 해시 추출
+    Log.d('카카오 키 해시: $hash'); // 키 해시 추출
   } on PlatformException catch (e) {
-    debugPrint('!!! 키 해시 얻기 실패 !!! : $e');
+    Log.d('!!! 키 해시 얻기 실패 !!! : $e');
   }
 }
 
@@ -42,7 +43,7 @@ Future<void> main() async {
       );
 
       await dotenv.load(fileName: ".env");
-      debugPrint("damta 릴리즈 키 해시: ${await KakaoSdk.origin}");
+      Log.d("damta 릴리즈 키 해시: ${await KakaoSdk.origin}");
 
       // if (kDebugMode) {
       //   final helper = DatabaseHelper();

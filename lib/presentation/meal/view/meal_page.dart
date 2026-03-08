@@ -1,3 +1,4 @@
+import 'package:damta/core/logger/log.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/domain/enum/meal_type_enum.dart';
 import 'package:damta/presentation/meal/view/widgets/date_selector.dart';
@@ -40,7 +41,7 @@ class MealPage extends ConsumerWidget {
           // user 에 저장된 officeCode, schoolCode 가져오기
           final officeCode = user.officeCode ?? 'J10';
           final schoolCode = user.schoolCode ?? '7642041';
-          print('🩷 급식표 : $officeCode, $schoolCode, ${user.schoolName}');
+          Log.d('🩷 급식표 : $officeCode, $schoolCode, ${user.schoolName}');
 
           final mealState = ref.watch(
             mealViewModelProvider(

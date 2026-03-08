@@ -1,3 +1,4 @@
+import 'package:damta/core/logger/log.dart';
 import 'package:damta/data/dto/school_dto.dart';
 import 'package:dio/dio.dart';
 
@@ -29,7 +30,7 @@ class SchoolApiDataSource {
 
       // schoolInfo 섹션이 있는지 확인 (검색 결과가 없거나 오류일 수 있음)
       if (!responseData.containsKey('schoolInfo')) {
-        print('!!! NEIS 응답 오류 또는 검색 결과 없음 !!! : schoolInfo 필드 누락');
+        Log.d('!!! NEIS 응답 오류 또는 검색 결과 없음 !!! : schoolInfo 필드 누락');
         return [];
       }
 
@@ -56,14 +57,10 @@ class SchoolApiDataSource {
           .map((json) => SchoolDto.fromJson(json as Map<String, dynamic>))
           .toList();
 
-      print('학교 검색 성공 (-_- b) . 결과 수: ${schools.length}');
+      Log.d('학교 검색 성공 (-_- b) . 결과 수: ${schools.length}');
       return schools;
-    } on DioError catch (e) {
-      print('!!! Dio API 오류 발생 !!! : ${e.message}');
-      // Dio 오류 발생 시 빈 리스트 반환
-      return [];
     } catch (e) {
-      print('!!! 학교 검색 중 알 수 없는 오류 발생 !!! : $e');
+      Log.e('!!! 학교 검색 중 알 수 없는 오류 발생 !!! : $e');
       return [];
     }
   }
