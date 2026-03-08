@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:damta/core/logger/log.dart';
 import 'package:damta/domain/entity/report_entity.dart';
 
 abstract interface class ReportDataSource {
@@ -40,10 +39,10 @@ class ReportDataSourceImpl implements ReportDataSource {
         'status': 'pending',
       });
     } on FirebaseException catch (e, s) {
-      log('Firebase addReport 실패: ${e.message}', error: e, stackTrace: s);
+      Log.e('Firebase addReport 실패: ${e.message}', error: e, stackTrace: s);
       rethrow;
     } catch (e, s) {
-      log('알 수 없는 addReport 실패: $e', error: e, stackTrace: s);
+      Log.e('알 수 없는 addReport 실패: $e', error: e, stackTrace: s);
       rethrow;
     }
   }

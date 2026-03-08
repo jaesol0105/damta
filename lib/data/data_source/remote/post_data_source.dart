@@ -1,5 +1,5 @@
-import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:damta/core/logger/log.dart';
 import 'package:damta/core/util/nick_name_generator.dart';
 import 'package:damta/data/dto/post_dto.dart';
 
@@ -100,10 +100,10 @@ class PostDataSourceImpl implements PostDataSource {
       });
       return post.copyWith(pId: ref.id);
     } on FirebaseException catch (e, s) {
-      log('Firebase addPost 실패: ${e.message}', error: e, stackTrace: s);
+      Log.e('Firebase addPost 실패: ${e.message}', error: e, stackTrace: s);
       rethrow;
     } catch (e, s) {
-      log('알 수 없는 addPost 실패: $e', error: e, stackTrace: s);
+      Log.e('알 수 없는 addPost 실패: $e', error: e, stackTrace: s);
       rethrow;
     }
   }
@@ -118,14 +118,14 @@ class PostDataSourceImpl implements PostDataSource {
         'p_image_url': post.pImageUrl ?? '',
       });
     } on FirebaseException catch (e, s) {
-      log(
+      Log.e(
         'Firebase updatePostContent 실패: ${e.message}',
         error: e,
         stackTrace: s,
       );
       rethrow;
     } catch (e, s) {
-      log('알 수 없는 updatePostContent 실패: $e', error: e, stackTrace: s);
+      Log.e('알 수 없는 updatePostContent 실패: $e', error: e, stackTrace: s);
       rethrow;
     }
   }
@@ -135,10 +135,10 @@ class PostDataSourceImpl implements PostDataSource {
     try {
       await firestore.collection('post').doc(id).delete();
     } on FirebaseException catch (e, s) {
-      log('Firebase deletePost 실패: ${e.message}', error: e, stackTrace: s);
+      Log.e('Firebase deletePost 실패: ${e.message}', error: e, stackTrace: s);
       rethrow;
     } catch (e, s) {
-      log('알 수 없는 deletePost 실패: $e', error: e, stackTrace: s);
+      Log.e('알 수 없는 deletePost 실패: $e', error: e, stackTrace: s);
       rethrow;
     }
   }
@@ -150,14 +150,14 @@ class PostDataSourceImpl implements PostDataSource {
         'view_count': FieldValue.increment(1),
       });
     } on FirebaseException catch (e, s) {
-      log(
+      Log.e(
         'Firebase incrementViewCount 실패: ${e.message}',
         error: e,
         stackTrace: s,
       );
       rethrow;
     } catch (e, s) {
-      log('알 수 없는 incrementViewCount 실패: $e', error: e, stackTrace: s);
+      Log.e('알 수 없는 incrementViewCount 실패: $e', error: e, stackTrace: s);
       rethrow;
     }
   }
@@ -172,10 +172,10 @@ class PostDataSourceImpl implements PostDataSource {
             .toString(),
       });
     } on FirebaseException catch (e, s) {
-      log('Firebase addReaction 실패: ${e.message}', error: e, stackTrace: s);
+      Log.e('Firebase addReaction 실패: ${e.message}', error: e, stackTrace: s);
       rethrow;
     } catch (e, s) {
-      log('알 수 없는 addReaction 실패: $e', error: e, stackTrace: s);
+      Log.e('알 수 없는 addReaction 실패: $e', error: e, stackTrace: s);
       rethrow;
     }
   }
@@ -187,10 +187,14 @@ class PostDataSourceImpl implements PostDataSource {
         'reactions.${userId}_$emoji': FieldValue.delete(),
       });
     } on FirebaseException catch (e, s) {
-      log('Firebase removeReaction 실패: ${e.message}', error: e, stackTrace: s);
+      Log.e(
+        'Firebase removeReaction 실패: ${e.message}',
+        error: e,
+        stackTrace: s,
+      );
       rethrow;
     } catch (e, s) {
-      log('알 수 없는 removeReaction 실패: $e', error: e, stackTrace: s);
+      Log.e('알 수 없는 removeReaction 실패: $e', error: e, stackTrace: s);
       rethrow;
     }
   }

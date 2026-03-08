@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'package:damta/core/logger/log.dart';
 import 'package:damta/data/data_source/local/time_table_local_data_source.dart';
 import 'package:damta/data/data_source/remote/time_table_remote_data_source.dart';
 import 'package:damta/data/mapper/time_table_mapper.dart';
@@ -54,7 +54,7 @@ class TimeTableRepositoryImpl implements TimeTableRepository {
       }
       return entities;
     } catch (e, s) {
-      log('Repository getSchedules 실패: $e', error: e, stackTrace: s);
+      Log.e('Repository getSchedules 실패: $e', error: e, stackTrace: s);
       rethrow;
     }
   }

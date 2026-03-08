@@ -1,5 +1,5 @@
-import 'dart:developer';
 import 'dart:io';
+import 'package:damta/core/logger/log.dart';
 import 'package:damta/data/data_source/remote/storage_data_source.dart';
 import 'package:damta/domain/repository/storage_repository.dart';
 import 'package:path/path.dart' as p;
@@ -18,7 +18,7 @@ class StorageRepositoryImpl implements StorageRepository {
 
       return await dataSource.uploadFile(file: file, path: path);
     } catch (e, s) {
-      log('Repository uploadPostImage 실패: $e', error: e, stackTrace: s);
+      Log.e('Repository uploadPostImage 실패: $e', error: e, stackTrace: s);
       rethrow;
     }
   }

@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:developer';
+import 'package:damta/core/logger/log.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 abstract class StorageDataSource {
@@ -21,14 +21,14 @@ class StorageDataSourceImpl implements StorageDataSource {
       await ref.putFile(file); // 파일 업로드
       return await ref.getDownloadURL(); // url 받아오기
     } on FirebaseException catch (e, s) {
-      log(
+      Log.e(
         'FirebaseStorage uploadFile 실패 : ${e.message}',
         error: e,
         stackTrace: s,
       );
       rethrow;
     } catch (e, s) {
-      log('알 수 없는 오류로 인한 uploadFile 실패 : $e', error: e, stackTrace: s);
+      Log.e('알 수 없는 오류로 인한 uploadFile 실패 : $e', error: e, stackTrace: s);
       rethrow;
     }
   }

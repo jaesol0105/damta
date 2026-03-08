@@ -1,8 +1,8 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:damta/core/di/provider.dart';
-import 'package:damta/core/services/firebase_service.dart';
+import 'package:damta/core/logger/log.dart';
+
 import 'package:damta/core/util/string_extension.dart';
 import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/domain/repository/post_repository.dart';
@@ -173,7 +173,7 @@ class PostEditorViewModel extends _$PostEditorViewModel {
       return (true, null, updated);
       // 예외 전파
     } catch (e, s) {
-      log('PostEditorViewModel save 실패: $e', error: e, stackTrace: s);
+      Log.e('PostEditorViewModel save 실패: $e', error: e, stackTrace: s);
       rethrow;
     } finally {
       state = state.copyWith(loading: false);

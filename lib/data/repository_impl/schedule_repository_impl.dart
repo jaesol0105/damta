@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+import 'package:damta/core/logger/log.dart';
 import 'package:damta/data/data_source/local/schedule_local_data_source.dart';
 import 'package:damta/data/data_source/remote/schedule_remote_data_source.dart';
 import 'package:damta/data/mapper/schedule_mapper.dart';
@@ -41,11 +40,14 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
 
       // API 응답을 로컬 캐시에 저장
       if (entities.isNotEmpty) {
-        await _localDataSource.saveSchedules(schoolCode: schoolCode, schedules: entities);
+        await _localDataSource.saveSchedules(
+          schoolCode: schoolCode,
+          schedules: entities,
+        );
       }
       return entities;
     } catch (e, s) {
-      log('Repository getSchedules 실패: $e', error: e, stackTrace: s);
+      Log.e('Repository getSchedules 실패: $e', error: e, stackTrace: s);
       rethrow;
     }
   }
