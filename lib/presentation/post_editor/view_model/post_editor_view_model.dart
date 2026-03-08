@@ -148,12 +148,11 @@ class PostEditorViewModel extends _$PostEditorViewModel {
       }
 
       // 유저 정보 가져오기
+      final uId = ref.read(currentUIdProvider);
       String? schoolCode;
-      String? uId;
       try {
         final user = await ref.read(userProvider.future);
         schoolCode = user.schoolCode;
-        uId = user.uId;
       } catch (_) {}
 
       final updated = state.originalPost.copyWith(

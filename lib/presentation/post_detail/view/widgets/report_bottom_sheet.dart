@@ -5,7 +5,6 @@ import 'package:damta/domain/enum/report_target_type_enum.dart';
 import 'package:damta/presentation/post_detail/view_model/report_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ReportBottomSheet extends HookConsumerWidget {

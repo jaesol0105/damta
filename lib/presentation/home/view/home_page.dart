@@ -1,9 +1,11 @@
-import 'package:damta/presentation/home/view/widgets/edit_animated_card.dart';
+import 'package:damta/domain/enum/module_type_enum.dart';
+import 'package:damta/domain/enum/module_width_enum.dart';
+import 'package:damta/presentation/home/view/widgets/modules/edit_animated_card.dart';
 import 'package:damta/presentation/home/view/widgets/home_app_bar.dart';
 import 'package:damta/presentation/home/view/module_builder.dart';
 import 'package:damta/presentation/home/view/widgets/home_drawer.dart';
 import 'package:damta/presentation/home/view_model/home_view_model.dart';
-import 'package:damta/presentation/home/view_model/module_item.dart';
+import 'package:damta/presentation/home/module_item.dart';
 import 'package:damta/presentation/ui_provider/users_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';

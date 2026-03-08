@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:damta/core/config/app_constants.dart';
-import 'package:damta/presentation/home/view_model/module_item.dart';
+import 'package:damta/presentation/home/module_item.dart';
+import 'package:damta/domain/enum/module_type_enum.dart';
+import 'package:damta/domain/enum/module_width_enum.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';

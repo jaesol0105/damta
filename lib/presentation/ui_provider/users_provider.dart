@@ -6,6 +6,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'users_provider.g.dart';
 
+// UID Provider
+@riverpod
+String? currentUId(Ref ref) => FirebaseAuth.instance.currentUser?.uid;
+
 // 사용자 정보 가져오기 Provider
 @riverpod
 Future<UsersEntity> user(Ref ref) {

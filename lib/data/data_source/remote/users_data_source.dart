@@ -3,10 +3,10 @@ import 'package:damta/data/dto/users_dto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract interface class UsersDataSource {
-  // 사용자 정보 불러오기
+  /// 사용자 정보 불러오기
   Future<UsersDto> getUser(String uId);
 
-  // 사용자의 학교 정보 저장
+  /// 사용자의 학교 정보 저장
   Future<void> saveSchoolInfo({
     required String schoolName,
     required String officeCode,

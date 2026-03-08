@@ -1,7 +1,7 @@
 import 'package:damta/data/dto/post_dto.dart';
 import 'package:damta/domain/entity/post_entity.dart';
 
-// DTO > Entity
+/// DTO > Entity
 PostEntity postDtoToPostEntity(PostDto postDto) {
   return PostEntity(
     uId: postDto.uId,

@@ -2,7 +2,7 @@ import 'package:damta/core/theme/app_colors.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/core/util/debouncer.dart';
 import 'package:damta/presentation/memo/view_model/memo_view_model.dart';
-import 'package:damta/presentation/util/custom_dialog.dart';
+import 'package:damta/presentation/widget/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -34,7 +34,7 @@ class MemoPage extends HookConsumerWidget {
     // 디바운싱 적용
     final debouncer = useMemoized(
       () => Debouncer(
-        duration: const Duration(milliseconds: 600),
+        duration: const Duration(milliseconds: 200),
         callback: () => viewModel.save(contentController.text),
       ),
     );

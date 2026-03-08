@@ -1,5 +1,5 @@
 import 'package:damta/core/theme/app_colors.dart';
-import 'package:damta/presentation/home/view_model/weather_extensions.dart';
+import 'package:damta/presentation/home/view_model/utils/weather_extensions.dart';
 import 'package:damta/presentation/home/view_model/weather_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

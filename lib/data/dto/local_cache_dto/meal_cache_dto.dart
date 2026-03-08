@@ -59,7 +59,10 @@ class MealCacheDTO {
   }
 
   /// MealEntity를 MealCacheDTO로 변환
-  factory MealCacheDTO.fromDomain({required MealEntity entity, required String schoolCode}) {
+  factory MealCacheDTO.fromDomain({
+    required MealEntity entity,
+    required String schoolCode,
+  }) {
     return MealCacheDTO(
       schoolCode: schoolCode,
       date: entity.date.dbDate(),

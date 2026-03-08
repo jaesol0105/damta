@@ -1,6 +1,7 @@
 import 'package:damta/data/dto/comment_dto.dart';
 import 'package:damta/domain/entity/comment_entity.dart';
 
+/// DTO > Entity
 CommentEntity commentDtoToCommentEntity(CommentDto commentDto) {
   return CommentEntity(
     cId: commentDto.cId,
@@ -12,6 +13,7 @@ CommentEntity commentDtoToCommentEntity(CommentDto commentDto) {
   );
 }
 
+/// Entity > DTO
 CommentDto commentEntityToCommentDto(CommentEntity commentEntity) {
   return CommentDto(
     cId: commentEntity.cId,

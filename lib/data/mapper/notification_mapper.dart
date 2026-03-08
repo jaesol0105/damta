@@ -1,7 +1,7 @@
 import 'package:damta/data/dto/notification_dto.dart';
 import 'package:damta/domain/entity/notification_entity.dart';
 
-// DTO > Entity
+/// DTO > Entity
 NotificationEntity dtoToEntity(NotificationDto dto) {
   return NotificationEntity(
     nId: dto.nId,
@@ -16,7 +16,7 @@ NotificationEntity dtoToEntity(NotificationDto dto) {
   );
 }
 
-// Entity > DTO
+/// Entity > DTO
 NotificationDto entityToDto(NotificationEntity entity) {
   return NotificationDto(
     nId: entity.nId,

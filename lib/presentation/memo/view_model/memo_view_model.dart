@@ -1,11 +1,11 @@
 import 'package:damta/core/di/provider.dart';
 import 'package:damta/domain/repository/memo_repository.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final memoViewModelProvider =
-    AsyncNotifierProvider<MemoViewModel, String>(MemoViewModel.new);
+part 'memo_view_model.g.dart';
 
-class MemoViewModel extends AsyncNotifier<String> {
+@riverpod
+class MemoViewModel extends _$MemoViewModel {
   MemoRepository get _repo => ref.read(memoRepositoryProvider);
 
   @override

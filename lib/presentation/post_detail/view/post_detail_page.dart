@@ -1,17 +1,18 @@
 import 'dart:io';
 
 import 'package:damta/core/config/routes.dart';
-import 'package:damta/core/services/analytics_service.dart';
-import 'package:damta/core/services/firebase_service.dart';
+import 'package:damta/core/service/analytics_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/domain/enum/report_target_type_enum.dart';
+import 'package:damta/presentation/post_detail/view/widgets/emoji_reaction_section.dart';
 import 'package:damta/presentation/post_detail/view/widgets/report_bottom_sheet.dart';
 import 'package:damta/presentation/ui_provider/users_provider.dart';
+import 'package:damta/presentation/widget/custom_dialog.dart';
 import 'package:damta/presentation/util/time_ago.dart';
 import 'package:damta/presentation/post_detail/view/full_image_page.dart';
 import 'package:damta/presentation/post_detail/view/widgets/comment_input_bottom_sheet.dart';
-import 'package:damta/presentation/post_detail/view/widgets/comment_item_widget.dart';
-import 'package:damta/presentation/post_detail/view/widgets/emoji_picker_widget.dart';
+import 'package:damta/presentation/post_detail/view/widgets/comment_item.dart';
+import 'package:damta/presentation/post_detail/view/widgets/emoji_picker.dart';
 import 'package:damta/presentation/post_detail/view_model/comment_view_model.dart';
 import 'package:damta/presentation/post/view_model/post_view_model.dart';
 import 'package:flutter/material.dart';
@@ -29,9 +30,8 @@ class PostDetailPage extends HookConsumerWidget {
     final showEmojiPicker = useState(false);
     final overlayEntryRef = useRef<OverlayEntry?>(null);
 
-    final userValue = ref.watch(userProvider).value;
-    final currentUId = userValue?.uId;
-    final schoolCode = userValue?.schoolCode ?? '';
+    final currentUId = ref.watch(currentUIdProvider);
+    final schoolCode = ref.watch(userProvider).value?.schoolCode ?? '';
 
     final postList = ref.watch(postViewModelProvider);
     final post = postList.firstWhere(
@@ -63,7 +63,7 @@ class PostDetailPage extends HookConsumerWidget {
 
     void showPopup() {
       if (overlayEntryRef.value != null) return;
-      overlayEntryRef.value = EmojiPickerWidget.createEmojiPickerOverlay(
+      overlayEntryRef.value = EmojiPicker.createEmojiPickerOverlay(
         context: context,
         post: post,
         ref: ref,
@@ -112,37 +112,24 @@ class PostDetailPage extends HookConsumerWidget {
                   if (value == 'edit') {
                     context.push(AppRoutePath.postEditor, extra: post);
                   } else if (value == 'delete') {
-                    showDialog(
+                    showCustomDialog(
                       context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text("삭제"),
-                          content: Text("정말로 삭제하시겠습니까?"),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                context.pop();
-                              },
-                              child: Text("취소"),
-                            ),
-                            TextButton(
-                              onPressed: () async {
-                                if (context.mounted) {
-                                  context.pop();
-                                  context.pop();
-                                }
-                                await ref
-                                    .read(postViewModelProvider.notifier)
-                                    .deletePost(pId);
-                                // 📝
-                                AnalyticsService.event(
-                                  'post_action',
-                                  p: {'action': 'delete'},
-                                );
-                              },
-                              child: const Text("삭제"),
-                            ),
-                          ],
+                      title: '게시글을 삭제합니다',
+                      confirmText: '삭제',
+                      cancelText: '취소',
+                      reverseButtons: false,
+                      onConfirm: () async {
+                        if (context.mounted) {
+                          Navigator.pop(context);
+                          context.pop();
+                        }
+                        await ref
+                            .read(postViewModelProvider.notifier)
+                            .deletePost(pId);
+                        // 📝
+                        AnalyticsService.event(
+                          'post_action',
+                          p: {'action': 'delete'},
                         );
                       },
                     );
@@ -238,156 +225,25 @@ class PostDetailPage extends HookConsumerWidget {
                   child: buildPostImage(context, post.pImageUrl!),
                 ),
 
-              // 이모지 반응 (슬랙처럼 그룹화 + 카운트 표시)
-              Builder(
-                builder: (context) {
-                  // 이모지별 카운트 + 첫 반응 시각 집계
-                  // key: userId_emoji 형태, value: timestamp 형식
-                  final grouped = <String, int>{};
-                  final firstTime = <String, int>{};
-                  for (final entry
-                      in post.reactions?.entries ??
-                          <MapEntry<String, String>>[]) {
-                    final sep = entry.key.indexOf('_');
-                    if (sep < 0) continue;
-                    final emoji = entry.key.substring(sep + 1);
-                    final ts = int.tryParse(entry.value) ?? 0;
-                    grouped[emoji] = (grouped[emoji] ?? 0) + 1;
-                    if (!firstTime.containsKey(emoji) ||
-                        ts < firstTime[emoji]!) {
-                      firstTime[emoji] = ts;
-                    }
+              // 이모지 반응 영역
+              EmojiReactionSection(
+                reactions: post.reactions,
+                currentUId: currentUId,
+                onTogglePicker: () {
+                  if (showEmojiPicker.value) {
+                    removePopup();
+                  } else {
+                    showPopup();
                   }
-
-                  // 첫 반응 시각 기준 오름차순 정렬
-                  final sortedEntries = grouped.entries.toList()
-                    ..sort(
-                      (a, b) => (firstTime[a.key] ?? 0).compareTo(
-                        firstTime[b.key] ?? 0,
-                      ),
-                    );
-
-                  // 현재 유저가 반응한 이모지 목록
-                  final myEmojis = (post.reactions ?? {}).entries
-                      .where(
-                        (e) =>
-                            currentUId != null &&
-                            e.key.startsWith('${currentUId}_'),
-                      )
-                      .map((e) => e.key.substring(e.key.indexOf('_') + 1))
-                      .toSet();
-
-                  return Wrap(
-                    spacing: 6,
-                    runSpacing: 6,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      // 이모지 추가 버튼
-                      InkWell(
-                        onTap: () {
-                          if (showEmojiPicker.value) {
-                            removePopup();
-                          } else {
-                            showPopup();
-                          }
-                        },
-                        borderRadius: BorderRadius.circular(30),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: vrc(context).background,
-                            border: Border.all(
-                              color: vrc(context).border!,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: HugeIcon(
-                            icon: HugeIcons.strokeRoundedHeartAdd,
-                            size: 24,
-                            color: vrc(context).detailText,
-                            strokeWidth: 2,
-                          ),
-                        ),
-                      ),
-                      // 그룹화된 이모지 버블
-                      ...sortedEntries.map((entry) {
-                        final isHighlighted = myEmojis.contains(entry.key);
-                        return InkWell(
-                          borderRadius: BorderRadius.circular(30),
-                          onTap: () {
-                            if (currentUId == null) return;
-                            if (isHighlighted) {
-                              ref
-                                  .read(postViewModelProvider.notifier)
-                                  .removeReaction(
-                                    post.pId!,
-                                    currentUId,
-                                    entry.key,
-                                  );
-                            } else {
-                              ref
-                                  .read(postViewModelProvider.notifier)
-                                  .addReaction(
-                                    post.pId!,
-                                    currentUId,
-                                    entry.key,
-                                  );
-                            }
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: isHighlighted
-                                  ? Theme.of(
-                                      context,
-                                    ).colorScheme.primary.withOpacity(0.12)
-                                  : vrc(context).background,
-                              border: Border.all(
-                                color: vrc(context).border!,
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  entry.key,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontFamily: Platform.isAndroid
-                                        ? 'NotoColorEmoji'
-                                        : null,
-                                  ),
-                                ),
-                                if (entry.value >= 1) ...[
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    '${entry.value}',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: isHighlighted
-                                          ? Theme.of(
-                                              context,
-                                            ).colorScheme.primary
-                                          : null,
-                                    ),
-                                  ),
-                                ],
-                              ],
-                            ),
-                          ),
-                        );
-                      }),
-                    ],
-                  );
+                },
+                onTapEmoji: (emoji, isHighlighted) {
+                  if (currentUId == null) return;
+                  final notifier = ref.read(postViewModelProvider.notifier);
+                  if (isHighlighted) {
+                    notifier.removeReaction(post.pId!, currentUId!, emoji);
+                  } else {
+                    notifier.addReaction(post.pId!, currentUId!, emoji);
+                  }
                 },
               ),
               Row(
@@ -426,7 +282,7 @@ class PostDetailPage extends HookConsumerWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: commentList.length,
                 itemBuilder: (context, index) {
-                  return CommentItemWidget(
+                  return CommentItem(
                     comment: commentList[index],
                     schoolCode: schoolCode,
                   );

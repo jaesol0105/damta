@@ -1,0 +1,1 @@
+enum ModuleWidth { half, full }

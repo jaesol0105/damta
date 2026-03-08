@@ -3,35 +3,24 @@ import 'package:damta/core/di/provider.dart';
 import 'package:damta/core/logger/log.dart';
 import 'package:damta/domain/entity/time_table_entity.dart';
 import 'package:damta/presentation/util/date_formatter.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'time_table_view_model.g.dart';
+part 'time_table_view_model.freezed.dart';
 
 const _selectedClassKey = AppConstants.timetableSelectedClassKey;
 
-class TimeTableState {
-  final String selectedClass;
-  final DateTime currentMonday;
-  final List<TimeTableEntity> list;
+@freezed
+abstract class TimeTableState with _$TimeTableState {
+  const TimeTableState._(); // getter 사용하려면 필요
 
-  const TimeTableState({
-    required this.selectedClass,
-    required this.currentMonday,
-    required this.list,
-  });
-
-  TimeTableState copyWith({
-    String? selectedClass,
-    DateTime? currentMonday,
-    List<TimeTableEntity>? list,
-  }) {
-    return TimeTableState(
-      selectedClass: selectedClass ?? this.selectedClass,
-      currentMonday: currentMonday ?? this.currentMonday,
-      list: list ?? this.list,
-    );
-  }
+  const factory TimeTableState({
+    required String selectedClass,
+    required DateTime currentMonday,
+    required List<TimeTableEntity> list,
+  }) = _TimeTableState;
 
   /// 선택한 반 + 현재 주 필터링된 시간표
   List<TimeTableEntity> get filtered {
@@ -159,7 +148,7 @@ class TimeTableViewModel extends _$TimeTableViewModel {
     }
   }
 
-  // 학년-반 변경
+  /// 학년-반 변경
   void changeClass(
     String value, {
     required String officeCode,
@@ -183,7 +172,7 @@ class TimeTableViewModel extends _$TimeTableViewModel {
     );
   }
 
-  // 이전 주 변경
+  /// 이전 주 변경
   void prevWeek({required String officeCode, required String schoolCode}) {
     if (!state.hasValue) return;
 
@@ -199,7 +188,7 @@ class TimeTableViewModel extends _$TimeTableViewModel {
     );
   }
 
-  // 다음 주 변경
+  /// 다음 주 변경
   void nextWeek({required String officeCode, required String schoolCode}) {
     if (!state.hasValue) return;
 
