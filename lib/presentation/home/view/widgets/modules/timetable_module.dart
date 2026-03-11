@@ -1,3 +1,4 @@
+import 'package:damta/core/theme/app_colors.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/home/view/widgets/modules/shared/mini_card.dart';
 import 'package:damta/presentation/home/view/widgets/modules/shared/more_button.dart';
@@ -70,7 +71,7 @@ class TimetableModule extends ConsumerWidget {
     return Builder(
       builder: (ctx) => MiniCard(
         icon: 'assets/icons/icon_timetable.png',
-        bottomLabelColor: const Color(0xFFFFA726),
+        bottomLabelColor: AppColors.moduleTimetableCard,
         title: '시간표',
         trailing: MoreButton(onTap: () => ctx.push('/timetable')),
         bottomLabel: bottomLabel,

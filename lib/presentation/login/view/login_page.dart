@@ -33,9 +33,9 @@ class LoginPage extends HookConsumerWidget {
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 120),
-              Image.asset("assets/images/damta_logo.png", width: 300),
-              const SizedBox(height: 120),
+              const SizedBox(height: 60),
+              Image.asset("assets/images/damta_logo_color_down.png", width: 300),
+              const SizedBox(height: 50),
 
               // const SocialLoginLarge(), // 사각형 버튼 스타일
               const SocialLoginSmall(), // 원형 버튼 스타일

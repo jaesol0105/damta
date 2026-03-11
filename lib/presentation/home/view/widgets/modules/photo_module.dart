@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/home/view/widgets/modules/shared/minus_button.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +26,7 @@ class PhotoModule extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: const Color(0xFFE9E9E9)),
+            border: Border.all(color: vrc(context).moduleBorder!),
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(14),

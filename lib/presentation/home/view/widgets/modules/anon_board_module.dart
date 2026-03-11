@@ -89,18 +89,18 @@ class _BoardPill extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
-          color: const Color(0xFFF5F6F8), // TODO : 테마색
+          color: vrc(context).modulePostBg,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFE7E8EB)), // TODO : 테마색
+          border: Border.all(color: vrc(context).moduleBorder!),
         ),
         child: Text(
           text,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 12.5,
             fontWeight: FontWeight.w700,
-            color: Color(0xFF1A1A1A),
+            color: vrc(context).labelText,
           ),
         ),
       ),

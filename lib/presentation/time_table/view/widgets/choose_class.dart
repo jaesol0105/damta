@@ -1,3 +1,4 @@
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/time_table/view_model/time_table_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -30,7 +31,7 @@ class ChooseClass extends ConsumerWidget {
           child: Container(
             padding: const EdgeInsets.only(left: 12),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: vrc(context).surface,
               border: Border.all(color: Colors.grey),
               borderRadius: BorderRadius.circular(8),
             ),

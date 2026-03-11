@@ -58,7 +58,7 @@ class HomePage extends HookConsumerWidget {
             child: CustomScrollView(
               controller: scrollController,
               slivers: [
-                // 상단바
+                // 앱바
                 // 아래로 스크롤 시 숨김, 위로 스크롤 시 복구
                 SliverAppBar(
                   floating: true,
@@ -84,7 +84,7 @@ class HomePage extends HookConsumerWidget {
 
                 // 홈 화면 모듈들
                 SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                   sliver: SliverToBoxAdapter(
                     child: LayoutBuilder(
                       builder: (context, constraints) {

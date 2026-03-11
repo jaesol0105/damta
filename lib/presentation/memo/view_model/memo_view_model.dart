@@ -15,4 +15,8 @@ class MemoViewModel extends _$MemoViewModel {
     await _repo.saveMemo(content);
     state = AsyncData(content);
   }
+
+  Future<void> setContent(String content) async {
+    state = AsyncData(content);
+  }
 }

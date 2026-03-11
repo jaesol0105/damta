@@ -16,14 +16,17 @@ class HomeDrawer extends HookConsumerWidget {
       width: 250,
       child: ListView(
         children: [
-          /// 병아리 아이콘
+          // 앱 로고
           Padding(
             padding: const EdgeInsets.only(top: 30),
             child: drawerItem(
               onTap: () {},
               // () => context.push('/melon'),
               context: context,
-              leading: Image.asset("assets/images/damta_icon.png"),
+              leading: SizedBox(
+                width: 120,
+                child: Image.asset("assets/images/damta_logo_color_down.png"),
+              ),
             ),
           ),
 

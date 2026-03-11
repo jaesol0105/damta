@@ -95,6 +95,7 @@ class PostEditorPage extends HookConsumerWidget {
         context: context,
         title: '작성 중인 내용이 있습니다',
         confirmText: '나가기',
+        confirmColor: fxc(context).brandColor,
         cancelText: '계속 작성',
         reverseButtons: false,
         onConfirm: () {

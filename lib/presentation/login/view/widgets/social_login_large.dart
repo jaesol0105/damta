@@ -1,3 +1,4 @@
+import 'package:damta/core/theme/app_colors.dart';
 import 'package:damta/presentation/login/view_model/auth_view_model.dart';
 import 'package:damta/presentation/widget/custom_snackbar.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class SocialLoginLarge extends HookConsumerWidget {
         ),
         largeButton(
           label: 'Google 계정으로 로그인',
-          backgroundColor: const Color(0xfff2f2f2),
+          backgroundColor: AppColors.loginGoogleBackground,
           textColor: Colors.black,
           iconPath: 'assets/images/google_logo_18.svg',
           onPressed: () =>
@@ -30,15 +31,15 @@ class SocialLoginLarge extends HookConsumerWidget {
         ),
         largeButton(
           label: '카카오 로그인',
-          backgroundColor: const Color(0xfffee500),
-          textColor: const Color(0xff191919),
+          backgroundColor: AppColors.loginKakaoBackground,
+          textColor: AppColors.loginKakaoText,
           iconPath: 'assets/images/kakao_logo_18.svg',
           onPressed: () =>
               ref.read(authViewModelProvider.notifier).signInKakao(),
         ),
         largeButton(
           label: '네이버 로그인',
-          backgroundColor: const Color(0xff03A94D),
+          backgroundColor: AppColors.loginNaverBackground,
           textColor: Colors.white,
           iconPath: 'assets/images/naver_logo_18.svg',
           onPressed:

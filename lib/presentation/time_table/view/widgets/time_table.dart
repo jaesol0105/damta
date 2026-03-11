@@ -1,3 +1,4 @@
+import 'package:damta/core/theme/app_colors.dart';
 import 'package:damta/presentation/time_table/view_model/time_table_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -89,7 +90,8 @@ class TimeTable extends ConsumerWidget {
                               width: dayWidth,
                               height: 70,
                               decoration: BoxDecoration(
-                                border: Border.all(color: grey),
+                                border: Border.all(color: vrc(context).moduleBorder!,
+                                ),
                               ),
                             );
                           }
@@ -103,11 +105,13 @@ class TimeTable extends ConsumerWidget {
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               color: blue,
-                              border: Border.all(color: grey),
+                              border: Border.all(color: vrc(context).moduleBorder!,
+                              ),
                             ),
                             child: Text(
                               subject,
-                              style: const TextStyle(
+                              style: TextStyle(
+                                color: AppColors.gray500,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14,
                               ),

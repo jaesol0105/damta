@@ -6,10 +6,10 @@ class MiniCard extends StatelessWidget {
   /// 작은 모듈
   const MiniCard({
     super.key,
+    this.bottomLabelColor = const Color(0xFF1A1A1A),
     required this.icon,
     required this.title,
     required this.child,
-    this.bottomLabelColor = const Color(0xFF1A1A1A),
     this.trailing,
     this.bottomLabel,
   });

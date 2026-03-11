@@ -35,7 +35,7 @@ class MemoPage extends HookConsumerWidget {
     final debouncer = useMemoized(
       () => Debouncer(
         duration: const Duration(milliseconds: 200),
-        callback: () => viewModel.save(contentController.text),
+        callback: () => viewModel.setContent(contentController.text),
       ),
     );
     useEffect(() => debouncer.dispose, const []);
@@ -45,10 +45,12 @@ class MemoPage extends HookConsumerWidget {
         context.pop();
         return;
       }
+
       showCustomDialog(
         context: context,
         title: '저장하지 않고 나가시겠어요?',
         confirmText: '나가기',
+        confirmColor: fxc(context).brandColor,
         cancelText: '계속 작성',
         reverseButtons: false,
         onConfirm: () {
@@ -97,7 +99,7 @@ class MemoPage extends HookConsumerWidget {
                     fontWeight: FontWeight.w800,
                     fontSize: 15,
                     color: isEdited.value
-                        ? AppColors.secondaryHeavy
+                        ? AppColors.actionWrite
                         : Colors.grey.withOpacity(0.5),
                   ),
                 ),

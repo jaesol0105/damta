@@ -1,3 +1,4 @@
+import 'package:damta/core/theme/app_colors.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/notification/view_model/notification_view_model.dart';
 import 'package:damta/presentation/post/view_model/post_view_model.dart';
@@ -50,7 +51,7 @@ class NotificationView extends ConsumerWidget {
       child: Container(
         decoration: BoxDecoration(
           color: isRead ? Colors.transparent : blue,
-          border: Border(bottom: BorderSide(color: grey)),
+          border: Border(bottom: BorderSide(color: vrc(context).moduleBorder!)),
         ),
         padding: EdgeInsets.all(15),
         child: Column(
@@ -63,7 +64,7 @@ class NotificationView extends ConsumerWidget {
                 Expanded(
                   child: Text(
                     title,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.gray700),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -71,7 +72,7 @@ class NotificationView extends ConsumerWidget {
                   onTap: () async => await ref
                       .read(notificationViewModelProvider(uId: uId).notifier)
                       .deleteNotis(nId),
-                  child: Icon(Icons.clear),
+                  child: Icon(Icons.clear, color: AppColors.gray500),
                 ),
               ],
             ),

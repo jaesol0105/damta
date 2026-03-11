@@ -1,4 +1,5 @@
 import 'package:damta/core/config/routes.dart';
+import 'package:damta/core/theme/app_colors.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/post/view/widgets/post_list_item.dart';
 import 'package:damta/presentation/post/view_model/post_view_model.dart';
@@ -19,7 +20,7 @@ class PostPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, size: 28),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             context.pop();
           },
@@ -82,7 +83,7 @@ class PostPage extends ConsumerWidget {
                     },
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
-                      backgroundColor: Color.fromARGB(255, 104, 195, 255),
+                      backgroundColor: AppColors.actionWrite,
                       foregroundColor: vrc(context).contentText,
                       padding: const EdgeInsets.symmetric(horizontal: 24),
                       minimumSize: const Size(0, 48),

@@ -1,3 +1,4 @@
+import 'package:damta/core/theme/app_colors.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/domain/enum/meal_type_enum.dart';
 import 'package:damta/presentation/home/view/widgets/modules/shared/mini_card.dart';
@@ -54,7 +55,7 @@ class MealModule extends ConsumerWidget {
     return Builder(
       builder: (ctx) => MiniCard(
         icon: 'assets/icons/icon_meal.png',
-        bottomLabelColor: const Color(0xFF3B6FD8),
+        bottomLabelColor: AppColors.moduleLunchCard,
         title: '  급식',
         trailing: MoreButton(onTap: () => ctx.push('/meal')),
         bottomLabel: bottomLabel,
