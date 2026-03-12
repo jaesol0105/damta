@@ -47,11 +47,13 @@ class WeatherModule extends ConsumerWidget {
               left: 16,
               child: Text(
                 weather.formattedDate,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 12.5,
                   letterSpacing: -1,
                   fontWeight: FontWeight.w500,
-                  color: AppColors.weatherTextDefault,
+                  color: weather.temperature >= 28
+                      ? AppColors.weatherTextHot
+                      : AppColors.weatherTextDefault,
                 ),
               ),
             ),
@@ -107,20 +109,22 @@ class WeatherModule extends ConsumerWidget {
               child: Text(
                 weather.weatherComment,
                 textAlign: TextAlign.right,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: "Komacon",
                   height: 1,
                   fontSize: 12,
                   letterSpacing: -0.3,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.weatherTextDefault,
+                  color: weather.temperature >= 28
+                      ? AppColors.weatherTextHot
+                      : AppColors.weatherTextDefault,
                 ),
               ),
             ),
 
             // 코멘트 3줄 이상일 때 .. 붙이기
             if (weather.weatherComment.split('\n').length == 3)
-              const Positioned(
+              Positioned(
                 top: 46,
                 right: 99,
                 child: Text(
@@ -132,7 +136,9 @@ class WeatherModule extends ConsumerWidget {
                     fontSize: 12,
                     letterSpacing: -0.3,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.weatherTextDefault,
+                    color: weather.temperature >= 28
+                        ? AppColors.weatherTextHot
+                        : AppColors.weatherTextDefault,
                   ),
                 ),
               ),
