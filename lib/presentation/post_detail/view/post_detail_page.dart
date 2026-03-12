@@ -35,9 +35,20 @@ class PostDetailPage extends HookConsumerWidget {
     final schoolCode = ref.watch(userProvider).value?.schoolCode ?? '';
 
     final postList = ref.watch(postViewModelProvider);
-    final postIndex = postList.indexWhere((p) => p.pId == pId); // 현재 글
-    final post = postIndex != -1 ? postList[postIndex] : null; // 글 숨기기 대응
-    if (post == null) return const Scaffold(); // TODO : 일단 빈화면, UX 개선
+    final postIdx = postList.indexWhere((p) => p.pId == pId); // 현재 글
+    final currentPost = postIdx != -1 ? postList[postIdx] : null; // 글 숨기기 대응
+    final cachedPost = useState(currentPost); // 캐싱해서 삭제 후 pop 할때 빈 화면 방지
+    if (currentPost != null) cachedPost.value = currentPost;
+    final post = cachedPost.value;
+
+    if (post == null) {
+      return Scaffold(
+        appBar: AppBar(),
+        body: const Center(
+          child: Text('삭제된 게시글입니다.', style: TextStyle(color: Colors.grey)),
+        ),
+      );
+    }
 
     final isOwner = post.uId == currentUId;
 
