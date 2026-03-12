@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:damta/core/di/provider.dart';
 import 'package:damta/core/logger/log.dart';
+import 'package:damta/core/util/content_filter.dart';
 
 import 'package:damta/core/util/string_extension.dart';
 import 'package:damta/domain/entity/post_entity.dart';
@@ -121,6 +122,10 @@ class PostEditorViewModel extends _$PostEditorViewModel {
   String? validate() {
     if (state.title.isEmpty) return '제목을 입력해 주세요';
     if (state.content.isEmpty) return '내용을 입력해 주세요';
+    if (ContentFilter.containsBlockedWord(state.title) ||
+        ContentFilter.containsBlockedWord(state.content)) {
+      return '부적절한 표현이 포함되어 있습니다. 내용을 확인해주세요.';
+    }
     return null;
   }
 

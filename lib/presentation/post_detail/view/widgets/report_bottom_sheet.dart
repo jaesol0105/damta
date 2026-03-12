@@ -3,6 +3,7 @@ import 'package:damta/domain/entity/report_entity.dart';
 import 'package:damta/domain/enum/report_reason_enum.dart';
 import 'package:damta/domain/enum/report_target_type_enum.dart';
 import 'package:damta/presentation/post_detail/view_model/report_view_model.dart';
+import 'package:damta/presentation/widget/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -81,18 +82,16 @@ class ReportBottomSheet extends HookConsumerWidget {
                       Navigator.of(context).pop();
                       if (!context.mounted) return;
                       if (state is AsyncData) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('신고가 접수되었습니다.')),
+                        showCustomSnackBar(
+                          context: context,
+                          message: '신고가 접수되었습니다.',
                         );
                       } else if (state is AsyncError) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              state.error.toString().replaceAll(
-                                'Exception: ',
-                                '',
-                              ),
-                            ),
+                        showCustomSnackBar(
+                          context: context,
+                          message: state.error.toString().replaceAll(
+                            'Exception: ',
+                            '',
                           ),
                         );
                       }

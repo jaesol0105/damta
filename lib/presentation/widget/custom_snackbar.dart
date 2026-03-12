@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
-void showCustomSnackBar(BuildContext context, String message) {
+void showCustomSnackBar({
+  required BuildContext context,
+  required String message,
+  Color? confirmColor,
+}) {
   ScaffoldMessenger.of(context).clearSnackBars();
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
@@ -14,7 +18,7 @@ void showCustomSnackBar(BuildContext context, String message) {
         content: Container(
           padding: const EdgeInsets.symmetric(vertical: 14),
           decoration: BoxDecoration(
-            color: Colors.amber,
+            color: confirmColor ?? Colors.amber,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(

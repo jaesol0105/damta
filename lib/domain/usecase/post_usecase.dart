@@ -1,3 +1,4 @@
+import 'package:damta/core/util/content_filter.dart';
 import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/domain/repository/post_repository.dart';
 
@@ -13,11 +14,18 @@ class PostUsecase {
     return postRepository.getPost(pId);
   }
 
-  Future<void> addPost(PostEntity postEntity, {String? schoolCode}) async {
-    await postRepository.addPost(postEntity, schoolCode: schoolCode);
+  Future<PostEntity> addPost(
+    PostEntity postEntity, {
+    String? schoolCode,
+  }) async {
+    ContentFilter.validate(postEntity.pTitle);
+    ContentFilter.validate(postEntity.pContent);
+    return postRepository.addPost(postEntity, schoolCode: schoolCode);
   }
 
   Future<void> updatePostContent(PostEntity postEntity) async {
+    ContentFilter.validate(postEntity.pTitle);
+    ContentFilter.validate(postEntity.pContent);
     await postRepository.updatePostContent(postEntity);
   }
 

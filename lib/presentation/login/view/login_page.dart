@@ -23,7 +23,8 @@ class LoginPage extends HookConsumerWidget {
           }
         },
         // 로그인 실패 시
-        error: (e, _) => showCustomSnackBar(context, '로그인 실패'),
+        error: (e, _) =>
+            showCustomSnackBar(context: context, message: '로그인 실패'),
       );
     });
 

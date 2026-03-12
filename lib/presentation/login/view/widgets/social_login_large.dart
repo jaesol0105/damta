@@ -43,7 +43,7 @@ class SocialLoginLarge extends HookConsumerWidget {
           iconPath: 'assets/images/naver_logo_18.svg',
           onPressed:
               // () => ref.read(authViewModelProvider.notifier).signInNaver(),
-              () => showCustomSnackBar(context, '이용할 수 없습니다'),
+              () => showCustomSnackBar(context: context, message: '이용할 수 없습니다'),
         ),
       ],
     );

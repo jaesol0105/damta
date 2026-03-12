@@ -54,7 +54,10 @@ class HomeDrawer extends HookConsumerWidget {
                       onError: () {
                         Navigator.pop(context);
                         Navigator.pop(context);
-                        showCustomSnackBar(context, '회원 탈퇴에 실패했습니다');
+                        showCustomSnackBar(
+                          context: context,
+                          message: '회원 탈퇴에 실패했습니다',
+                        );
                       },
                     );
                 AnalyticsService.event('withdraw'); // 📝
@@ -81,7 +84,10 @@ class HomeDrawer extends HookConsumerWidget {
                       onError: () {
                         Navigator.pop(context);
                         Navigator.pop(context);
-                        showCustomSnackBar(context, '로그아웃에 실패했습니다');
+                        showCustomSnackBar(
+                          context: context,
+                          message: '로그아웃에 실패했습니다',
+                        );
                       },
                     );
                 AnalyticsService.event('logout'); // 📝

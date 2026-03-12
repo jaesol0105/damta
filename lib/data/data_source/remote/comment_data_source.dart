@@ -34,7 +34,11 @@ class CommentDataSourceImpl implements CommentDataSource {
         .where('p_id', isEqualTo: pId)
         .orderBy('c_created_at')
         .get();
-    return snapshot.docs.map(_parseDoc).toList();
+    // 숨겨진 댓글 제외한 리스트 반환
+    return snapshot.docs
+        .where((doc) => doc.data()['is_hidden'] != true)
+        .map(_parseDoc)
+        .toList();
   }
 
   @override

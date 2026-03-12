@@ -7,6 +7,7 @@ import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/presentation/post/view_model/post_view_model.dart';
 import 'package:damta/presentation/post_editor/view_model/post_editor_view_model.dart';
 import 'package:damta/presentation/widget/custom_dialog.dart';
+import 'package:damta/presentation/widget/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -63,23 +64,31 @@ class PostEditorPage extends HookConsumerWidget {
     }, const []);
 
     Future<void> onTapSave() async {
-      final (success, error, updated) = await viewModel.save();
-      if (!success) {
-        if (error != null && context.mounted) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(error)));
+      try {
+        final (success, error, updated) = await viewModel.save();
+        if (!success) {
+          if (error != null && context.mounted) {
+            showCustomSnackBar(context: context, message: error);
+          }
+          return;
         }
-        return;
-      }
-      // 저장 성공 후 게시글 목록 갱신
-      await ref.read(postViewModelProvider.notifier).getPosts();
-      if (context.mounted) {
-        context.pop();
-      }
+        // 저장 성공 후 게시글 목록 갱신
+        await ref.read(postViewModelProvider.notifier).getPosts();
+        if (context.mounted) {
+          context.pop();
+        }
 
-      // 📝
-      AnalyticsService.event('post_action', p: {'action': 'create'});
+        // 📝
+        AnalyticsService.event('post_action', p: {'action': 'create'});
+      } catch (e) {
+        if (context.mounted) {
+          // 유즈케이스로부터 필터링 throw 받기
+          showCustomSnackBar(
+            context: context,
+            message: e.toString().replaceAll('Exception: ', ''),
+          );
+        }
+      }
     }
 
     /// 뒤로가기 시 나가기 여부 확인

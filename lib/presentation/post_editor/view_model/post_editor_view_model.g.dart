@@ -59,7 +59,7 @@ final class PostEditorViewModelProvider
 }
 
 String _$postEditorViewModelHash() =>
-    r'6fb5eeff44856602e4257a68596d007f16fa1e9f';
+    r'9a5e6e582b6bec66ac64b0ffa33de5060d1351a1';
 
 final class PostEditorViewModelFamily extends $Family
     with

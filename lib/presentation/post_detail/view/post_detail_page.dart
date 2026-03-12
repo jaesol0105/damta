@@ -15,6 +15,7 @@ import 'package:damta/presentation/post_detail/view/widgets/comment_item.dart';
 import 'package:damta/presentation/post_detail/view/widgets/emoji_picker.dart';
 import 'package:damta/presentation/post_detail/view_model/comment_view_model.dart';
 import 'package:damta/presentation/post/view_model/post_view_model.dart';
+import 'package:damta/presentation/widget/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -34,10 +35,10 @@ class PostDetailPage extends HookConsumerWidget {
     final schoolCode = ref.watch(userProvider).value?.schoolCode ?? '';
 
     final postList = ref.watch(postViewModelProvider);
-    final post = postList.firstWhere(
-      (p) => p.pId == pId,
-      orElse: () => throw Exception("Post not found"),
-    );
+    final postIndex = postList.indexWhere((p) => p.pId == pId); // 현재 글
+    final post = postIndex != -1 ? postList[postIndex] : null; // 글 숨기기 대응
+    if (post == null) return const Scaffold(); // TODO : 일단 빈화면, UX 개선
+
     final isOwner = post.uId == currentUId;
 
     final comments = ref.watch(commentViewModelProvider);
@@ -149,10 +150,9 @@ class PostDetailPage extends HookConsumerWidget {
                 onPressed: () {
                   showModalBottomSheet(
                     context: context,
-                    builder: (_) => ReportBottomSheet(
-                      reporterUid: currentUId,
-                      targetType: ReportTargetType.post,
-                      targetId: pId,
+                    builder: (_) => _PostActionSheet(
+                      currentUId: currentUId,
+                      pId: pId,
                       targetUid: post.uId,
                       schoolCode: schoolCode,
                     ),
@@ -321,4 +321,74 @@ Widget buildPostImage(BuildContext context, String url) {
       ),
     ),
   );
+}
+
+/// 게시글 신고, 숨기기 선택 시트
+class _PostActionSheet extends ConsumerWidget {
+  const _PostActionSheet({
+    required this.currentUId,
+    required this.pId,
+    required this.targetUid,
+    required this.schoolCode,
+  });
+
+  final String currentUId;
+  final String pId;
+  final String targetUid;
+  final String schoolCode;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            leading: const Icon(Icons.flag_outlined),
+            title: const Text('신고하기'),
+            onTap: () {
+              Navigator.pop(context);
+              showModalBottomSheet(
+                context: context,
+                builder: (_) => ReportBottomSheet(
+                  reporterUid: currentUId,
+                  targetType: ReportTargetType.post,
+                  targetId: pId,
+                  targetUid: targetUid,
+                  schoolCode: schoolCode,
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.visibility_off_outlined),
+            title: const Text('이 글 숨기기'),
+            onTap: () async {
+              try {
+                await ref
+                    .read(postViewModelProvider.notifier)
+                    .hidePost(pId, currentUId);
+                if (context.mounted) {
+                  showCustomSnackBar(
+                    context: context,
+                    message: '게시글을 숨겼습니다. 해당 글이 더는 표시되지 않습니다.',
+                  );
+                  Navigator.pop(context);
+                  context.pop();
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  showCustomSnackBar(
+                    context: context,
+                    message: e.toString().replaceAll('Exception: ', ''),
+                  );
+                  Navigator.pop(context);
+                }
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
 }
