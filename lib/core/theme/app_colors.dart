@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-/// 앱 전체에서 사용하는 색상 토큰(Atomic + Brand/Semantic)
-/// - Atomic: 고정 팔레트(그레이 스케일 등)
-/// - Brand: primary/secondary/status/gradient
-/// - Semantic: 화면 의미(배경/라인/텍스트 등)로 매핑하기 위한 재료
+/// 앱 전체에서 사용하는 색상
+/// Atomic: 고정 팔레트(그레이 스케일 등)
+/// Brand: primary/secondary/status/gradient
+/// Semantic: 화면 의미(배경/라인/텍스트 등)로 매핑하기 위한 재료
 class AppColors {
   AppColors._();
 
+  /// ===== Atomic Colors =====
   static const white = Color(0xFFFFFFFF);
   static const gray50 = Color(0xFFF7FAFF);
   static const gray100 = Color(0xFFDDDFE3);
@@ -19,6 +20,7 @@ class AppColors {
   static const gray800 = Color(0xFF292C32);
   static const gray900 = Color(0xFF121416);
 
+  /// ===== Brand Colors =====
   static const primaryLight = Color(0xFFEAF4FF);
   static const primaryWeak = Color(0xFFD4E9FF);
   static const primaryNormal = Color(0xFFA7D7FE);
@@ -31,23 +33,23 @@ class AppColors {
   static const secondaryStrong = Color(0xFF4EA3E3);
   static const secondaryHeavy = Color(0xFF2F78B7);
 
-  static const gradientStart = Color(0xFFEAF4FF);
-  static const gradientEnd = Color(0xFF6FB9F6);
+  /// ===== Module Colors =====
+  static const moduleLunchCard = Color(0xFF3B6FD8);
+  static const moduleTimetableCard = Color(0xFFFFA726);
 
-  static const statusNormal = Color(0xFFFE3752);
+  /// ===== Weather Colors =====
+  static const weatherTextHot = Color(0xFFE2B15D);
+  static const weatherTextDefault = Color(0xFF5B7A99);
 
-  static const semanticWhite = Color(0xFFFFFFFF);
-  static const semanticLight = Color(0xFFF8FAFE);
+  /// ===== Action Colors =====
+  static const actionWrite = Color(0xFF68C3FF);
 
-  static const textDeepBlack = Color(0xFF121416);
-  static const textStrong = Color.fromRGBO(0, 0, 0, 0.80);
-  static const textNormal = Color.fromRGBO(0, 0, 0, 0.60);
-  static const textWeak = Color.fromRGBO(0, 0, 0, 0.30);
-  static const textLight = Color.fromRGBO(0, 0, 0, 0.15);
+  /// ===== Reaction Colors =====
+  static const reactionLike = Color(0xFFF7584C);
 
-  static const brandGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [gradientStart, gradientEnd],
-  );
+  /// ===== Login Colors =====
+  static const loginGoogleBackground = Color(0xFFF2F2F2);
+  static const loginKakaoBackground = Color(0xFFFEE500);
+  static const loginKakaoText = Color(0xFF191919);
+  static const loginNaverBackground = Color(0xFF03A94D);
 }

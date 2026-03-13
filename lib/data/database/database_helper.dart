@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:damta/core/logger/log.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';

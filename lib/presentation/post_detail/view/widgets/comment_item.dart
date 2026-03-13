@@ -36,6 +36,7 @@ class CommentItem extends StatelessWidget {
                 context: context,
                 title: '댓글을 삭제하시겠습니까?',
                 confirmText: '삭제',
+                confirmColor: fxc(context).brandColor,
                 cancelText: '취소',
                 reverseButtons: false,
                 onConfirm: () {

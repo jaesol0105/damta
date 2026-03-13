@@ -16,7 +16,6 @@ class ScheduleModule extends ConsumerWidget {
 
     return MiniCard(
       icon: 'assets/icons/icon_schedule.png',
-      bottomLabelColor: const Color(0xFF1A1A1A),
       title: '  학사일정',
       trailing: MoreButton(onTap: () => context.push('/schedule')),
       child: scheduleAsync.when(

@@ -12,6 +12,9 @@ class VariableColors extends ThemeExtension<VariableColors> {
     required this.contentText,
     required this.labelText,
     required this.errorText,
+    // 모듈 색상
+    required this.modulePostBg, // 게시판 모듈 게시글 배경
+    required this.moduleBorder, // 조금 연한 테두리
   });
 
   final Color? background;
@@ -22,30 +25,38 @@ class VariableColors extends ThemeExtension<VariableColors> {
   final Color? contentText;
   final Color? labelText;
   final Color? errorText;
+  // 모듈 색상
+  final Color? modulePostBg;
+  final Color? moduleBorder;
 
   /// 라이트 모드
   static const VariableColors light = VariableColors(
     background: Colors.white, // [배경] (white)
-    surface: Colors.white, // [레이어] (grey100)
-    // surface: Color(0xFFF5F5F5), // [레이어] (grey100)
+    surface: Colors.white, // [카드배경] (grey100)
     border: Color(0xFFE0E0E0), // [테두리] (grey300)
-    disabledText: Color(0xFFBDBDBD), // [비활성화] 텍스트 (grey400)
-    detailText: Color(0xFF757575), // [디테일] 내용 텍스트, 설명/세부사항 등에 사용 (grey600)
-    contentText: Color(0xFF616161), // [내용] 텍스트, 누를 수 있는 위젯의 텍스트 등에 사용 (grey700)
-    labelText: Color(0xDD000000), // [라벨] 등에 사용, 플러터 앱 기본 텍스트 색깔임 (black87)
-    errorText: Colors.grey, // [에러 텍스트] (grey500)
+    disabledText: Color(0xFFBDBDBD), // [비활성텍스트] (grey400)
+    detailText: Color(0xFF757575), // [설명텍스트] (grey600)
+    contentText: Color(0xFF616161), // [내용텍스트] (grey700)
+    labelText: Color(0xDD000000), // [라벨텍스트] (black87)
+    errorText: Colors.grey, // [에러텍스트] (grey500)
+    // 모듈 색상
+    modulePostBg: Color(0xFFF5F6F8),
+    moduleBorder: Color(0xFFE7E8EB),
   );
 
   /// 다크모드
   static const VariableColors dark = VariableColors(
     background: Color(0xFF121416), // [배경] (material_dark)
-    surface: Color(0xFF1E1E1E), // [레이어] (material_surface_dark)
+    surface: Color(0xFF1E1E1E), // [카드배경] (material_surface_dark)
     border: Color(0x1FFFFFFF), // [테두리] (white12)
-    disabledText: Color(0x61FFFFFF), // [비활성화] 텍스트 (white38)
-    detailText: Color(0x99FFFFFF), // [디테일] 내용 텍스트, 설명/세부사항 등에 사용 (white60)
-    contentText: Color(0xB3FFFFFF), // [내용] 텍스트, 누를 수 있는 위젯의 텍스트 등에 사용 (white70)
-    labelText: Color(0xDDFFFFFF), // [라벨] 등에 사용, 플러터 앱 기본 텍스트 색깔임 (white87)
-    errorText: Color(0xFFE57373), // [에러] 텍스트 (red300)
+    disabledText: Color(0x61FFFFFF), // [비활성텍스트] (white38)
+    detailText: Color(0x99FFFFFF), // [설명텍스트] (white60)
+    contentText: Color(0xB3FFFFFF), // [내용텍스트] (white70)
+    labelText: Color(0xDDFFFFFF), // [라벨텍스트] (white87)
+    errorText: Color(0xFFE57373), // [에러텍스트] (red300)
+    // 모듈 색상
+    modulePostBg: Color(0xFF1C1D1E),
+    moduleBorder: Color(0x2FFFFFFF),
   );
 
   /// Flutter는 Theme.of(context)로 가져온 객체를 불변(immutable) 으로 간주함.
@@ -60,6 +71,8 @@ class VariableColors extends ThemeExtension<VariableColors> {
     Color? contentText,
     Color? labelText,
     Color? errorText,
+    Color? modulePostBg,
+    Color? moduleBorder,
   }) => VariableColors(
     background: background ?? this.background,
     surface: surface ?? this.surface,
@@ -69,6 +82,8 @@ class VariableColors extends ThemeExtension<VariableColors> {
     contentText: contentText ?? this.contentText,
     labelText: labelText ?? this.labelText,
     errorText: errorText ?? this.errorText,
+    modulePostBg: modulePostBg ?? this.modulePostBg,
+    moduleBorder: moduleBorder ?? this.moduleBorder,
   );
 
   /// 라이트/다크 테마가 교체될 때, 색상이 자연스럽게 변경 되도록 하는 메서드.
@@ -84,6 +99,8 @@ class VariableColors extends ThemeExtension<VariableColors> {
       contentText: Color.lerp(contentText, other.contentText, t),
       labelText: Color.lerp(labelText, other.labelText, t),
       errorText: Color.lerp(errorText, other.errorText, t),
+      modulePostBg: Color.lerp(modulePostBg, other.modulePostBg, t),
+      moduleBorder: Color.lerp(moduleBorder, other.moduleBorder, t),
     );
   }
 }

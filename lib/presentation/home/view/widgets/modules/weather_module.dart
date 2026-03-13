@@ -1,5 +1,6 @@
 import 'package:damta/core/theme/app_colors.dart';
-import 'package:damta/presentation/home/view_model/utils/weather_extensions.dart';
+import 'package:damta/core/theme/app_theme.dart';
+import 'package:damta/presentation/home/utils/weather_extensions.dart';
 import 'package:damta/presentation/home/view_model/weather_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -16,9 +17,10 @@ class WeatherModule extends ConsumerWidget {
     return Container(
       height: _cardHeight,
       decoration: BoxDecoration(
+        // color: vrc(context).surface,
+        // border: Border.all(color: vrc(context).border!),
         color: const Color(0xFFD8ECFF),
         borderRadius: BorderRadius.circular(16),
-        // border: Border.all(color: const Color(0xFFCBE3FA)),
       ),
       child: weatherAsync.when(
         loading: () => const Center(
@@ -27,14 +29,14 @@ class WeatherModule extends ConsumerWidget {
             height: 20,
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              color: Color(0xFF5B7A99),
+              color: AppColors.weatherTextDefault,
             ),
           ),
         ),
         error: (e, _) => const Center(
           child: Text(
             '날씨 정보를 불러올 수 없습니다',
-            style: TextStyle(color: Color(0xFF5B7A99), fontSize: 12),
+            style: TextStyle(color: AppColors.weatherTextDefault, fontSize: 12),
           ),
         ),
         data: (weather) => Stack(
@@ -45,11 +47,13 @@ class WeatherModule extends ConsumerWidget {
               left: 16,
               child: Text(
                 weather.formattedDate,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 12.5,
                   letterSpacing: -1,
                   fontWeight: FontWeight.w500,
-                  color: Color(0xFF5B7A99),
+                  color: weather.temperature >= 28
+                      ? AppColors.weatherTextHot
+                      : AppColors.weatherTextDefault,
                 ),
               ),
             ),
@@ -69,10 +73,10 @@ class WeatherModule extends ConsumerWidget {
                   const SizedBox(width: 3),
                   Text(
                     '${weather.temperature.round()}°',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
-                      color: Color(0xFF1A1A1A),
+                      color: vrc(context).labelText,
                       letterSpacing: -1,
                       height: 1.2,
                     ),
@@ -86,10 +90,10 @@ class WeatherModule extends ConsumerWidget {
                   const SizedBox(width: 3),
                   Text(
                     '${weather.precipitation}%',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
-                      color: Color(0xFF1A1A1A),
+                      color: vrc(context).labelText,
                       letterSpacing: -1,
                       height: 1.2,
                     ),
@@ -105,20 +109,22 @@ class WeatherModule extends ConsumerWidget {
               child: Text(
                 weather.weatherComment,
                 textAlign: TextAlign.right,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: "Komacon",
                   height: 1,
                   fontSize: 12,
                   letterSpacing: -0.3,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF5B7A99),
+                  color: weather.temperature >= 28
+                      ? AppColors.weatherTextHot
+                      : AppColors.weatherTextDefault,
                 ),
               ),
             ),
 
             // 코멘트 3줄 이상일 때 .. 붙이기
             if (weather.weatherComment.split('\n').length == 3)
-              const Positioned(
+              Positioned(
                 top: 46,
                 right: 99,
                 child: Text(
@@ -130,7 +136,9 @@ class WeatherModule extends ConsumerWidget {
                     fontSize: 12,
                     letterSpacing: -0.3,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textNormal,
+                    color: weather.temperature >= 28
+                        ? AppColors.weatherTextHot
+                        : AppColors.weatherTextDefault,
                   ),
                 ),
               ),

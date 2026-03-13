@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:damta/core/logger/log.dart';
 import 'package:damta/core/service/firebase_service.dart';
@@ -33,14 +34,14 @@ class _SplashPageState extends State<SplashPage>
 
   /// 앱 시작전 스플래시 화면에서 수행할 초기화 작업
   Future<void> _loadHomeData() async {
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 3));
   }
 
   /// 인증, 유저 정보, 학교 정보 여부 체크하고 라우팅 분기 (+ 홈 화면에서 필요한 데이터 로드)
   Future<void> _runInit() async {
     try {
       // 네이티브 스플래시 → Flutter 스플래시 자연스럽게 보이도록 최소 딜레이
-      await Future.delayed(const Duration(milliseconds: 500));
+      // await Future.delayed(const Duration(milliseconds: 500));
 
       // 로그인된 사용자가 있는지 확인
       final fb_auth.User? user = FirebaseService.instance.auth.currentUser;
@@ -96,20 +97,49 @@ class _SplashPageState extends State<SplashPage>
 
   @override
   Widget build(BuildContext context) {
-    // 추후 추가 예정 (애니메이션)
     return Scaffold(
       backgroundColor: vrc(context).background,
       body: Center(
-        child: Lottie.asset(
-          // 'assets/lottie/splash_chick.json',
-          'assets/lottie/splash_chick_small.json',
-          controller: _controller,
-          onLoaded: (composition) {
-            if (_initialized) return;
-            _initialized = true;
-            _controller.repeat(period: composition.duration);
-            _runInit();
-          },
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ClipRect(
+              child: Align(
+                alignment: Alignment.center,
+                widthFactor: 0.5, // 좌우 50% 잘림
+                heightFactor: 0.5, // 상하 50% 잘림
+                child: Lottie.asset(
+                  'assets/lottie/splash_chick_v2_small_notext.json',
+                  controller: _controller,
+                  onLoaded: (composition) {
+                    if (_initialized) return;
+                    _initialized = true;
+                    _controller.repeat(period: composition.duration);
+                    _runInit();
+                  },
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+            // 타이핑 텍스트
+            DefaultTextStyle(
+              style: TextStyle(
+                color: vrc(context).disabledText,
+                fontWeight: FontWeight.w600,
+              ),
+              child: AnimatedTextKit(
+                pause: const Duration(seconds: 3),
+                animatedTexts: [
+                  TyperAnimatedText(
+                    'LOADING...',
+                    speed: const Duration(milliseconds: 100),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

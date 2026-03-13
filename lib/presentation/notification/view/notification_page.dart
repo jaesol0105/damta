@@ -23,17 +23,26 @@ class NotificationPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => context.pop(),
-          icon: Icon(Icons.arrow_back, size: 30, color: darkgrey),
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.pop();
+          },
         ),
-        title: SizedBox(
-          width: double.infinity,
+        elevation: 0,
+        centerTitle: false,
+        titleSpacing: 0,
+        title: Padding(
+          padding: const EdgeInsets.only(left: 4),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 '알림',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 16,
+                  height: 0.95,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
               Text(
                 userAsync.when(
@@ -41,7 +50,7 @@ class NotificationPage extends ConsumerWidget {
                   error: (e, _) => "학교 정보를 찾을 수 없습니다.",
                   loading: () => "",
                 ),
-                style: TextStyle(fontSize: 14, color: darkgrey),
+                style: TextStyle(fontSize: 14, color: vrc(context).detailText),
               ),
             ],
           ),

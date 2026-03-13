@@ -116,6 +116,7 @@ class PostDetailPage extends HookConsumerWidget {
                       context: context,
                       title: '게시글을 삭제합니다',
                       confirmText: '삭제',
+                      confirmColor: fxc(context).brandColor,
                       cancelText: '취소',
                       reverseButtons: false,
                       onConfirm: () async {

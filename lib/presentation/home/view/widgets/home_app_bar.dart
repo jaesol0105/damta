@@ -32,15 +32,13 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         // 로고 이미지
-        Transform.translate(
-          offset: const Offset(0, 1),
-          child: Image.asset(
-            'assets/images/damta_icon_app_bar.png',
-            height: 28,
-          ),
-        ),
-        SizedBox(width: 10),
-        // 앱 제목, 오버플로우 방지
+        // Transform.translate(
+        //   offset: const Offset(0, 1),
+        //   child: Image.asset('assets/images/app_icon_v3.png', height: 28),
+        // ),
+        // SizedBox(width: 10),
+
+        // 학교명
         Flexible(
           child: Transform.translate(
             offset: const Offset(0, 2),
@@ -54,22 +52,29 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   letterSpacing: -0.3,
                   fontWeight: FontWeight.bold,
                   color: vrc(context).labelText,
-                  fontSize: 22,
+                  fontSize: 24,
                 ),
               ),
             ),
           ),
         ),
+
+        // 학교 이모지
+        Transform.translate(
+          offset: const Offset(6, -1),
+          child: Text('🏫', style: TextStyle(fontSize: 24)),
+        ),
+
         // 편집 모드
         if (isEditMode) ...[
-          const SizedBox(width: 10),
+          const SizedBox(width: 14),
           // 편집 중 표시 카드
           Transform.translate(
             offset: const Offset(0, 1.3),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
-                color: Color(0xFFD8ECFF),
+                color: vrc(context).border,
                 borderRadius: BorderRadius.circular(999),
               ),
               child: Text(

@@ -53,6 +53,7 @@ dependencies:
   sign_in_with_apple: ^7.0.1
   google_sign_in: ^6.3.0
   flutter_naver_login: ^2.1.1
+  animated_text_kit: ^4.3.0
 
 dev_dependencies:
   flutter_test:

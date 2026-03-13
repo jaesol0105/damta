@@ -23,7 +23,7 @@ extension WeatherEntityPresentation on WeatherEntity {
     if (temperature < 8) return '오늘 꽤\n쌀쌀한 날씨야';
     if (temperature < 15) return '오늘\n선선한 날씨야';
     if (temperature < 22) return '오늘\n날씨\n좋아';
-    if (temperature < 28) return '따뜻한\n날씨야';
+    if (temperature < 28) return '오늘\n따뜻한 날씨야';
     if (temperature < 30) return '더운 날씨야\n조심해';
     return '밖에 10분이상\n있으면\n녹는 날씨야';
   }

@@ -1,3 +1,4 @@
+import 'package:damta/core/theme/app_colors.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/domain/entity/post_entity.dart';
 import 'package:damta/presentation/util/time_ago.dart';
@@ -49,15 +50,13 @@ class PostListItem extends StatelessWidget {
                   const HugeIcon(
                     icon: HugeIcons.strokeRoundedFavourite,
                     size: 20,
-                    color: Color.fromARGB(255, 247, 88, 76),
+                    color: AppColors.reactionLike,
                     strokeWidth: 2,
                   ),
                   const SizedBox(width: 4),
                   Text(
                     (post.reactions?.length ?? 0).toString(),
-                    style: const TextStyle(
-                      color: Color.fromARGB(255, 247, 88, 76),
-                    ),
+                    style: const TextStyle(color: AppColors.reactionLike),
                   ),
                   const SizedBox(width: 10),
                   Container(width: 2, height: 12, color: vrc(context).border),

@@ -1,3 +1,4 @@
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class CardHeader extends StatelessWidget {
@@ -33,11 +34,11 @@ class CardHeader extends StatelessWidget {
               child: Text(
                 title,
                 maxLines: 1,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 15,
                   letterSpacing: -1,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF1A1A1A),
+                  color: vrc(context).labelText,
                 ),
               ),
             ),
