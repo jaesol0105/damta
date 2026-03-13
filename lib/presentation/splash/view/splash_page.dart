@@ -128,13 +128,12 @@ class _SplashPageState extends State<SplashPage>
               style: TextStyle(
                 color: vrc(context).disabledText,
                 fontWeight: FontWeight.w600,
-                letterSpacing: -0.3,
               ),
               child: AnimatedTextKit(
                 pause: const Duration(seconds: 3),
                 animatedTexts: [
                   TyperAnimatedText(
-                    'Loading...',
+                    'LOADING...',
                     speed: const Duration(milliseconds: 100),
                   ),
                 ],
