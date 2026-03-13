@@ -66,9 +66,10 @@ class ScheduleFilterUtil {
         schedule.date.day,
       );
       // 주말 제외
-      // if (date.weekday == DateTime.saturday || date.weekday == DateTime.sunday) {
-      //   continue;
-      // }
+      if (date.weekday == DateTime.saturday ||
+          date.weekday == DateTime.sunday) {
+        continue;
+      }
       grouped.putIfAbsent(date, () => []).add(schedule);
     }
 

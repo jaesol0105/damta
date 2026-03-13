@@ -43,7 +43,7 @@ class SocialLoginSmall extends HookConsumerWidget {
           onTap: () {
             // ref.read(authViewModelProvider.notifier).signInNaver();
             // AnalyticsService.event('login', p: {'type': 'naver'}); // 📝
-            showCustomSnackBar(context, '이용할 수 없습니다');
+            showCustomSnackBar(context: context, message: '이용할 수 없습니다');
           },
         ),
       ],

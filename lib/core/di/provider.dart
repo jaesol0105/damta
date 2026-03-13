@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:damta/data/data_source/remote/auth_data_source.dart';
+import 'package:damta/data/data_source/remote/block_data_source.dart';
 import 'package:damta/data/data_source/remote/comment_data_source.dart';
 import 'package:damta/data/data_source/local/meal_local_data_source.dart';
 import 'package:damta/data/data_source/local/memo_local_data_source.dart';
@@ -16,6 +17,7 @@ import 'package:damta/data/data_source/remote/users_data_source.dart';
 import 'package:damta/data/data_source/remote/weather_data_source.dart';
 import 'package:damta/data/database/database_helper.dart';
 import 'package:damta/data/repository_impl/auth_repository_impl.dart';
+import 'package:damta/data/repository_impl/block_repository_impl.dart';
 import 'package:damta/data/repository_impl/comment_repository_impl.dart';
 import 'package:damta/data/repository_impl/meal_repository_impl.dart';
 import 'package:damta/data/repository_impl/memo_repository_impl.dart';
@@ -28,6 +30,7 @@ import 'package:damta/data/repository_impl/time_table_repository_impl.dart';
 import 'package:damta/data/repository_impl/users_repository_impl.dart';
 import 'package:damta/data/repository_impl/weather_repostitory_impl.dart';
 import 'package:damta/domain/repository/auth_repository.dart';
+import 'package:damta/domain/repository/block_repository.dart';
 import 'package:damta/domain/repository/comment_repository.dart';
 import 'package:damta/domain/repository/meal_repository.dart';
 import 'package:damta/domain/repository/memo_repository.dart';
@@ -39,6 +42,7 @@ import 'package:damta/domain/repository/storage_repository.dart';
 import 'package:damta/domain/repository/time_table_repository.dart';
 import 'package:damta/domain/repository/users_repository.dart';
 import 'package:damta/domain/repository/weather_repository.dart';
+import 'package:damta/domain/usecase/block_usecase.dart';
 import 'package:damta/domain/usecase/comment_usecase.dart';
 import 'package:damta/domain/usecase/post_usecase.dart';
 import 'package:damta/domain/usecase/report_usecase.dart';
@@ -136,6 +140,12 @@ AuthDataSource authDataSource(Ref ref) {
 ReportDataSource reportDataSource(Ref ref) {
   final firestore = ref.watch(firestoreProvider);
   return ReportDataSourceImpl(firestore);
+}
+
+@riverpod
+BlockDataSource blockDataSource(Ref ref) {
+  final firestore = ref.watch(firestoreProvider);
+  return BlockDataSourceImpl(firestore);
 }
 
 // ==================== Local DataSource ====================
@@ -248,6 +258,12 @@ ReportRepository reportRepository(Ref ref) {
   return ReportRepositoryImpl(dataSource);
 }
 
+@riverpod
+BlockRepository blockRepository(Ref ref) {
+  final dataSource = ref.watch(blockDataSourceProvider);
+  return BlockRepositoryImpl(dataSource);
+}
+
 // ==================== Usecase ====================
 
 @riverpod
@@ -266,4 +282,10 @@ CommentUsecase commentUsecase(Ref ref) {
 ReportUsecase reportUsecase(Ref ref) {
   final repository = ref.watch(reportRepositoryProvider);
   return ReportUsecase(repository);
+}
+
+@riverpod
+BlockUsecase blockUsecase(Ref ref) {
+  final repository = ref.watch(blockRepositoryProvider);
+  return BlockUsecase(repository);
 }

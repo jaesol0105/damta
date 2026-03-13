@@ -716,6 +716,48 @@ final class ReportDataSourceProvider
 
 String _$reportDataSourceHash() => r'52fa1595583ea0581768c78101e2a51f442b5b65';
 
+@ProviderFor(blockDataSource)
+const blockDataSourceProvider = BlockDataSourceProvider._();
+
+final class BlockDataSourceProvider
+    extends
+        $FunctionalProvider<BlockDataSource, BlockDataSource, BlockDataSource>
+    with $Provider<BlockDataSource> {
+  const BlockDataSourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'blockDataSourceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$blockDataSourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<BlockDataSource> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  BlockDataSource create(Ref ref) {
+    return blockDataSource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(BlockDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<BlockDataSource>(value),
+    );
+  }
+}
+
+String _$blockDataSourceHash() => r'82deb49c079895003e4291f3ebe1d6306cbd2c16';
+
 @ProviderFor(mealLocalDataSource)
 const mealLocalDataSourceProvider = MealLocalDataSourceProvider._();
 
@@ -1413,6 +1455,48 @@ final class ReportRepositoryProvider
 
 String _$reportRepositoryHash() => r'1f36d0e59a319e830ac0b2be42799c8d821ba4ac';
 
+@ProviderFor(blockRepository)
+const blockRepositoryProvider = BlockRepositoryProvider._();
+
+final class BlockRepositoryProvider
+    extends
+        $FunctionalProvider<BlockRepository, BlockRepository, BlockRepository>
+    with $Provider<BlockRepository> {
+  const BlockRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'blockRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$blockRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<BlockRepository> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  BlockRepository create(Ref ref) {
+    return blockRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(BlockRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<BlockRepository>(value),
+    );
+  }
+}
+
+String _$blockRepositoryHash() => r'b45b95f40ec425eb7893a8c5cb54bf16ce63beb5';
+
 @ProviderFor(postUsecase)
 const postUsecaseProvider = PostUsecaseProvider._();
 
@@ -1535,3 +1619,44 @@ final class ReportUsecaseProvider
 }
 
 String _$reportUsecaseHash() => r'1a79888fcfb14f5add54c8f77515ca4745af2d9c';
+
+@ProviderFor(blockUsecase)
+const blockUsecaseProvider = BlockUsecaseProvider._();
+
+final class BlockUsecaseProvider
+    extends $FunctionalProvider<BlockUsecase, BlockUsecase, BlockUsecase>
+    with $Provider<BlockUsecase> {
+  const BlockUsecaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'blockUsecaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$blockUsecaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<BlockUsecase> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  BlockUsecase create(Ref ref) {
+    return blockUsecase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(BlockUsecase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<BlockUsecase>(value),
+    );
+  }
+}
+
+String _$blockUsecaseHash() => r'1703f70fcb8bb650bc1d1bf46748cd90af358271';

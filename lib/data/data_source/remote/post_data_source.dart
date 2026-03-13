@@ -37,7 +37,8 @@ class PostDataSourceImpl implements PostDataSource {
   List<PostDto> _parseDocs(
     List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
   ) {
-    return docs.map((doc) {
+    // 숨겨진 글 제외한 리스트 반환
+    return docs.where((doc) => doc.data()['is_hidden'] != true).map((doc) {
       final data = Map<String, dynamic>.from(doc.data());
       data['p_id'] = doc.id;
 

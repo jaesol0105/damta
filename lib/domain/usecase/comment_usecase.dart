@@ -1,3 +1,4 @@
+import 'package:damta/core/util/content_filter.dart';
 import 'package:damta/domain/entity/comment_entity.dart';
 import 'package:damta/domain/repository/comment_repository.dart';
 
@@ -10,10 +11,12 @@ class CommentUsecase {
   }
 
   Future<void> updateComment(CommentEntity commentEntity) async {
+    ContentFilter.validate(commentEntity.cContent);
     await commentRepository.updateComment(commentEntity);
   }
 
   Future<void> addComment(CommentEntity commentEntity) async {
+    ContentFilter.validate(commentEntity.cContent);
     await commentRepository.addComment(commentEntity);
   }
 

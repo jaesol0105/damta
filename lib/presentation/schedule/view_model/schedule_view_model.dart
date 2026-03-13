@@ -28,12 +28,15 @@ abstract class ScheduleState with _$ScheduleState {
     final weekEnd = today.add(const Duration(days: 6));
     final result = allSchedules.where((s) {
       final d = DateTime(s.date.year, s.date.month, s.date.day);
-      return !d.isBefore(today) && !d.isAfter(weekEnd);
+      final isWeekend =
+          d.weekday == DateTime.saturday || d.weekday == DateTime.sunday;
+      // 오늘부터 일주일치 일정, 주말 제외
+      return !d.isBefore(today) && !d.isAfter(weekEnd) && !isWeekend;
     }).toList()..sort((a, b) => a.date.compareTo(b.date));
     return result;
   }
 
-  /// M. D 학사일정명. 홈 화면 모듈에서 사용.
+  /// M. D 학사일정명 형태로 출력. 홈 화면 모듈에서 사용.
   List<String> get weekScheduleLines => weekSchedules
       .map((s) => '${s.date.month}. ${s.date.day} ${s.eventName}')
       .toList();
