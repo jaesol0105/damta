@@ -17,10 +17,10 @@ class WeatherModule extends ConsumerWidget {
     return Container(
       height: _cardHeight,
       decoration: BoxDecoration(
-        color: vrc(context).surface,
-        // color: const Color(0xFFD8ECFF),
+        // color: vrc(context).surface,
+        // border: Border.all(color: vrc(context).border!),
+        color: const Color(0xFFD8ECFF),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: vrc(context).border!),
       ),
       child: weatherAsync.when(
         loading: () => const Center(

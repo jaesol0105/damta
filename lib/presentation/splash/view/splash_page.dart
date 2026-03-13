@@ -124,22 +124,22 @@ class _SplashPageState extends State<SplashPage>
               ),
             ),
             // 타이핑 텍스트
-            // DefaultTextStyle(
-            //   style: TextStyle(
-            //     color: Color(0xffF8961E),
-            //     fontWeight: FontWeight.w700,
-            //     letterSpacing: -0.3,
-            //   ),
-            //   child: AnimatedTextKit(
-            //     pause: const Duration(seconds: 3),
-            //     animatedTexts: [
-            //       TyperAnimatedText(
-            //         'Damso Time',
-            //         speed: const Duration(milliseconds: 100),
-            //       ),
-            //     ],
-            //   ),
-            // ),
+            DefaultTextStyle(
+              style: TextStyle(
+                color: vrc(context).disabledText,
+                fontWeight: FontWeight.w600,
+                letterSpacing: -0.3,
+              ),
+              child: AnimatedTextKit(
+                pause: const Duration(seconds: 3),
+                animatedTexts: [
+                  TyperAnimatedText(
+                    'Loading...',
+                    speed: const Duration(milliseconds: 100),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
