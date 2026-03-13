@@ -21,7 +21,13 @@ class CommentViewModel extends _$CommentViewModel {
     if (currentUid != null) {
       // 숨김 댓글 제외
       final hiddenIds = await blockUsecase.getHiddenTargetIds(currentUid);
-      state = comments.where((c) => !hiddenIds.contains(c.cId)).toList();
+      final blockedUserIds = await blockUsecase.getBlockedUserIds(currentUid);
+      state = comments
+          .where(
+            (c) =>
+                !hiddenIds.contains(c.cId) && !blockedUserIds.contains(c.uId),
+          )
+          .toList();
     } else {
       state = comments;
     }
@@ -66,5 +72,19 @@ class CommentViewModel extends _$CommentViewModel {
       if (ref.mounted) state = prevState;
       rethrow;
     }
+  }
+
+  /// 사용자 차단
+  Future<void> blockUser(String targetUid, String hiderUid) async {
+    await ref
+        .read(blockUsecaseProvider)
+        .hideTarget(hiderUid, targetUid, 'user');
+  }
+
+  /// 사용자 차단 후 UI 갱신
+  /// post와 comment 모두 갱신해야하기 때문에 중복처리 방지 위해 분리
+  void removeUserFromState(String targetUid) {
+    // 낙관적 업데이트
+    state = state.where((c) => c.uId != targetUid).toList();
   }
 }

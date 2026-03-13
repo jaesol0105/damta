@@ -1,8 +1,10 @@
+import 'package:damta/core/di/provider.dart';
 import 'package:damta/core/service/analytics_service.dart';
 import 'package:damta/core/service/firebase_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/domain/entity/comment_entity.dart';
 import 'package:damta/domain/enum/report_target_type_enum.dart';
+import 'package:damta/presentation/post/view_model/post_view_model.dart';
 import 'package:damta/presentation/post_detail/view/widgets/report_bottom_sheet.dart';
 import 'package:damta/presentation/widget/custom_dialog.dart';
 import 'package:damta/presentation/util/time_ago.dart';
@@ -155,6 +157,38 @@ class _CommentActionSheet extends ConsumerWidget {
                   showCustomSnackBar(
                     context: context,
                     message: '댓글을 숨겼습니다. 해당 댓글이 더는 표시되지 않습니다.',
+                  );
+                  Navigator.pop(context);
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  showCustomSnackBar(
+                    context: context,
+                    message: e.toString().replaceAll('Exception: ', ''),
+                  );
+                  Navigator.pop(context);
+                }
+              }
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.block_outlined),
+            title: const Text('이 사용자 차단'),
+            onTap: () async {
+              try {
+                await ref
+                    .read(commentViewModelProvider.notifier)
+                    .blockUser(comment.uId, currentUId);
+                ref
+                    .read(commentViewModelProvider.notifier)
+                    .removeUserFromState(comment.uId);
+                ref
+                    .read(postViewModelProvider.notifier)
+                    .removeUserFromState(comment.uId);
+                if (context.mounted) {
+                  showCustomSnackBar(
+                    context: context,
+                    message: '사용자를 차단했습니다.\n해당 사용자가 작성한 글/댓글이 더는 표시되지 않습니다.',
                   );
                   Navigator.pop(context);
                 }

@@ -8,6 +8,9 @@ abstract interface class BlockDataSource {
   /// 사용자가 숨김 처리한 게시글/댓글 id 조회
   Future<List<String>> getHiddenTargetIds(String hiderUid);
 
+  /// 차단한 사용자 목록 조회
+  Future<List<String>> getBlockedUserIds(String hiderUid);
+
   /// 게시글/댓글이 숨김 처리 되었는지 확인
   Future<bool> isHidden(String hiderUid, String targetId);
 }
@@ -44,6 +47,18 @@ class BlockDataSourceImpl implements BlockDataSource {
     final snapshot = await _firestore
         .collection(_collection)
         .where('hider_uid', isEqualTo: hiderUid)
+        .get();
+    return snapshot.docs
+        .map((doc) => doc.data()['target_id'] as String)
+        .toList();
+  }
+
+  @override
+  Future<List<String>> getBlockedUserIds(String hiderUid) async {
+    final snapshot = await _firestore
+        .collection(_collection)
+        .where('hider_uid', isEqualTo: hiderUid)
+        .where('target_type', isEqualTo: 'user')
         .get();
     return snapshot.docs
         .map((doc) => doc.data()['target_id'] as String)

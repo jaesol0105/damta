@@ -26,18 +26,23 @@ class PostViewModel extends _$PostViewModel {
 
     // 숨김 게시글 제외
     if (currentUid != null) {
-      final hiddenIds = await ref
-          .read(blockUsecaseProvider)
-          .getHiddenTargetIds(currentUid);
+      final blockUsecase = ref.read(blockUsecaseProvider);
+      final hiddenIds = await blockUsecase.getHiddenTargetIds(currentUid);
+      final blockedUserIds = await blockUsecase.getBlockedUserIds(currentUid);
       if (ref.mounted) {
-        state = posts.where((p) => !hiddenIds.contains(p.pId)).toList();
+        state = posts
+            .where(
+              (p) =>
+                  !hiddenIds.contains(p.pId) && !blockedUserIds.contains(p.uId),
+            )
+            .toList();
       }
     } else {
       state = posts;
     }
   }
 
-  /// 게시글 숨기기 (개인한테만 숨김)
+  /// 게시글 숨기기
   Future<void> hidePost(String pId, String hiderUid) async {
     // 낙관적 업데이트
     state = state.where((p) => p.pId != pId).toList();
@@ -139,6 +144,21 @@ class PostViewModel extends _$PostViewModel {
       if (ref.mounted) state = prevState;
       rethrow;
     }
+  }
+
+  /// 사용자 차단 후 UI 갱신
+  /// comment에서 사용자 차단 후 글 갱신을 위해 사용
+  void removeUserFromState(String targetUid) {
+    state = state.where((c) => c.uId != targetUid).toList();
+  }
+
+  /// 사용자 차단
+  Future<void> blockUser(String targetUid, String hiderUid) async {
+    // 낙관적 업데이트
+    state = state.where((p) => p.uId != targetUid).toList();
+    await ref
+        .read(blockUsecaseProvider)
+        .hideTarget(hiderUid, targetUid, 'user');
   }
 
   /// 게시글 찾기

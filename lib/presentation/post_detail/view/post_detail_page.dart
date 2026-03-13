@@ -398,6 +398,33 @@ class _PostActionSheet extends ConsumerWidget {
               }
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.block_outlined),
+            title: const Text('이 사용자 차단'),
+            onTap: () async {
+              try {
+                await ref
+                    .read(postViewModelProvider.notifier)
+                    .blockUser(targetUid, currentUId);
+                if (context.mounted) {
+                  showCustomSnackBar(
+                    context: context,
+                    message: '사용자를 차단했습니다.\n해당 사용자가 작성한 글/댓글이 더는 표시되지 않습니다.',
+                  );
+                  Navigator.pop(context);
+                  context.pop();
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  showCustomSnackBar(
+                    context: context,
+                    message: e.toString().replaceAll('Exception: ', ''),
+                  );
+                  Navigator.pop(context);
+                }
+              }
+            },
+          ),
         ],
       ),
     );

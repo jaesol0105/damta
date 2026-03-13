@@ -10,10 +10,19 @@ class BlockUsecase {
     String targetType,
   ) async {
     final already = await _blockRepository.isHidden(hiderUid, targetId);
-    if (already) throw Exception('이미 숨긴 항목입니다.');
+    if (already) {
+      if (targetType == 'user') {
+        throw Exception('이미 차단한 사용자입니다.');
+      } else {
+        throw Exception('이미 숨긴 항목입니다.');
+      }
+    }
     await _blockRepository.hideTarget(hiderUid, targetId, targetType);
   }
 
   Future<List<String>> getHiddenTargetIds(String hiderUid) =>
       _blockRepository.getHiddenTargetIds(hiderUid);
+
+  Future<List<String>> getBlockedUserIds(String hiderUid) =>
+      _blockRepository.getBlockedUserIds(hiderUid);
 }

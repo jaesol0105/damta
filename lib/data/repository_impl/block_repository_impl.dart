@@ -17,6 +17,10 @@ class BlockRepositoryImpl implements BlockRepository {
       _dataSource.getHiddenTargetIds(hiderUid);
 
   @override
+  Future<List<String>> getBlockedUserIds(String hiderUid) =>
+      _dataSource.getBlockedUserIds(hiderUid);
+
+  @override
   Future<bool> isHidden(String hiderUid, String targetId) =>
       _dataSource.isHidden(hiderUid, targetId);
 }
