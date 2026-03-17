@@ -6,6 +6,7 @@ import 'package:damta/presentation/widget/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeDrawer extends HookConsumerWidget {
   const HomeDrawer({super.key});
@@ -19,7 +20,7 @@ class HomeDrawer extends HookConsumerWidget {
           // 앱 로고
           Padding(
             padding: const EdgeInsets.only(top: 30),
-            child: drawerItem(
+            child: _drawerItem(
               onTap: () {},
               // () => context.push('/melon'),
               context: context,
@@ -31,7 +32,7 @@ class HomeDrawer extends HookConsumerWidget {
           ),
 
           /// 학교 정보 수정
-          drawerItem(
+          _drawerItem(
             onTap: () {
               Navigator.of(context).pop();
               context.go('/school');
@@ -41,8 +42,41 @@ class HomeDrawer extends HookConsumerWidget {
             title: '학교 정보 수정',
           ),
 
+          /// 문의/신고
+          _drawerItem(
+            onTap: () => showCustomDialog(
+              context: context,
+              title: '문의 및 관리자의 조치가 필요한\n사항은 아래로 연락해 주세요',
+              content: 'at6768569@gmail.com',
+              confirmText: '메일 보내기',
+              cancelText: '취소',
+              reverseButtons: false,
+              onConfirm: () async {
+                final Uri emailUri = Uri(
+                  scheme: 'mailto',
+                  path: 'at6768569@gmail.com',
+                  query: Uri.encodeFull('subject=[담타 문의]&body=문의 내용을 작성해주세요.'),
+                );
+
+                if (await canLaunchUrl(emailUri)) {
+                  await launchUrl(emailUri);
+                } else {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  showCustomSnackBar(
+                    context: context,
+                    message: '메일 앱을 열 수 없습니다.',
+                  );
+                }
+              },
+            ),
+            context: context,
+            leading: Icon(Icons.mail_outline),
+            title: '문의 / 신고',
+          ),
+
           /// 회원 탈퇴
-          drawerItem(
+          _drawerItem(
             onTap: () => showCustomDialog(
               context: context,
               title: '정말 탈퇴하시겠습니까?',
@@ -73,7 +107,7 @@ class HomeDrawer extends HookConsumerWidget {
           ),
 
           /// 로그아웃
-          drawerItem(
+          _drawerItem(
             onTap: () => showCustomDialog(
               context: context,
               title: '로그아웃 하시겠습니까?',
@@ -105,7 +139,7 @@ class HomeDrawer extends HookConsumerWidget {
     );
   }
 
-  Widget drawerItem({
+  Widget _drawerItem({
     required BuildContext context,
     required GestureTapCallback? onTap,
     required Widget leading,
