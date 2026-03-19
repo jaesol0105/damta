@@ -96,7 +96,7 @@ class MemoPage extends HookConsumerWidget {
                 child: Text(
                   '저장',
                   style: TextStyle(
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.bold,
                     fontSize: 15,
                     color: isEdited.value
                         ? AppColors.actionWrite

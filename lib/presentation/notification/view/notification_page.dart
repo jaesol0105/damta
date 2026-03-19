@@ -41,7 +41,7 @@ class NotificationPage extends ConsumerWidget {
                 style: TextStyle(
                   fontSize: 16,
                   height: 0.95,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               Text(

@@ -27,7 +27,7 @@ class PostListItem extends StatelessWidget {
               post.pTitle,
               maxLines: 1,
               overflow: TextOverflow.ellipsis, // 길어지면 ... 출력
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              style: const TextStyle(fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 5),
             Text(post.pContent, overflow: TextOverflow.ellipsis),

@@ -109,7 +109,7 @@ class PostDetailPage extends HookConsumerWidget {
             style: TextStyle(
               fontSize: 20,
               height: 0.95,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),

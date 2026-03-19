@@ -85,21 +85,21 @@ class _SplashPageState extends ConsumerState<SplashPage>
               ),
             ),
             // 타이핑 텍스트
-            DefaultTextStyle(
-              style: TextStyle(
-                color: vrc(context).disabledText,
-                fontWeight: FontWeight.w600,
-              ),
-              child: AnimatedTextKit(
-                pause: const Duration(seconds: 3),
-                animatedTexts: [
-                  TyperAnimatedText(
-                    'LOADING...',
-                    speed: const Duration(milliseconds: 100),
-                  ),
-                ],
-              ),
-            ),
+            // DefaultTextStyle(
+            //   style: TextStyle(
+            //     color: vrc(context).disabledText,
+            //     fontWeight: FontWeight.w600,
+            //   ),
+            //   child: AnimatedTextKit(
+            //     pause: const Duration(seconds: 3),
+            //     animatedTexts: [
+            //       TyperAnimatedText(
+            //         'LOADING...',
+            //         speed: const Duration(milliseconds: 100),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),

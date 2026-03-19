@@ -42,7 +42,6 @@ class _MemoText extends StatelessWidget {
           style: TextStyle(
             height: 1.25,
             fontSize: 12.5,
-            fontWeight: FontWeight.w500,
             color: vrc(context).detailText,
           ),
         ),
@@ -58,7 +57,6 @@ class _MemoText extends StatelessWidget {
         style: TextStyle(
           height: 1.25,
           fontSize: 12.5,
-          fontWeight: FontWeight.w500,
           color: vrc(context).labelText,
         ),
       ),

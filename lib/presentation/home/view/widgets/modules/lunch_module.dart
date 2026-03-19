@@ -29,11 +29,7 @@ class MealModule extends ConsumerWidget {
             context,
             child: Text(
               '오늘 급식 정보가 없습니다',
-              style: TextStyle(
-                fontSize: 12.5,
-                fontWeight: FontWeight.w500,
-                color: vrc(context).detailText,
-              ),
+              style: TextStyle(fontSize: 12.5, color: vrc(context).detailText),
             ),
           );
         }
@@ -79,7 +75,6 @@ class _LunchText extends StatelessWidget {
         style: TextStyle(
           height: 1.25,
           fontSize: 12.5,
-          fontWeight: FontWeight.w500,
           color: vrc(context).labelText,
         ),
       ),

@@ -50,11 +50,7 @@ class _AnonBoardBody extends StatelessWidget {
         padding: EdgeInsets.only(left: 4),
         child: Text(
           '게시글이 없습니다',
-          style: TextStyle(
-            fontSize: 12.5,
-            fontWeight: FontWeight.w500,
-            color: vrc(context).detailText,
-          ),
+          style: TextStyle(fontSize: 12.5, color: vrc(context).detailText),
         ),
       );
     }
@@ -99,7 +95,7 @@ class _BoardPill extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
             fontSize: 12.5,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             color: vrc(context).labelText,
           ),
         ),

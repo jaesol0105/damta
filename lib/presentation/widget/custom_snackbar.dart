@@ -1,3 +1,4 @@
+import 'package:damta/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 void showCustomSnackBar({
@@ -14,21 +15,17 @@ void showCustomSnackBar({
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        duration: const Duration(seconds: 2),
+        duration: const Duration(seconds: 3),
         content: Container(
           padding: const EdgeInsets.symmetric(vertical: 14),
           decoration: BoxDecoration(
-            color: confirmColor ?? Colors.amber,
+            color: confirmColor ?? vrc(context).detailText,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
             message,
             textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-            ),
+            style: TextStyle(color: Colors.white, fontSize: 12),
           ),
         ),
       ),

@@ -37,7 +37,7 @@ class CardHeader extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 15,
                   letterSpacing: -1,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.bold,
                   color: vrc(context).labelText,
                 ),
               ),

@@ -50,7 +50,6 @@ class WeatherModule extends ConsumerWidget {
                 style: TextStyle(
                   fontSize: 12.5,
                   letterSpacing: -1,
-                  fontWeight: FontWeight.w500,
                   color: weather.temperature >= 28
                       ? AppColors.weatherTextHot
                       : AppColors.weatherTextDefault,

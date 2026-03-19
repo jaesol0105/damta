@@ -38,7 +38,7 @@ class PostPage extends ConsumerWidget {
                 style: TextStyle(
                   fontSize: 16,
                   height: 0.95,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
@@ -107,7 +107,7 @@ class PostPage extends ConsumerWidget {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 15,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
