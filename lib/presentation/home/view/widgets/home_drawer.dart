@@ -1,11 +1,13 @@
 import 'package:damta/core/service/analytics_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/login/view_model/auth_view_model.dart';
+import 'package:damta/presentation/util/open_terms_url.dart';
 import 'package:damta/presentation/widget/custom_dialog.dart';
 import 'package:damta/presentation/widget/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeDrawer extends HookConsumerWidget {
@@ -18,17 +20,12 @@ class HomeDrawer extends HookConsumerWidget {
       child: ListView(
         children: [
           // 앱 로고
-          Padding(
-            padding: const EdgeInsets.only(top: 30),
-            child: _drawerItem(
-              onTap: () {},
-              // () => context.push('/melon'),
-              context: context,
-              leading: SizedBox(
-                width: 120,
-                child: Image.asset("assets/images/damta_logo_color_down.png"),
-              ),
+          Container(
+            padding: const EdgeInsets.fromLTRB(20, 40, 60, 10),
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(color: vrc(context).border!)),
             ),
+            child: Image.asset("assets/images/damta_logo_color_down.png"),
           ),
 
           /// 학교 정보 수정
@@ -38,7 +35,7 @@ class HomeDrawer extends HookConsumerWidget {
               context.go('/school');
             },
             context: context,
-            leading: Icon(Icons.school),
+            icon: PhosphorIcons.graduationCap(),
             title: '학교 정보 수정',
           ),
 
@@ -61,6 +58,7 @@ class HomeDrawer extends HookConsumerWidget {
                 if (await canLaunchUrl(emailUri)) {
                   await launchUrl(emailUri);
                 } else {
+                  if (!context.mounted) return;
                   Navigator.pop(context);
                   Navigator.pop(context);
                   showCustomSnackBar(
@@ -71,8 +69,16 @@ class HomeDrawer extends HookConsumerWidget {
               },
             ),
             context: context,
-            leading: Icon(Icons.mail_outline),
+            icon: PhosphorIcons.envelopeSimple(),
             title: '문의 / 신고',
+          ),
+
+          /// 이용 약관
+          _drawerItem(
+            onTap: () => openTermsUrl(),
+            context: context,
+            icon: PhosphorIcons.link(),
+            title: '이용 약관',
           ),
 
           /// 회원 탈퇴
@@ -101,7 +107,7 @@ class HomeDrawer extends HookConsumerWidget {
               },
             ),
             context: context,
-            leading: Icon(Icons.delete),
+            icon: PhosphorIcons.trash(),
             title: '회원 탈퇴',
             color: Colors.red,
           ),
@@ -131,7 +137,7 @@ class HomeDrawer extends HookConsumerWidget {
               },
             ),
             context: context,
-            leading: Icon(Icons.logout),
+            icon: PhosphorIcons.signOut(),
             title: '로그아웃',
           ),
         ],
@@ -142,7 +148,7 @@ class HomeDrawer extends HookConsumerWidget {
   Widget _drawerItem({
     required BuildContext context,
     required GestureTapCallback? onTap,
-    required Widget leading,
+    required IconData icon,
     String? title,
     Color? color,
   }) {
@@ -153,7 +159,7 @@ class HomeDrawer extends HookConsumerWidget {
           border: Border(bottom: BorderSide(color: vrc(context).border!)),
         ),
         child: ListTile(
-          leading: leading,
+          leading: PhosphorIcon(icon),
           title: title == null ? null : Text(title),
           iconColor: color,
           textColor: color,

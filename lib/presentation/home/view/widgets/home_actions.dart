@@ -4,7 +4,7 @@ import 'package:damta/presentation/notification/view_model/notification_view_mod
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:hugeicons/hugeicons.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class HomeActions extends HookConsumerWidget {
   const HomeActions({super.key});
@@ -17,44 +17,46 @@ class HomeActions extends HookConsumerWidget {
     // 내 알림 목록 중 isRead == false 인 알림이 있는지 여부
     final bool hasNewNoti = notiList.any((n) => n.isRead == false);
 
-    return Row(
-      children: [
-        /// 알림
-        actionsItem(
-          context,
-          onTap: () => context.push("/notification/$uId"),
-          hugeIcon: HugeIcons.strokeRoundedNotification02,
-          hasUpdate: hasNewNoti,
-        ),
+    return Padding(
+      padding: const EdgeInsets.only(right: 20),
+      child: Row(
+        children: [
+          /// 알림
+          _actionsItem(
+            context,
+            onTap: () => context.push("/notification/$uId"),
+            icon: PhosphorIconsBold.bell,
+            hasUpdate: hasNewNoti,
+          ),
 
-        /// 설정
-        actionsItem(
-          context,
-          onTap: () => Scaffold.of(context).openEndDrawer(),
-          hugeIcon: HugeIcons.strokeRoundedSettings01,
-        ),
-      ],
+          /// 설정
+          _actionsItem(
+            context,
+            onTap: () => Scaffold.of(context).openEndDrawer(),
+            icon: PhosphorIconsBold.gearSix,
+          ),
+        ],
+      ),
     );
   }
 
-  Widget actionsItem(
+  Widget _actionsItem(
     BuildContext context, {
     required GestureTapCallback? onTap,
-    required List<List<dynamic>> hugeIcon,
+    required IconData icon,
     bool? hasUpdate,
   }) {
     return Padding(
-      padding: const EdgeInsets.only(right: 20),
+      padding: const EdgeInsets.only(left: 16),
       child: GestureDetector(
         onTap: onTap,
         child: Stack(
           children: [
             Center(
-              child: HugeIcon(
-                icon: hugeIcon,
+              child: PhosphorIcon(
+                icon,
                 size: 26,
                 color: vrc(context).contentText,
-                strokeWidth: 2,
               ),
             ),
             hasUpdate == null
@@ -70,7 +72,10 @@ class HomeActions extends HookConsumerWidget {
                         decoration: BoxDecoration(
                           color: Colors.red,
                           shape: BoxShape.circle,
-                          border: Border.all(color: vrc(context).background!, width: 1.5),
+                          border: Border.all(
+                            color: vrc(context).background!,
+                            width: 1.5,
+                          ),
                         ),
                       ),
                     ),

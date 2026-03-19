@@ -1,5 +1,5 @@
 import 'package:damta/presentation/login/view/widgets/social_login_small.dart';
-import 'package:damta/presentation/login/view/widgets/terms_agreement_text.dart';
+import 'package:damta/presentation/login/view/widgets/terms_bottom_sheet.dart';
 import 'package:damta/presentation/login/view_model/auth_view_model.dart';
 import 'package:damta/presentation/widget/custom_snackbar.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +17,18 @@ class LoginPage extends HookConsumerWidget {
     ref.listen<AsyncValue<void>>(authViewModelProvider, (prev, next) {
       next.whenOrNull(
         // 로그인 성공 시
-        data: (_) {
+        data: (_) async {
+          // 최초 로그인 시 약관 동의 체크
           if (prev?.isLoading == true) {
-            context.go('/school');
+            final agreed = await showTermsBottomSheet(context);
+            if (agreed) {
+              context.go('/school'); // 동의해야 학교 페이지로 이동
+            } else {
+              showCustomSnackBar(
+                context: context,
+                message: "약관에 동의해야 앱을 이용할 수 있습니다",
+              );
+            }
           }
         },
         // 로그인 실패 시
@@ -33,16 +42,15 @@ class LoginPage extends HookConsumerWidget {
         Scaffold(
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 50,
             children: [
-              const SizedBox(height: 60),
-              Image.asset("assets/images/damta_logo_color_down.png", width: 300),
-              const SizedBox(height: 50),
-
-              // const SocialLoginLarge(), // 사각형 버튼 스타일
-              const SocialLoginSmall(), // 원형 버튼 스타일
-
-              const SizedBox(height: 50),
-              const TermsAgreementText(),
+              Image.asset(
+                "assets/images/damta_logo_color_down.png",
+                width: 300,
+              ),
+              const SocialLoginSmall(), // 원형 로그인
+              // const SocialLoginLarge(), // 사각형 로그인
+              // const TermsAgreementText(), // 약관동의 문구
             ],
           ),
         ),
