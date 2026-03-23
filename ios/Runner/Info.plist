@@ -35,6 +35,8 @@
 				<string>Editor</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
+					<string>naverEdesQvmeQjtvE_PXeZSK</string>
+					<string>kakao905586a95c550bb2604245bee31dd16c</string>
 					<string>com.googleusercontent.apps.436072449092-fkstkr05qrsup10f80b373kv0iecrstf</string>
 				</array>
 			</dict>
@@ -51,6 +53,14 @@
 			<string>naversearchapp</string>
 			<string>naversearchthirdlogin</string>
 		</array>
+		<key>NidUrlScheme</key>
+		<string>naverEdesQvmeQjtvE_PXeZSK</string>
+		<key>NidClientID</key>
+		<string>EdesQvmeQjtvE_PXeZSK</string>
+		<key>NidClientSecret</key>
+		<string>cnP1ZV36pL</string>
+		<key>NidAppName</key>
+		<string>Damta</string>
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
 		<key>NSLocationWhenInUseUsageDescription</key>

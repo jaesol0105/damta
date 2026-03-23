@@ -9,6 +9,16 @@
         android:name=".MyApplication"
         android:icon="@mipmap/ic_launcher"
         android:enableOnBackInvokedCallback="true">
+
+        <meta-data
+            android:name="com.naver.sdk.clientId"
+            android:value="@string/client_id" />
+        <meta-data
+            android:name="com.naver.sdk.clientSecret"
+            android:value="@string/client_secret" />
+        <meta-data
+            android:name="com.naver.sdk.clientName"
+            android:value="@string/client_name" />
         
         <activity
             android:name=".MainActivity"
@@ -28,7 +38,20 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="authorize"
+                      android:scheme="naverEdesQvmeQjtvE_PXeZSK"/>
+            </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.navercorp.nid.oauth.activity.NidOAuthCustomTabActivity"
+            android:exported="true"
+            android:launchMode="singleTask" />
 
         <activity
             android:name="com.kakao.sdk.flutter.AuthCodeCustomTabsActivity"
