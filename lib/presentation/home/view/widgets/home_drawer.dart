@@ -1,11 +1,14 @@
 import 'package:damta/core/service/analytics_service.dart';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/login/view_model/auth_view_model.dart';
+import 'package:damta/presentation/util/open_terms_url.dart';
 import 'package:damta/presentation/widget/custom_dialog.dart';
 import 'package:damta/presentation/widget/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeDrawer extends HookConsumerWidget {
   const HomeDrawer({super.key});
@@ -17,32 +20,69 @@ class HomeDrawer extends HookConsumerWidget {
       child: ListView(
         children: [
           // 앱 로고
-          Padding(
-            padding: const EdgeInsets.only(top: 30),
-            child: drawerItem(
-              onTap: () {},
-              // () => context.push('/melon'),
-              context: context,
-              leading: SizedBox(
-                width: 120,
-                child: Image.asset("assets/images/damta_logo_color_down.png"),
-              ),
+          Container(
+            padding: const EdgeInsets.fromLTRB(20, 40, 60, 10),
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(color: vrc(context).border!)),
             ),
+            child: Image.asset("assets/images/damta_logo_color_down.png"),
           ),
 
           /// 학교 정보 수정
-          drawerItem(
+          _drawerItem(
             onTap: () {
               Navigator.of(context).pop();
               context.go('/school');
             },
             context: context,
-            leading: Icon(Icons.school),
+            icon: PhosphorIcons.graduationCap(),
             title: '학교 정보 수정',
           ),
 
+          /// 문의/신고
+          _drawerItem(
+            onTap: () => showCustomDialog(
+              context: context,
+              title: '문의 및 관리자의 조치가 필요한\n사항은 아래로 연락해 주세요',
+              content: 'at6768569@gmail.com',
+              confirmText: '메일 보내기',
+              cancelText: '취소',
+              reverseButtons: false,
+              onConfirm: () async {
+                final Uri emailUri = Uri(
+                  scheme: 'mailto',
+                  path: 'at6768569@gmail.com',
+                  query: Uri.encodeFull('subject=[담타 문의]&body=문의 내용을 작성해주세요.'),
+                );
+
+                if (await canLaunchUrl(emailUri)) {
+                  await launchUrl(emailUri);
+                } else {
+                  if (!context.mounted) return;
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  showCustomSnackBar(
+                    context: context,
+                    message: '메일 앱을 열 수 없습니다.',
+                  );
+                }
+              },
+            ),
+            context: context,
+            icon: PhosphorIcons.envelopeSimple(),
+            title: '문의 / 신고',
+          ),
+
+          /// 이용 약관
+          _drawerItem(
+            onTap: () => openTermsUrl(),
+            context: context,
+            icon: PhosphorIcons.link(),
+            title: '이용 약관',
+          ),
+
           /// 회원 탈퇴
-          drawerItem(
+          _drawerItem(
             onTap: () => showCustomDialog(
               context: context,
               title: '정말 탈퇴하시겠습니까?',
@@ -67,13 +107,13 @@ class HomeDrawer extends HookConsumerWidget {
               },
             ),
             context: context,
-            leading: Icon(Icons.delete),
+            icon: PhosphorIcons.trash(),
             title: '회원 탈퇴',
             color: Colors.red,
           ),
 
           /// 로그아웃
-          drawerItem(
+          _drawerItem(
             onTap: () => showCustomDialog(
               context: context,
               title: '로그아웃 하시겠습니까?',
@@ -97,7 +137,7 @@ class HomeDrawer extends HookConsumerWidget {
               },
             ),
             context: context,
-            leading: Icon(Icons.logout),
+            icon: PhosphorIcons.signOut(),
             title: '로그아웃',
           ),
         ],
@@ -105,10 +145,10 @@ class HomeDrawer extends HookConsumerWidget {
     );
   }
 
-  Widget drawerItem({
+  Widget _drawerItem({
     required BuildContext context,
     required GestureTapCallback? onTap,
-    required Widget leading,
+    required IconData icon,
     String? title,
     Color? color,
   }) {
@@ -119,7 +159,7 @@ class HomeDrawer extends HookConsumerWidget {
           border: Border(bottom: BorderSide(color: vrc(context).border!)),
         ),
         child: ListTile(
-          leading: leading,
+          leading: PhosphorIcon(icon),
           title: title == null ? null : Text(title),
           iconColor: color,
           textColor: color,

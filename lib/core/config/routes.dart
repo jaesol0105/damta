@@ -48,12 +48,12 @@ final routerProvider = Provider<GoRouter>((ref) {
 
     redirect: (context, state) {
       final user = authState.value;
-      final isLoginPage = state.uri.path == '/';
-      final isSplashPage = state.uri.path == '/splash';
+      final isLoginPage = state.uri.path == AppRoutePath.login;
+      final isSplashPage = state.uri.path == AppRoutePath.splash;
 
       // 비로그인 접근 차단 (로그아웃, 회원탈퇴 시에도 redirect)
       if (user == null && !isLoginPage && !isSplashPage) {
-        return '/';
+        return AppRoutePath.login;
       }
 
       return null;

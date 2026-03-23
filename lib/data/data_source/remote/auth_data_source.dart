@@ -115,7 +115,11 @@ class AuthDataSourceImpl implements AuthDataSource {
   Future<String?> _getKakaoAccessToken() async {
     try {
       OAuthToken token;
-      token = await UserApi.instance.loginWithKakaoAccount();
+      if (await isKakaoTalkInstalled()) {
+        token = await UserApi.instance.loginWithKakaoTalk();
+      } else {
+        token = await UserApi.instance.loginWithKakaoAccount();
+      }
 
       Log.d("Kakao 로그인 성공");
       return token.accessToken;

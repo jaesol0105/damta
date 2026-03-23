@@ -35,6 +35,7 @@ void showCustomDialog({
                 Text(
                   title,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.center,
                 ),
                 // 내용
                 if (content != null) ...[
