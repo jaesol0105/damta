@@ -21,11 +21,15 @@ class HomeDrawer extends HookConsumerWidget {
         children: [
           // 앱 로고
           Container(
+            alignment: Alignment.centerLeft,
             padding: const EdgeInsets.fromLTRB(20, 40, 60, 10),
             decoration: BoxDecoration(
               border: Border(bottom: BorderSide(color: vrc(context).border!)),
             ),
-            child: Image.asset("assets/images/damta_logo_color_down.png"),
+            child: Image.asset(
+              "assets/images/damta_logo_color_down.png",
+              height: 60,
+            ),
           ),
 
           /// 학교 정보 수정
@@ -160,7 +164,9 @@ class HomeDrawer extends HookConsumerWidget {
         ),
         child: ListTile(
           leading: PhosphorIcon(icon),
-          title: title == null ? null : Text(title),
+          title: title == null
+              ? null
+              : Text(title, style: TextStyle(letterSpacing: -0.3)),
           iconColor: color,
           textColor: color,
         ),
