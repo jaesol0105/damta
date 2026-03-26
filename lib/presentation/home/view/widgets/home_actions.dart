@@ -18,7 +18,7 @@ class HomeActions extends HookConsumerWidget {
     final bool hasNewNoti = notiList.any((n) => n.isRead == false);
 
     return Padding(
-      padding: const EdgeInsets.only(right: 20),
+      padding: const EdgeInsets.only(right: 16),
       child: Row(
         children: [
           /// 알림
@@ -56,7 +56,7 @@ class HomeActions extends HookConsumerWidget {
               child: PhosphorIcon(
                 icon,
                 size: 26,
-                color: vrc(context).contentText,
+                color: vrc(context).labelText,
               ),
             ),
             hasUpdate == null

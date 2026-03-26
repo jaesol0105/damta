@@ -65,7 +65,7 @@ class HomePage extends HookConsumerWidget {
                   snap: true,
                   automaticallyImplyLeading: false,
                   elevation: 0,
-                  titleSpacing: 20,
+                  titleSpacing: 16,
                   centerTitle: false,
                   surfaceTintColor: Colors.transparent,
                   title: HomeAppBar.buildTitle(

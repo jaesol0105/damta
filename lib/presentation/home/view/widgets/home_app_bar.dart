@@ -31,17 +31,10 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // 로고 이미지
-        // Transform.translate(
-        //   offset: const Offset(0, 1),
-        //   child: Image.asset('assets/images/app_icon_v3.png', height: 28),
-        // ),
-        // SizedBox(width: 10),
-
         // 학교명
         Flexible(
           child: Transform.translate(
-            offset: const Offset(0, 2),
+            offset: const Offset(0, 0.5),
             child: FittedBox(
               fit: BoxFit.scaleDown,
               alignment: Alignment.centerLeft,
@@ -60,14 +53,14 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
 
         // 학교 이모지
-        Transform.translate(
-          offset: const Offset(6, -1),
-          child: Text('🏫', style: TextStyle(fontSize: 24)),
-        ),
+        // Transform.translate(
+        //   offset: const Offset(6, -1),
+        //   child: Text('🏫', style: TextStyle(fontSize: 24)),
+        // ),
 
         // 편집 모드
         if (isEditMode) ...[
-          const SizedBox(width: 14),
+          const SizedBox(width: 8),
           // 편집 중 표시 카드
           Transform.translate(
             offset: const Offset(0, 1.3),
@@ -81,7 +74,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 '편집 중',
                 style: TextStyle(
                   fontSize: 12,
-                  fontWeight: FontWeight.w800,
+                  letterSpacing: -0.3,
+                  fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
               ),
@@ -114,7 +108,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 '사진추가',
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w800,
+                  letterSpacing: -0.3,
+                  fontWeight: FontWeight.bold,
                   color: AppColors.secondaryHeavy,
                 ),
               ),
@@ -132,8 +127,9 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 '완료',
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                  color: vrc(context).contentText,
+                  letterSpacing: -0.3,
+                  fontWeight: FontWeight.bold,
+                  color: vrc(context).labelText,
                 ),
               ),
             ),

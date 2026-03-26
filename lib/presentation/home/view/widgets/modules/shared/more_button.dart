@@ -23,7 +23,6 @@ class MoreButton extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12,
                   letterSpacing: -1,
-                  fontWeight: FontWeight.w500,
                   color: vrc(context).contentText,
                 ),
               ),

@@ -79,8 +79,8 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="$PROJECT_DIR$/../assets/images/app_icon_v2.png" />
-                                                <entry key="scalingPercent" value="70" />
+                                                <entry key="imagePath" value="$USER_HOME$/Downloads/_damta_resource/AppIcons/Assets.xcassets/AppIcon.appiconset/1024.png" />
+                                                <entry key="scalingPercent" value="65" />
                                               </map>
                                             </option>
                                           </PersistentState>
