@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:damta/domain/enum/module_type_enum.dart';
 import 'package:damta/presentation/home/view/widgets/modules/anon_board_module.dart';
 import 'package:damta/presentation/home/view/widgets/modules/lunch_module.dart';
@@ -39,7 +40,9 @@ class ModuleBuilder {
         return const MemoModule();
 
       case ModuleType.anonBoard:
-        return const AnonBoardModule();
+        return Platform.isIOS
+            ? const SizedBox.shrink()
+            : const AnonBoardModule();
     }
   }
 }

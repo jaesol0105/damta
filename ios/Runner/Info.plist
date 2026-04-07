@@ -35,7 +35,7 @@
 				<string>Editor</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
-					<string>naverEdesQvmeQjtvE_PXeZSK</string>
+					<string>naverEdesQvmeQjtvEPXeZSK</string>
 					<string>kakao905586a95c550bb2604245bee31dd16c</string>
 					<string>com.googleusercontent.apps.436072449092-fkstkr05qrsup10f80b373kv0iecrstf</string>
 				</array>
@@ -54,7 +54,7 @@
 			<string>naversearchthirdlogin</string>
 		</array>
 		<key>NidUrlScheme</key>
-		<string>naverEdesQvmeQjtvE_PXeZSK</string>
+		<string>naverEdesQvmeQjtvEPXeZSK</string>
 		<key>NidClientID</key>
 		<string>EdesQvmeQjtvE_PXeZSK</string>
 		<key>NidClientSecret</key>

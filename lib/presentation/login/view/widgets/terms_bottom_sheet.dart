@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:damta/core/theme/app_theme.dart';
 import 'package:damta/presentation/util/open_terms_url.dart';
 import 'package:flutter/material.dart';
@@ -112,34 +113,36 @@ class _TermsBottomSheet extends HookConsumerWidget {
                 spacing: 10,
                 children: [
                   /// 커뮤니티 이용 약관
-                  GestureDetector(
-                    onTap: () => toggleCommunity(),
-                    child: Row(
-                      children: [
-                        Icon(
-                          communityChecked.value
-                              ? Icons.check_circle
-                              : Icons.radio_button_unchecked,
-                          color: communityChecked.value
-                              ? Colors.amber
-                              : Colors.grey,
-                        ),
-                        const SizedBox(width: 10),
-                        const Expanded(child: Text("커뮤니티 이용 약관 동의 (필수)")),
-                      ],
+                  if (Platform.isAndroid)
+                    GestureDetector(
+                      onTap: () => toggleCommunity(),
+                      child: Row(
+                        children: [
+                          Icon(
+                            communityChecked.value
+                                ? Icons.check_circle
+                                : Icons.radio_button_unchecked,
+                            color: communityChecked.value
+                                ? Colors.amber
+                                : Colors.grey,
+                          ),
+                          const SizedBox(width: 10),
+                          const Expanded(child: Text("커뮤니티 이용 약관 동의 (필수)")),
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade300),
-                      borderRadius: BorderRadius.circular(12),
+                  if (Platform.isAndroid)
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade300),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        "본 앱을 이용함으로써 사용자는 아래 사항에 동의합니다.\n\n- 혐오 표현, 차별, 괴롭힘, 협박, 성적 표현, 불법 콘텐츠를 게시할 수 없습니다.\n- 타인의 개인정보(실명, 연락처, 주소 등)를 공유할 수 없습니다.\n- 타 사용자에 대한 비방, 모욕, 악의적 행위를 금지합니다.\n- 본 앱은 무관용 원칙(Zero Tolerance Policy)을 적용합니다.\n- 위반 시 계정은 영구 정지될 수 있습니다.\n\n신고된 콘텐츠는 24시간 이내에 검토됩니다.",
+                        style: TextStyle(fontSize: 13),
+                      ),
                     ),
-                    child: Text(
-                      "본 앱을 이용함으로써 사용자는 아래 사항에 동의합니다.\n\n- 혐오 표현, 차별, 괴롭힘, 협박, 성적 표현, 불법 콘텐츠를 게시할 수 없습니다.\n- 타인의 개인정보(실명, 연락처, 주소 등)를 공유할 수 없습니다.\n- 타 사용자에 대한 비방, 모욕, 악의적 행위를 금지합니다.\n- 본 앱은 무관용 원칙(Zero Tolerance Policy)을 적용합니다.\n- 위반 시 계정은 영구 정지될 수 있습니다.\n\n신고된 콘텐츠는 24시간 이내에 검토됩니다.",
-                      style: TextStyle(fontSize: 13),
-                    ),
-                  ),
 
                   /// 서비스 이용 약관, 개인정보 처리방침
                   GestureDetector(
