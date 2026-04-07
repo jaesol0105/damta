@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:damta/core/service/analytics_service.dart';
 import 'package:damta/presentation/login/view_model/auth_view_model.dart';
 import 'package:damta/presentation/widget/custom_snackbar.dart';
@@ -41,9 +42,12 @@ class SocialLoginSmall extends HookConsumerWidget {
           label: '네이버',
           iconPath: 'assets/images/naver_login_s.png',
           onTap: () {
-            // ref.read(authViewModelProvider.notifier).signInNaver();
-            // AnalyticsService.event('login', p: {'type': 'naver'}); // 📝
-            showCustomSnackBar(context: context, message: '이용할 수 없습니다');
+            if (Platform.isIOS) {
+              ref.read(authViewModelProvider.notifier).signInNaver();
+              AnalyticsService.event('login', p: {'type': 'naver'}); // 📝
+            } else {
+              showCustomSnackBar(context: context, message: '이용할 수 없습니다');
+            }
           },
         ),
       ],
