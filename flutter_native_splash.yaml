@@ -1,0 +1,25 @@
+# 명령어 : flutter pub run flutter_native_splash:create
+
+flutter_native_splash:
+  color: "#FFFFFF" # 스플래쉬 배경색 (Flutter SplashPage 배경과 맞추기)
+  image: assets/images/splash_icon_v2.png # 중앙에 올 로고 이미지 (정적 PNG)
+
+  # Android 12 이상 전용 설정
+  android_12:
+    color: "#FFFFFF"
+    image: assets/images/splash_icon_v2.png
+
+    # Android 12 다크모드
+    color_dark: "#121416"
+    image_dark: assets/images/splash_icon_v2.png
+
+  # 다크모드 설정
+  color_dark: "#121416"
+  image_dark: assets/images/splash_icon_v2.png
+
+  # 플랫폼별로 끄고 켜기
+  android: true
+  ios: true
+  # 화면 채우기/정렬 옵션 (기본값 center)
+  android_gravity: center
+  ios_content_mode: center

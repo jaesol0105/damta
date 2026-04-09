@@ -1,0 +1,291 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:damta/data/data_source/remote/auth_data_source.dart';
+import 'package:damta/data/data_source/remote/block_data_source.dart';
+import 'package:damta/data/data_source/remote/comment_data_source.dart';
+import 'package:damta/data/data_source/local/meal_local_data_source.dart';
+import 'package:damta/data/data_source/local/memo_local_data_source.dart';
+import 'package:damta/data/data_source/local/schedule_local_data_source.dart';
+import 'package:damta/data/data_source/local/time_table_local_data_source.dart';
+import 'package:damta/data/data_source/remote/notification_data_source.dart';
+import 'package:damta/data/data_source/remote/post_data_source.dart';
+import 'package:damta/data/data_source/remote/meal_remote_data_source.dart';
+import 'package:damta/data/data_source/remote/report_data_source.dart';
+import 'package:damta/data/data_source/remote/schedule_remote_data_source.dart';
+import 'package:damta/data/data_source/remote/storage_data_source.dart';
+import 'package:damta/data/data_source/remote/time_table_remote_data_source.dart';
+import 'package:damta/data/data_source/remote/users_data_source.dart';
+import 'package:damta/data/data_source/remote/weather_data_source.dart';
+import 'package:damta/data/database/database_helper.dart';
+import 'package:damta/data/repository_impl/auth_repository_impl.dart';
+import 'package:damta/data/repository_impl/block_repository_impl.dart';
+import 'package:damta/data/repository_impl/comment_repository_impl.dart';
+import 'package:damta/data/repository_impl/meal_repository_impl.dart';
+import 'package:damta/data/repository_impl/memo_repository_impl.dart';
+import 'package:damta/data/repository_impl/notification_repository_impl.dart';
+import 'package:damta/data/repository_impl/post_repository_impl.dart';
+import 'package:damta/data/repository_impl/report_repository_impl.dart';
+import 'package:damta/data/repository_impl/schedule_repository_impl.dart';
+import 'package:damta/data/repository_impl/storage_repository_impl.dart';
+import 'package:damta/data/repository_impl/time_table_repository_impl.dart';
+import 'package:damta/data/repository_impl/users_repository_impl.dart';
+import 'package:damta/data/repository_impl/weather_repostitory_impl.dart';
+import 'package:damta/domain/repository/auth_repository.dart';
+import 'package:damta/domain/repository/block_repository.dart';
+import 'package:damta/domain/repository/comment_repository.dart';
+import 'package:damta/domain/repository/meal_repository.dart';
+import 'package:damta/domain/repository/memo_repository.dart';
+import 'package:damta/domain/repository/notification_repository.dart';
+import 'package:damta/domain/repository/post_repository.dart';
+import 'package:damta/domain/repository/report_repository.dart';
+import 'package:damta/domain/repository/schedule_repository.dart';
+import 'package:damta/domain/repository/storage_repository.dart';
+import 'package:damta/domain/repository/time_table_repository.dart';
+import 'package:damta/domain/repository/users_repository.dart';
+import 'package:damta/domain/repository/weather_repository.dart';
+import 'package:damta/domain/usecase/block_usecase.dart';
+import 'package:damta/domain/usecase/comment_usecase.dart';
+import 'package:damta/domain/usecase/post_usecase.dart';
+import 'package:damta/domain/usecase/report_usecase.dart';
+import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:sqflite/sqflite.dart';
+
+part 'provider.g.dart';
+
+@riverpod
+Dio dio(Ref ref) => Dio();
+
+@riverpod
+FirebaseFirestore firestore(Ref ref) => FirebaseFirestore.instance;
+
+@riverpod
+FirebaseStorage firebaseStorage(Ref ref) => FirebaseStorage.instance;
+
+@riverpod
+FirebaseAuth auth(Ref ref) => FirebaseAuth.instance;
+
+@Riverpod(keepAlive: true)
+Future<Database> database(Ref ref) async {
+  final helper = DatabaseHelper();
+  return helper.database;
+}
+
+// ==================== Remote DataSource ====================
+
+@riverpod
+MealRemoteDataSource mealRemoteDataSource(Ref ref) {
+  final dio = ref.watch(dioProvider);
+  return MealRemoteDataSourceImpl(dio: dio);
+}
+
+@riverpod
+ScheduleRemoteDataSource scheduleRemoteDataSource(Ref ref) {
+  final dio = ref.watch(dioProvider);
+  return ScheduleRemoteDataSourceImpl(dio);
+}
+
+@riverpod
+TimeTableRemoteDataSource timeTableRemoteDataSource(Ref ref) {
+  final dio = ref.watch(dioProvider);
+  return TimeTableRemoteDataSourceImpl(dio: dio);
+}
+
+@riverpod
+WeatherDataSource weatherDataSource(Ref ref) {
+  final dio = ref.watch(dioProvider);
+  return WeatherDataSourceImpl(dio);
+}
+
+@riverpod
+PostDataSource postDataSource(Ref ref) {
+  final firestore = ref.watch(firestoreProvider);
+  return PostDataSourceImpl(firestore);
+}
+
+@riverpod
+CommentDataSource commentDataSource(Ref ref) {
+  final firestore = ref.watch(firestoreProvider);
+  return CommentDataSourceImpl(firestore);
+}
+
+@riverpod
+StorageDataSource storageDataSource(Ref ref) {
+  final storage = ref.watch(firebaseStorageProvider);
+  return StorageDataSourceImpl(storage: storage);
+}
+
+@riverpod
+NotificationDataSource notificationDataSource(Ref ref) {
+  final firestore = ref.watch(firestoreProvider);
+  return NotificationDataSourceImpl(firestore);
+}
+
+@riverpod
+UsersDataSource usersDataSource(Ref ref) {
+  final firestore = ref.watch(firestoreProvider);
+  return UsersDataSourceImpl(firestore);
+}
+
+@riverpod
+AuthDataSource authDataSource(Ref ref) {
+  final auth = ref.watch(authProvider);
+  final firestore = ref.watch(firestoreProvider);
+  return AuthDataSourceImpl(auth, firestore);
+}
+
+@riverpod
+ReportDataSource reportDataSource(Ref ref) {
+  final firestore = ref.watch(firestoreProvider);
+  return ReportDataSourceImpl(firestore);
+}
+
+@riverpod
+BlockDataSource blockDataSource(Ref ref) {
+  final firestore = ref.watch(firestoreProvider);
+  return BlockDataSourceImpl(firestore);
+}
+
+// ==================== Local DataSource ====================
+
+@riverpod
+Future<MealLocalDataSource> mealLocalDataSource(Ref ref) async {
+  final db = await ref.watch(databaseProvider.future);
+  return MealLocalDataSourceImpl(database: db);
+}
+
+@riverpod
+Future<ScheduleLocalDataSource> scheduleLocalDataSource(Ref ref) async {
+  final db = await ref.watch(databaseProvider.future);
+  return ScheduleLocalDataSourceImpl(database: db);
+}
+
+@riverpod
+Future<TimeTableLocalDataSource> timeTableLocalDataSource(Ref ref) async {
+  final db = await ref.watch(databaseProvider.future);
+  return TimeTableLocalDataSourceImpl(database: db);
+}
+
+@riverpod
+MemoLocalDataSource memoLocalDataSource(Ref ref) {
+  return MemoLocalDataSourceImpl();
+}
+
+// ==================== Repository ====================
+
+@riverpod
+Future<MealRepository> mealRepository(Ref ref) async {
+  final remoteDataSource = ref.watch(mealRemoteDataSourceProvider);
+  final localDataSource = await ref.watch(mealLocalDataSourceProvider.future);
+  return MealRepositoryImpl(
+    remoteDataSource: remoteDataSource,
+    localDataSource: localDataSource,
+  );
+}
+
+@riverpod
+Future<ScheduleRepository> scheduleRepository(Ref ref) async {
+  final remoteDataSource = ref.watch(scheduleRemoteDataSourceProvider);
+  final localDataSource = await ref.watch(
+    scheduleLocalDataSourceProvider.future,
+  );
+  return ScheduleRepositoryImpl(remoteDataSource, localDataSource);
+}
+
+@riverpod
+Future<TimeTableRepository> timeTableRepository(Ref ref) async {
+  final remoteDataSource = ref.watch(timeTableRemoteDataSourceProvider);
+  final localDataSource = await ref.watch(
+    timeTableLocalDataSourceProvider.future,
+  );
+  return TimeTableRepositoryImpl(remoteDataSource, localDataSource);
+}
+
+@riverpod
+WeatherRepository weatherRepository(Ref ref) {
+  final dataSource = ref.watch(weatherDataSourceProvider);
+  return WeatherRepositoryImpl(dataSource);
+}
+
+@riverpod
+PostRepository postRepository(Ref ref) {
+  final postDataSource = ref.watch(postDataSourceProvider);
+  return PostRepositoryImpl(postDataSource);
+}
+
+@riverpod
+CommentRepository commentRepository(Ref ref) {
+  final commentDataSource = ref.watch(commentDataSourceProvider);
+  return CommentRepositoryImpl(commentDataSource);
+}
+
+@riverpod
+StorageRepository storageRepository(Ref ref) {
+  return StorageRepositoryImpl(
+    dataSource: ref.watch(storageDataSourceProvider),
+  );
+}
+
+@riverpod
+NotificationRepository notificationRepository(Ref ref) {
+  final dataSource = ref.watch(notificationDataSourceProvider);
+  return NotificationRepositoryImpl(dataSource);
+}
+
+@riverpod
+UsersRepository usersRepository(Ref ref) {
+  final dataSource = ref.watch(usersDataSourceProvider);
+  return UsersRepositoryImpl(dataSource);
+}
+
+@riverpod
+MemoRepository memoRepository(Ref ref) {
+  final dataSource = ref.watch(memoLocalDataSourceProvider);
+  return MemoRepositoryImpl(dataSource);
+}
+
+@riverpod
+AuthRepository authRepository(Ref ref) {
+  final dataSource = ref.watch(authDataSourceProvider);
+  return AuthRepositoryImpl(dataSource);
+}
+
+@riverpod
+ReportRepository reportRepository(Ref ref) {
+  final dataSource = ref.watch(reportDataSourceProvider);
+  return ReportRepositoryImpl(dataSource);
+}
+
+@riverpod
+BlockRepository blockRepository(Ref ref) {
+  final dataSource = ref.watch(blockDataSourceProvider);
+  return BlockRepositoryImpl(dataSource);
+}
+
+// ==================== Usecase ====================
+
+@riverpod
+PostUsecase postUsecase(Ref ref) {
+  final postRepository = ref.watch(postRepositoryProvider);
+  return PostUsecase(postRepository);
+}
+
+@riverpod
+CommentUsecase commentUsecase(Ref ref) {
+  final commentRepository = ref.watch(commentRepositoryProvider);
+  return CommentUsecase(commentRepository);
+}
+
+@riverpod
+ReportUsecase reportUsecase(Ref ref) {
+  final repository = ref.watch(reportRepositoryProvider);
+  return ReportUsecase(repository);
+}
+
+@riverpod
+BlockUsecase blockUsecase(Ref ref) {
+  final repository = ref.watch(blockRepositoryProvider);
+  return BlockUsecase(repository);
+}

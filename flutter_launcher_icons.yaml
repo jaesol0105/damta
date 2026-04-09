@@ -1,0 +1,6 @@
+# 명령어 : flutter pub run flutter_launcher_icons -f flutter_launcher_icons.yaml
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app_icon_v2.png"
